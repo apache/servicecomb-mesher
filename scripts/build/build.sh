@@ -20,7 +20,7 @@ cp -r /var/lib/jenkins/workspace/mesher/* /var/lib/jenkins/workspace/Mesher/src/
 
 release_dir=$PROJECT_DIR/release
 repo="github.com"
-project="go-chassis"
+project="go-mesh"
 
 if [ -d $release_dir ]; then
     rm -rf $release_dir
