@@ -1,0 +1,19 @@
+## Router rules and fault injection rules are moved to router.yaml
+#plugin:
+#  destinationResolver:
+#    http: host # how to turn host to destination name. default to service name，
+
+##admin: #admin API
+#  goRuntimeMetrics : true # enable metrics
+
+## enable pprof to profile mesher runtime
+#pprof:
+#  enable: false
+
+#localHealthCheck:
+#  - port: 8080
+#    uri: /health
+#    interval: 30s
+#    match:
+#      status: 200
+#      body: ok

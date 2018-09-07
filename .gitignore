@@ -20,3 +20,12 @@
 *.iml
 out
 gen
+.log
+mesher
+
+vendor
+*.log
+
+_build
+coverage.txt
+go.sum

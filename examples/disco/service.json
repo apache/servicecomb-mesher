@@ -1,0 +1,13 @@
+{
+        "service": [{
+                        "name": "hellomesher",
+                        "Instance": ["rest://127.0.0.1:9999"]
+                },
+
+                {
+                        "name": "localserver1",
+                        "Instance": ["rest://10.162.247.188:30101"]
+                }
+
+        ]
+}

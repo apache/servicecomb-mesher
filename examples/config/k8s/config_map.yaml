@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mesher-config
+data:
+  registry.addr: 127.0.0.1:30100
+  registry.ssl: false
+  configCenter.addr: 127.0.0.1:30200
+  handlers: bizkeeper-consumer,loadbalance
+  mesher.yaml: |-
+    policy:
+     - destination: reviews.default.svc.cluster.local
+       tags:
+          version: v1
+       loadBalancing:
+          strategy: roundrobin

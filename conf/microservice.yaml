@@ -1,0 +1,7 @@
+## microservice property
+service_description:
+  name: hellomesher
+  version: 0.0.1
+  environment:  #microservice environment
+  properties:
+    allowCrossApp: false #whether to allow calls across applications

@@ -1,0 +1,23 @@
+---
+writers: file,stdout
+# LoggerLevel: |DEBUG|INFO|WARN|ERROR|FATAL
+logger_level: INFO
+
+# LoggerFile: used to output the name of log
+logger_file: log/mesher.log
+
+# LogFormatText: json/plaintext (such as log4j)，default to false
+# if set logger_file and log_format_text to true, turns out log4j format log
+log_format_text: true
+
+#rollingPolicy daily/size; defines rotate according to daily or size
+rollingPolicy: size
+
+# MaxDaily of a log file before rotate. By D Days.
+log_rotate_date: 1
+
+# MaxSize of a log file before rotate. By M Bytes.
+log_rotate_size: 10
+
+# Max counts to keep of a log's backup files.
+log_backup_count: 7

@@ -1,0 +1,112 @@
+---
+cse:
+  protocols:
+    http:
+      listenAddress: 127.0.0.1:30101
+  service:
+    registry:
+      #address: http://127.0.0.1:30100 # uri of service center
+      address: https://cse.cn-north-1.myhuaweicloud.com:443 # uri of service center
+      scope: full #set full to be able to discover other app's service
+      watch: false # set if you want to watch instance change event
+      autoIPIndex: true # set to true if u want to resolve source IP to microservice
+  config:
+    client:
+      serverUri: https://cse.cn-north-1.myhuaweicloud.com:443 #uri of config center
+      refreshMode: 1 # 1: only pull config.
+      refreshInterval: 30 # unit is second
+  monitor: #Send monitoring data to CSE monitor Server
+    client:
+      serverUri: https://cse.cn-north-1.myhuaweicloud.com:443   # monitor server url
+  handler:
+    chain:
+      Consumer:
+        outgoing:  #consumer handlers
+      Provider:
+        incoming:  #provider handlers
+#  loadbalance:
+#    strategy:
+#      name: RoundRobin  # Random|RoundRobin|SessionStickiness
+#    retryEnabled: false # if there is error, retry request or not
+#    retryOnNext: 2      # times to switch to another instance based on strategy
+#    retryOnSame: 3      # times to retry on the same instance
+#    backoff:            # backoff policy of retried request
+#      kind: constant    # jittered/constant/zero
+#      MinMs: 200        # millisecond, Minimum duration to backoff
+#      MaxMs: 400        # millisecond, Maximum duration to backoff
+## circuit breaker configurations
+#  isolation:
+#    Consumer:
+#      timeout:
+#        enabled: true
+#      timeoutInMilliseconds: 1000
+#      maxConcurrentRequests: 100
+#  circuitBreaker:
+#    Consumer:
+#      enabled: true
+#      forceOpen: false
+#      forceClosed: false
+#      sleepWindowInMilliseconds: 10000
+#      requestVolumeThreshold: 20
+#      errorThresholdPercentage: 50
+#  fallback:
+#    Consumer:
+#      enabled: true
+#      maxConcurrentRequests: 20
+#  fallbackpolicy:
+#    Consumer:
+#      policy: throwexception
+#  flowcontrol:
+#    Consumer: # for consumer
+#      qps:
+#        enabled: true  # enable rate limiting or not
+#        global:
+#          limit: 100   # default limit of consumer
+#        limit:
+#          Server: 100  # rate limit for request to a provider,it represents 100 request per second
+#    Provider:
+#      qps:
+#        enabled: true  # enable rate limiting or not
+#        global:
+#          limit: 100   # default limit of provider
+#        limit:
+#          Server: 100  # rate limit for request from a provider, it represents 100 request per second
+
+#ssl:
+## Set those config to make mesher as https service
+#  mesher.Provider.cipherPlugin: default
+#  mesher.Provider.verifyPeer: false
+#  mesher.Provider.cipherSuits: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+#  mesher.Provider.protocol: TLSv1.2
+#  mesher.Provider.caFile:
+#  mesher.Provider.certFile:
+#  mesher.Provider.keyFile:
+#  mesher.Provider.certPwdFile:
+## Mesher TLS is base on Go Chassis TLS config
+## If users wan't to use transparent, ssl config for consumer and provider must be supplied.
+## The provider is the service which run in the same host/pod with mesher. for example the service name of provider is AccountService, then the ssl tag is AccountService.rest.provider
+## if u set this , no need to consider about expose your own service as https service,
+## your service can only listen on 127.0.0.1, mesher wil expose https and use http to communicate with your service
+#  AccountService.provider.cipherPlugin: default
+#  AccountService.provider.verifyPeer: false
+#  AccountService.provider.cipherSuits: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+#  AccountService.provider.protocol: TLSv1.2
+#  AccountService.provider.caFile:
+#  AccountService.provider.certFile:
+#  AccountService.provider.keyFile:
+#  AccountService.provider.certPwdFile:
+## If a service want to use transparent tls to call other services, it must supplies consumer ssl config for these services.
+## for example StoreWeb want to communicate with Account service the  config is like below
+#  AccountService.consumer.cipherPlugin: default
+#  AccountService.consumer.verifyPeer: false
+#  AccountService.consumer.cipherSuits: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+#  AccountService.consumer.protocol: TLSv1.2
+#  AccountService.consumer.caFile:
+#  AccountService.consumer.certFile:
+#  AccountService.consumer.keyFile:
+#  AccountService.consumer.certPwdFile:
+#tracing:
+#  enabled: true #enable distribution tracing
+#  collectorType: zipkin       #zipkin: Send tracing info to zipkin server
+#                              #namedPipe: Write tracing info to linux named pipe.
+#  collectorTarget: http://localhost:9411/api/v1/spans #If the collectorType is "zipkin", the target is a zipkin server url, if the collecterType is "file" or "namedPipe", the target is a file path.

@@ -1,0 +1,8 @@
+## Router rules and fault injection rules are moved to router.yaml
+#plugin:
+#  destinationResolver: host # how to turn host to destination name. default to service name，
+#admin: #admin API
+#  goRuntimeMetrics : true # enable metrics
+## enable pprof to profile mesher runtime
+#pprof:
+#  enable: false
