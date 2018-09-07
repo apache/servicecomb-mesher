@@ -151,7 +151,7 @@ Usage of serviceComb
 ~~~~~~~~~~~~~~~~~~~~
 
 To use service-center following are the required annotation to be given in client and server yaml file
-sidecar.mesher.io/inject: "yes" and sidecar.mesher.io/discoveryType:"pilot"
+sidecar.mesher.io/inject: "yes" and sidecar.mesher.io/discoveryType:"sc"
 
 `Example to use sc registry <https://github.com/go-chassis/sidecar-injector/tree/master/example/WithoutServicePort/sc>`_
 
