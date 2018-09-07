@@ -40,7 +40,7 @@ just same service center default listen address.
 ### Run on different infrastructure
 
 Mesher does not bind to any platform or infrastructures, plz refer to 
-https://github.com/go-chassis/mesher-examples/tree/master/Infrastructure
+https://github.com/go-mesh/mesher-examples/tree/master/Infrastructure
 to know how to run mesher on different infra
 
 ### Sidecar injector

@@ -101,6 +101,27 @@ service_description:
 EOF
 fi
 
+#add instance_properties if any provided
+if [ ! -z "$MD" ]; then
+  echo "  instance_properties:" >> $MESHER_CONF_DIR/$MICROSERVICE_YAML
+  while : 
+  do
+    KeyArray=$(echo $MD | cut -d '|' -f1)
+    RestArray=$(echo $MD | cut -d '|' -f2-)
+    Writer="-"
+    Key=$(echo $KeyArray | cut -d '=' -f1)
+    Value=$(echo $KeyArray | cut -d '=' -f2-)
+    Writer="    $Writer$Key"
+    Writer="$Writer: $Value"
+    echo $Writer| sed 's/-/    /'
+    echo $Writer | sed 's/-/    /'>> $MESHER_CONF_DIR/$MICROSERVICE_YAML
+    if [ "$KeyArray" = "$RestArray" ]; then
+      break
+    fi
+    MD=$RestArray
+  done
+fi
+
 # ENABLE_PROXY_TLS decide whether mesher is https proxy or http proxy
 if [[ $TLS_ENABLE && $TLS_ENABLE == true ]]; then
     sed -i '/ssl:/a \ \ mesher.Provider.cipherPlugin: default \n \ mesher.Provider.verifyPeer: false \n \ mesher.Provider.cipherSuits: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 \n \ mesher.Provider.protocol: TLSv1.2 \n \ mesher.Provider.caFile: \n \ mesher.Provider.certFile: /etc/ssl/meshercert/kubecfg.crt \n \ mesher.Provider.keyFile: /etc/ssl/meshercert/kubecfg.key \n \ mesher.Provider.certPwdFile: \n' $MESHER_CONF_DIR/$TLS_YAML

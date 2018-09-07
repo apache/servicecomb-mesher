@@ -1,6 +1,6 @@
 # Mesher
 
-[![Build Status](https://travis-ci.org/go-chassis/mesher.svg?branch=master)](https://travis-ci.org/go-chassis/mesher) [![Coverage Status](https://coveralls.io/repos/github/go-chassis/mesher/badge.svg?branch=master)](https://coveralls.io/github/go-chassis/mesher?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/go-chassis/mesher)](https://goreportcard.com/report/github.com/go-chassis/mesher) [![GoDoc](https://godoc.org/github.com/go-chassis/mesher?status.svg)](https://godoc.org/github.com/go-chassis/mesher) [![HitCount](http://hits.dwyl.io/go-chassis/mesher.svg)](http://hits.dwyl.io/go-chassis/mesher) [![Join Slack](https://img.shields.io/badge/Join-Slack-orange.svg)](https://join.slack.com/t/go-chassis/shared_invite/enQtMzk0MzAyMjEzNzEyLTRjOWE3NzNmN2IzOGZhMzZkZDFjODM1MDc5ZWI0YjcxYjM1ODNkY2RkNmIxZDdlOWI3NmQ0MTg3NzBkNGExZGU)
+[![Build Status](https://travis-ci.org/go-mesh/mesher.svg?branch=master)](https://travis-ci.org/go-mesh/mesher) [![Coverage Status](https://coveralls.io/repos/github/go-mesh/mesher/badge.svg?branch=master)](https://coveralls.io/github/go-mesh/mesher?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/go-mesh/mesher)](https://goreportcard.com/report/github.com/go-mesh/mesher) [![GoDoc](https://godoc.org/github.com/go-mesh/mesher?status.svg)](https://godoc.org/github.com/go-mesh/mesher) [![HitCount](http://hits.dwyl.io/go-mesh/mesher.svg)](http://hits.dwyl.io/go-mesh/mesher) [![Join Slack](https://img.shields.io/badge/Join-Slack-orange.svg)](https://join.slack.com/t/go-chassis/shared_invite/enQtMzk0MzAyMjEzNzEyLTRjOWE3NzNmN2IzOGZhMzZkZDFjODM1MDc5ZWI0YjcxYjM1ODNkY2RkNmIxZDdlOWI3NmQ0MTg3NzBkNGExZGU)
 
 A service mesh implementation based on [go chassis](https://github.com/go-chassis/go-chassis).
 
@@ -20,7 +20,7 @@ a go micro service framework
 
 
 # Get started
-Refer to [mesher-examples](https://github.com/go-chassis/mesher-examples)
+Refer to [mesher-examples](https://github.com/go-mesh/mesher-examples)
 
 ### How to build and run
 

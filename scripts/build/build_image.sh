@@ -2,7 +2,7 @@
 set -e
 set -x
 
-cd /var/lib/jenkins/workspace/Mesher/src/github.com/go-chassis/mesher/
+cd /var/lib/jenkins/workspace/Mesher/src/github.com/go-mesh/mesher/
 
 repo="github.com"
 project="go-chassis"

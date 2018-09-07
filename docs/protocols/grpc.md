@@ -29,3 +29,7 @@ after modify
 			return net.DialTimeout("tcp", "127.0.0.1:40101", time)
 		}))
 ```
+
+
+## example
+A gRPC example is [here](https://github.com/go-mesh/mesher-examples/tree/master/protocol/grpc-go)

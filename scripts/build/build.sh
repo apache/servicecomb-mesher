@@ -3,13 +3,20 @@ set -e
 set -x
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH=/var/lib/jenkins/workspace/Mesher
-rm -rf /var/lib/jenkins/workspace/Mesher
+rm -rf /var/lib/jenkins/workspace/Mesher/src
 export BUILD_DIR=/var/lib/jenkins/workspace/Mesher
 export PROJECT_DIR=$(dirname $BUILD_DIR)
 
-mkdir -p /var/lib/jenkins/workspace/Mesher/src/github.com/go-chassis/mesher
+mkdir -p /var/lib/jenkins/workspace/Mesher/src/github.com/go-mesh/mesher
 
-cp -r /var/lib/jenkins/workspace/mesher/* /var/lib/jenkins/workspace/Mesher/src/github.com/go-chassis/mesher/
+#To checkout to particular commit or tag
+if [ $CHECKOUT_VERSION == "latest" ]; then
+    echo "using latest code"
+else
+    git checkout $CHECKOUT_VERSION
+fi
+
+cp -r /var/lib/jenkins/workspace/mesher/* /var/lib/jenkins/workspace/Mesher/src/github.com/go-mesh/mesher/
 
 release_dir=$PROJECT_DIR/release
 repo="github.com"
@@ -21,12 +28,7 @@ fi
 mkdir -p $release_dir
 
 cd $BUILD_DIR/src/$repo/$project/mesher
-#To checkout to particular commit or tag
-if [ $CHECKOUT_VERSION == "latest" ]; then
-    echo "using latest code"
-else
-    git checkout $CHECKOUT_VERSION
-fi
+
 GO111MODULE=on go mod download
 GO111MODULE=on go mod vendor
 go build -o mesher -a
