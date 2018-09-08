@@ -5,7 +5,7 @@ set -x
 cd /var/lib/jenkins/workspace/Mesher/src/github.com/go-mesh/mesher/
 
 repo="github.com"
-project="go-chassis"
+project="go-mesh"
 export BUILD_DIR=/var/lib/jenkins/workspace/Mesher
 export WORK_DIR=$BUILD_DIR/src/$repo/$project/mesher
 cd $WORK_DIR
