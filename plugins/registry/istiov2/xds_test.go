@@ -12,13 +12,12 @@ import (
 )
 
 var (
-	ValidKubeConfigPath string = "/home/lance/.kube/config"
-	ValidXdsClient      *XdsClient
-	TestClusters        []apiv2.Cluster
+	ValidXdsClient *XdsClient
+	TestClusters   []apiv2.Cluster
 )
 
 func TestNewXdsClient(t *testing.T) {
-	client, err := NewXdsClient(ValidPilotAddr, nil, nodeInfo, ValidKubeConfigPath)
+	client, err := NewXdsClient(ValidPilotAddr, nil, nodeInfo, KubeConfig)
 
 	if err != nil {
 		t.Errorf("Failed to create xds client: %s", err.Error())

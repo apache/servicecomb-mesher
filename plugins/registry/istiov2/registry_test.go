@@ -18,12 +18,13 @@ var AllServices []*registry.MicroService
 func TestNewDiscoveryService(t *testing.T) {
 	options := registry.Options{
 		Addrs:      []string{ValidPilotAddr},
-		ConfigPath: kubeconfig,
+		ConfigPath: KubeConfig,
 	}
 
-	os.Setenv("POD_NAME", "myapp")
-	os.Setenv("NAMESPACE", "default")
-	os.Setenv("INSTANCE_IP", "192.168.0.104")
+	// Explicitly set the env vars, though this is checkd in the init of cache_test
+	os.Setenv("POD_NAME", TEST_POD_NAME)
+	os.Setenv("NAMESPACE", NAMESPACE_DEFAULT)
+	os.Setenv("INSTANCE_IP", LocalIPAddress)
 
 	// No panic should happen
 	VaildServiceDiscovery = NewDiscoveryService(options)
