@@ -115,7 +115,9 @@ func (client *XdsClient) GetSubsetTags(namespace, hostName, subsetName string) (
 	}
 
 	var drResult DestinationRuleResult
-	json.Unmarshal(rawBody, &drResult)
+	if err := json.Unmarshal(rawBody, &drResult); err != nil {
+		return nil, err
+	}
 
 	// Find the subset
 	tags := map[string]string{}
