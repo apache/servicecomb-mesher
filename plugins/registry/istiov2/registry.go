@@ -170,9 +170,7 @@ func (discovery *ServiceDiscovery) AutoSync() {
 }
 
 func (discovery *ServiceDiscovery) Close() error {
-	// TODO Should we explicitly recycle discovery's other resources?
-	// discovery.client.ReqCaches = nil
-	return discovery.client.GrpcConn.Close()
+	return nil
 }
 
 func NewDiscoveryService(options registry.Options) registry.ServiceDiscovery {

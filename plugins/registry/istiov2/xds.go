@@ -21,7 +21,7 @@ import (
 
 type XdsClient struct {
 	PilotAddr   string
-	GrpcConn    *grpc.ClientConn
+	TlsConfig   *tls.Config
 	ReqCaches   map[XdsType]*XdsReqCache
 	nodeInfo    *NodeInfo
 	NodeID      string
@@ -70,22 +70,6 @@ func NewXdsClient(pilotAddr string, tlsConfig *tls.Config, nodeInfo *NodeInfo, k
 	}
 	xdsClient.NodeID = fmt.Sprintf("sidecar~%s~%s~%s", nodeInfo.InstanceIP, nodeInfo.PodName, nodeInfo.Namespace)
 	xdsClient.NodeCluster = nodeInfo.PodName
-
-	// TODO Handle the TLS certs
-	var conn *grpc.ClientConn
-	var err error
-
-	if tlsConfig != nil {
-		creds := credentials.NewTLS(tlsConfig)
-		conn, err = grpc.Dial(xdsClient.PilotAddr, grpc.WithTransportCredentials(creds))
-	} else {
-		conn, err = grpc.Dial(xdsClient.PilotAddr, grpc.WithInsecure())
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	xdsClient.GrpcConn = conn
 
 	xdsClient.ReqCaches = map[XdsType]*XdsReqCache{
 		TypeCds: &XdsReqCache{},
@@ -138,16 +122,32 @@ func (client *XdsClient) GetSubsetTags(namespace, hostName, subsetName string) (
 	return tags, nil
 }
 
-func getAdsResClient(client *XdsClient) (v2.AggregatedDiscoveryService_StreamAggregatedResourcesClient, error) {
-	ctx := context.Background()
-
-	adsClient := v2.NewAggregatedDiscoveryServiceClient(client.GrpcConn)
-	adsResClient, err := adsClient.StreamAggregatedResources(ctx)
-	if err != nil {
-		return nil, err
+func (client *XdsClient) getGrpcConn() (*grpc.ClientConn, error) {
+	var conn *grpc.ClientConn
+	var err error
+	if client.TlsConfig != nil {
+		creds := credentials.NewTLS(client.TlsConfig)
+		conn, err = grpc.Dial(client.PilotAddr, grpc.WithTransportCredentials(creds))
+	} else {
+		conn, err = grpc.Dial(client.PilotAddr, grpc.WithInsecure())
 	}
 
-	return adsResClient, nil
+	return conn, err
+}
+
+func getAdsResClient(client *XdsClient) (v2.AggregatedDiscoveryService_StreamAggregatedResourcesClient, *grpc.ClientConn, error) {
+	conn, err := client.getGrpcConn()
+	if err != nil {
+		return nil, nil, err
+	}
+
+	adsClient := v2.NewAggregatedDiscoveryServiceClient(conn)
+	adsResClient, err := adsClient.StreamAggregatedResources(context.Background())
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return adsResClient, conn, nil
 }
 
 func (client *XdsClient) getRouterClusters(clusterName string) ([]string, error) {
@@ -182,10 +182,11 @@ func (client *XdsClient) setNonce(resType XdsType, nonce string) {
 }
 
 func (client *XdsClient) CDS() ([]apiv2.Cluster, error) {
-	adsResClient, err := getAdsResClient(client)
+	adsResClient, conn, err := getAdsResClient(client)
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 
 	req := &apiv2.DiscoveryRequest{
 		TypeUrl:       "type.googleapis.com/envoy.api.v2.Cluster",
@@ -226,10 +227,11 @@ func (client *XdsClient) CDS() ([]apiv2.Cluster, error) {
 }
 
 func (client *XdsClient) EDS(clusterName string) (*apiv2.ClusterLoadAssignment, error) {
-	adsResClient, err := getAdsResClient(client)
+	adsResClient, conn, err := getAdsResClient(client)
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 
 	req := &apiv2.DiscoveryRequest{
 		TypeUrl:       "type.googleapis.com/envoy.api.v2.ClusterLoadAssignment",
@@ -314,14 +316,16 @@ func (client *XdsClient) GetEndpointsByTags(serviceName string, tags map[string]
 }
 
 func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, error) {
-	parts := strings.Split(clusterName, "|")
-	port := parts[1]
-	serviceName := parts[3]
+	clusterInfo := ParseClusterName(clusterName)
+	if clusterInfo == nil {
+		return nil, fmt.Errorf("Invalid clusterName for routers: %s", clusterName)
+	}
 
-	adsResClient, err := getAdsResClient(client)
+	adsResClient, conn, err := getAdsResClient(client)
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 
 	req := &apiv2.DiscoveryRequest{
 		TypeUrl:       "type.googleapis.com/envoy.api.v2.RouteConfiguration",
@@ -356,7 +360,7 @@ func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, erro
 		} else {
 			vhosts := route.GetVirtualHosts()
 			for _, vhost := range vhosts {
-				if vhost.Name == fmt.Sprintf("%s:%s", serviceName, port) {
+				if vhost.Name == fmt.Sprintf("%s:%s", clusterInfo.ServiceName, clusterInfo.Port) {
 					virtualHosts = append(virtualHosts, vhost)
 				}
 			}
@@ -366,10 +370,11 @@ func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, erro
 }
 
 func (client *XdsClient) LDS() ([]apiv2.Listener, error) {
-	adsResClient, err := getAdsResClient(client)
+	adsResClient, conn, err := getAdsResClient(client)
 	if err != nil {
 		return nil, err
 	}
+	defer conn.Close()
 
 	req := &apiv2.DiscoveryRequest{
 		TypeUrl:       "type.googleapis.com/envoy.api.v2.ClusterLoadAssignment",

@@ -158,11 +158,12 @@ func TestGetSubsetTags(t *testing.T) {
 }
 
 func TestGetAdsResClient(t *testing.T) {
-	_, err := getAdsResClient(ValidXdsClient)
+	_, conn, err := getAdsResClient(ValidXdsClient)
 
 	if err != nil {
 		t.Errorf("Failed to get ads resource client: %s", err.Error())
 	}
+	conn.Close()
 }
 
 func TestParseClusterName(t *testing.T) {
