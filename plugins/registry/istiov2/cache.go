@@ -1,7 +1,6 @@
 package pilotv2
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -10,6 +9,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/archaius"
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/config"
+	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
 )
 
@@ -39,7 +39,7 @@ func (cm *CacheManager) AutoSync() {
 	} else {
 		timeValue, err := time.ParseDuration(refreshInterval)
 		if err != nil {
-			fmt.Println(err, "refeshInterval is invalid. So use Default value")
+			lager.Logger.Errorf("refeshInterval is invalid. So use Default value: %s", err.Error())
 			timeValue = DefaultRefreshInterval
 		}
 
@@ -55,23 +55,22 @@ func (cm *CacheManager) AutoSync() {
 func (cm *CacheManager) refreshCache() {
 	// TODO What is the design of autodiscovery
 	if archaius.GetBool("cse.service.registry.autodiscovery", false) {
-		// TODO CDS
-		fmt.Println(errors.New("not supported"), "SyncPilotEndpoints failed.")
+		lager.Logger.Errorf("SyncPilotEndpoints failed: not supported")
 	}
 
 	err := cm.pullMicroserviceInstance()
 	if err != nil {
-		fmt.Println(err, "AutoUpdateMicroserviceInstance failed.")
+		lager.Logger.Errorf("AutoUpdateMicroserviceInstance failed: %s", err.Error())
 	}
 
 	if archaius.GetBool("cse.service.registry.autoSchemaIndex", false) {
-		fmt.Println(errors.New("Not support operation"), "MakeSchemaIndex failed.")
+		lager.Logger.Errorf("MakeSchemaIndex failed: Not support operation")
 	}
 
 	if archaius.GetBool("cse.service.registry.autoIPIndex", false) {
 		err = cm.MakeIPIndex()
 		if err != nil {
-			fmt.Println(err, "Auto Update IP index failed.")
+			lager.Logger.Errorf("Auto Update IP index failed: %s", err.Error())
 		}
 	}
 }

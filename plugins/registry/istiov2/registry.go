@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/go-chassis/go-chassis/core/common"
+	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/metadata"
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
@@ -93,7 +94,7 @@ func (discovery *ServiceDiscovery) GetMicroService(microServiceID string) (*regi
 	for _, cluster := range clusters {
 		parts := strings.Split(cluster.Name, "|")
 		if len(parts) < 4 {
-			fmt.Println("[WARN] invalid cluster name: ", cluster.Name)
+			lager.Logger.Warnf("Invalid cluster name: %s", cluster.Name)
 			continue
 		}
 
@@ -162,7 +163,7 @@ func (discovery *ServiceDiscovery) AutoSync() {
 	var err error
 	cacheManager, err = NewCacheManager(discovery.client)
 	if err != nil {
-		fmt.Println("Failed to create cache manager, auto ip indexing will not work:", err)
+		lager.Logger.Errorf("Failed to create cache manager, indexing will not work: %s", err.Error())
 	} else {
 		cacheManager.AutoSync()
 	}
@@ -212,7 +213,7 @@ func init() {
 		POD_NAMESPACE = "default"
 	}
 	if INSTANCE_IP == "" {
-		fmt.Println("[WARN] Env var INSTANCE_IP not set, the service might not work properly.")
+		fmt.Println("[WARN] Env var INSTANCE_IP not set, try to get instance ip from local network, the service might not work properly.")
 		INSTANCE_IP = iputil.GetLocalIP()
 		if INSTANCE_IP == "" {
 			// Won't work without instance ip

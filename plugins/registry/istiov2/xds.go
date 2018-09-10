@@ -12,6 +12,7 @@ import (
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
 	apiv2route "github.com/envoyproxy/go-control-plane/envoy/api/v2/route"
 	"github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
+	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/gogo/protobuf/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -214,7 +215,7 @@ func (client *XdsClient) CDS() ([]apiv2.Cluster, error) {
 	clusters := []apiv2.Cluster{}
 	for _, res := range resources {
 		if err := proto.Unmarshal(res.GetValue(), &cluster); err != nil {
-			fmt.Println("Failed to unmarshal resource: ", err)
+			lager.Logger.Warnf("Failed to unmarshal cluster resource: %s", err.Error())
 		} else {
 			clusters = append(clusters, cluster)
 		}
@@ -280,33 +281,27 @@ func (client *XdsClient) GetEndpointsByTags(serviceName string, tags map[string]
 		if clusterInfo == nil || clusterInfo.Subset == "" || clusterInfo.ServiceName != serviceName {
 			continue
 		}
-		fmt.Println("try ", cluster.Name)
 		// So clusterInfo is not nil and subset is not empty
 		if subsetTags, err := client.GetSubsetTags(clusterInfo.Namespace, clusterInfo.ServiceName, clusterInfo.Subset); err == nil {
-			fmt.Println("subsetTags: ", cluster.Name, subsetTags)
 			// filter with tags
 			matched := true
 			for k, v := range tags {
 				if subsetTagValue, exists := subsetTags[k]; exists == false || subsetTagValue != v {
-					fmt.Println(k, "not matching")
 					matched = false
 					break
 				}
 			}
 
 			if matched { // We got the cluster!
-				fmt.Println("matched!", cluster.Name)
 				clusterName = cluster.Name
 				loadAssignment, err := client.EDS(cluster.Name)
 				if err != nil {
-					fmt.Println("failed to get load assignment")
 					return nil, clusterName, err
 				}
 
 				for _, item := range loadAssignment.Endpoints {
 					lbendpoints = append(lbendpoints, item.LbEndpoints...)
 				}
-				fmt.Println("got ", len(lbendpoints), "lbendpoints")
 
 				return lbendpoints, clusterName, nil
 			}
@@ -323,7 +318,6 @@ func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, erro
 
 	adsResClient, err := getAdsResClient(client)
 	if err != nil {
-		fmt.Println("failed to get stream adsResClient")
 		return nil, err
 	}
 
@@ -356,16 +350,12 @@ func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, erro
 
 	for _, res := range resources {
 		if err := proto.Unmarshal(res.GetValue(), &route); err != nil {
-			fmt.Println("Failed to unmarshal resource: ", err)
+			lager.Logger.Warnf("Failed to unmarshal router resource: ", err.Error())
 		} else {
 			vhosts := route.GetVirtualHosts()
 			for _, vhost := range vhosts {
 				if vhost.Name == fmt.Sprintf("%s:%s", serviceName, port) {
 					virtualHosts = append(virtualHosts, vhost)
-					for _, r := range vhost.Routes {
-						routerClusterName := r.GetRoute().GetCluster()
-						fmt.Println("[JUZHEN DEBUG]: ", routerClusterName)
-					}
 				}
 			}
 		}
@@ -376,7 +366,6 @@ func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, erro
 func (client *XdsClient) LDS() ([]apiv2.Listener, error) {
 	adsResClient, err := getAdsResClient(client)
 	if err != nil {
-		fmt.Println("failed to get stream adsResClient")
 		return nil, err
 	}
 
@@ -408,7 +397,7 @@ func (client *XdsClient) LDS() ([]apiv2.Listener, error) {
 
 	for _, res := range resources {
 		if err := proto.Unmarshal(res.GetValue(), &listener); err != nil {
-			fmt.Println("Failed to unmarshal resource: ", err)
+			lager.Logger.Warnf("Failed to unmarshal listener resource: ", err.Error())
 		} else {
 			listeners = append(listeners, listener)
 		}
