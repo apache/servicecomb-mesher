@@ -29,3 +29,6 @@ vendor
 _build
 coverage.txt
 go.sum
+
+mesher.tar.gz
+/release/

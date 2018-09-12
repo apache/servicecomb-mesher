@@ -33,7 +33,7 @@ import (
 func Init() (err error) {
 	isAdminEnable := config.GetConfig().Admin.Enable
 
-	if isAdminEnable != nil && *isAdminEnable == false {
+	if !isAdminEnable {
 		lager.Logger.Infof("admin api are not enable")
 		return nil
 	}
