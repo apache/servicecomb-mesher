@@ -109,6 +109,7 @@ func SetHandlers() {
 	}
 	providerChainMap := map[string]string{
 		common.ChainProviderIncoming: providerChain,
+		"default":                    chassisHandler.RatelimiterProvider,
 	}
 	chassis.SetDefaultConsumerChains(consumerChainMap)
 	chassis.SetDefaultProviderChains(providerChainMap)

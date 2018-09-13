@@ -45,7 +45,7 @@ type Plugin struct {
 
 //Admin has attributes for enabling, serverURI and metrics for admin data
 type Admin struct {
-	Enable           *bool  `yaml:"enable"`
+	Enable           bool   `yaml:"enable"`
 	ServerURI        string `yaml:"serverUri"`
 	GoRuntimeMetrics bool   `yaml:"goRuntimeMetrics"`
 }
