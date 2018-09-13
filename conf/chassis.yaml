@@ -6,7 +6,7 @@ cse:
     http:
       listenAddress: 127.0.0.1:30101
     rest-admin:
-      listenAddress: 0.0.0.0:30102 # listen addr use to adminAPI
+      listenAddress: 127.0.0.1:30102 # listen addr use to adminAPI
   service:
     registry:
       address: http://127.0.0.1:30100 # uri of service center

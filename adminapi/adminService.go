@@ -25,6 +25,5 @@ import
 
 //RegisterWebService creates route and returns all admin api's
 func RegisterWebService() {
-
 	chassis.RegisterSchema("rest-admin", &Admin{})
 }

@@ -2,7 +2,7 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The ASF licenses this file to You under the Apache License, LVersion 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -26,22 +26,21 @@ import (
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
 	"github.com/go-mesh/mesher/common"
 	"github.com/go-mesh/mesher/config"
-	"github.com/go-mesh/mesher/metrics"
+	"github.com/go-mesh/mesher/pkg/metrics"
+	"github.com/go-mesh/openlogging"
 )
 
 //Init function initiates admin server config and runs it
 func Init() (err error) {
 	isAdminEnable := config.GetConfig().Admin.Enable
-
-	if isAdminEnable != nil && *isAdminEnable == false {
+	metrics.Init()
+	if !isAdminEnable {
 		lager.Logger.Infof("admin api are not enable")
 		return nil
 	}
 
-	metrics.Init()
-	go func() {
-		RegisterWebService()
-	}()
+	openlogging.GetLogger().Info("enable admin API")
+	RegisterWebService()
 	return
 }
 

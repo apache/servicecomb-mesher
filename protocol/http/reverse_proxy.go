@@ -2,7 +2,7 @@
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The ASF licenses this file to You under the Apache License, LVersion 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -39,7 +39,7 @@ import (
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
 	"github.com/go-mesh/mesher/cmd"
 	"github.com/go-mesh/mesher/common"
-	"github.com/go-mesh/mesher/metrics"
+	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/mesher/protocol"
 	"github.com/go-mesh/mesher/resolver"
 )
@@ -121,8 +121,8 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer func(begin time.Time) {
 		timeTaken := time.Since(begin).Seconds()
-		serviceLabelValues := map[string]string{metrics.ServiceName: inv.MicroServiceName, metrics.AppID: inv.RouteTags.AppID(), metrics.Version: inv.RouteTags.Version()}
-		metrics.DefaultPrometheusExporter.Summary(metrics.RequestLatencySeconds, timeTaken, metrics.LabelNames, serviceLabelValues)
+		serviceLabelValues := map[string]string{metrics.LServiceName: inv.MicroServiceName, metrics.LApp: inv.RouteTags.AppID(), metrics.LVersion: inv.RouteTags.Version()}
+		metrics.DefaultPrometheusExporter.Summary(metrics.LRequestLatencySeconds, timeTaken, metrics.LabelNames, serviceLabelValues)
 	}(time.Now())
 	var invRsp *invocation.Response
 	c.Next(inv, func(ir *invocation.Response) error {
@@ -138,7 +138,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		lager.Logger.Error("Handle request failed: " + err.Error())
 		return
 	}
-	metrics.RecordResponse(inv, resp.GetStatusCode())
+	metrics.RecordStatus(inv, resp.GetStatusCode())
 }
 
 //RemoteRequestHandler is for request from remote
@@ -237,7 +237,7 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 							return nil, ir.Err
 						}
 						copyChassisResp2HttpResp(w, resp)
-						metrics.RecordResponse(inv, resp.Resp.StatusCode)
+						metrics.RecordStatus(inv, resp.Resp.StatusCode)
 					} else {
 						// unknown error, resp is nil, e.g. connection refused
 						handleErrorResponse(inv, w, http.StatusBadGateway, ir.Err)
@@ -283,7 +283,7 @@ func handleErrorResponse(inv *invocation.Invocation, w http.ResponseWriter, stat
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	}
-	metrics.RecordResponse(inv, statusCode)
+	metrics.RecordStatus(inv, statusCode)
 }
 
 func copyHeader(dst, src http.Header) {

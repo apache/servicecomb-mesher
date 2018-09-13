@@ -3,8 +3,9 @@
 #  destinationResolver:
 #    http: host # how to turn host to destination name. default to service name，
 
-##admin: #admin API
-#  goRuntimeMetrics : true # enable metrics
+admin: #admin API
+  goRuntimeMetrics : true # enable metrics
+  enable: true
 
 ## enable pprof to profile mesher runtime
 #pprof:
