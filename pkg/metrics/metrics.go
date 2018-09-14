@@ -23,8 +23,6 @@
 package metrics
 
 import (
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
 	mesherConf "github.com/go-mesh/mesher/config"
 	"sync"
@@ -40,8 +38,8 @@ const (
 	LRequestLatencySeconds = "request_latency_seconds"
 	LError4XX              = "status_4xx"
 	LError5XX              = "status_5xx"
-	LServiceName           = "servicename"
-	LApp                   = "appid"
+	LServiceName           = "service_name"
+	LApp                   = "app"
 	LVersion               = "version"
 	LStartTime             = "start_time_seconds"
 )
@@ -54,39 +52,50 @@ var (
 
 //Recorder export the metrics into various of system
 type Recorder interface {
-	RecordStatus(labels []string, labelValues map[string]string, status int)
-	RecordLatency(labels []string, labelValues map[string]string, latency float64)
-	RecordStartTime(labels []string, labelValues map[string]string, start time.Time)
+	RecordStatus(labelValues map[string]string, status int, opts *RecordOptions)
+	RecordLatency(labelValues map[string]string, latency float64, opts *RecordOptions)
+	RecordStartTime(labelValues map[string]string, start time.Time, opts *RecordOptions)
 }
 
 //Options define recorder options
 type Options struct {
+	LabelNames             []string //default label names, if RecordOptions LabelNames is nil
 	EnableGoRuntimeMetrics bool
+}
+
+//RecordOptions is options for record method
+type RecordOptions struct {
+	LabelNames []string // able top custom label names
 }
 
 var defaultRecorder Recorder = &promRecorder{}
 
-//RecordStatus record a status
-func RecordStatus(inv *invocation.Invocation, statusCode int) {
-	serviceLabelValues := map[string]string{LServiceName: inv.MicroServiceName, LApp: inv.RouteTags.AppID(), LVersion: inv.RouteTags.Version()}
-	defaultRecorder.RecordStatus(LabelNames, serviceLabelValues, statusCode)
+//RecordStatus record an operation status
+func RecordStatus(labelValues map[string]string, statusCode int, opts *RecordOptions) {
+	defaultRecorder.RecordStatus(labelValues, statusCode, opts)
 }
 
-//RecordLatency TODO
-func RecordLatency(labelNames []string, labelValues map[string]string, latency float64) {
-
+//RecordLatency record an operation latency
+func RecordLatency(labelValues map[string]string, latency float64, opts *RecordOptions) {
+	defaultRecorder.RecordLatency(labelValues, latency, opts)
 }
 
-//RecordStartTime record the app start time
-func RecordStartTime(labelNames []string, labelValues map[string]string, start time.Time) {
-	defaultRecorder.RecordStartTime(labelNames, labelValues, start)
+//RecordStartTime record app start time
+func RecordStartTime(labelValues map[string]string, start time.Time, opts *RecordOptions) {
+	defaultRecorder.RecordStartTime(labelValues, start, opts)
 }
 
 //Init initiate the recorder
-func Init() {
-	LabelValues := map[string]string{LServiceName: runtime.ServiceName, LApp: config.GlobalDefinition.AppID, LVersion: config.SelfVersion}
-	defaultRecorder = newPromRecorder(&Options{
+func Init() error {
+	var err error
+	LabelValues := map[string]string{LServiceName: runtime.ServiceName, LApp: runtime.App, LVersion: runtime.Version}
+	defaultRecorder, err = NewPromRecorder(&Options{
+		LabelNames:             LabelNames,
 		EnableGoRuntimeMetrics: mesherConf.GetConfig().Admin.GoRuntimeMetrics,
 	})
-	RecordStartTime(LabelNames, LabelValues, time.Now())
+	if err != nil {
+		return err
+	}
+	RecordStartTime(LabelValues, time.Now(), nil)
+	return nil
 }

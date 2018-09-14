@@ -203,7 +203,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "count(count(requests_total{instance=~\"$node\"}) by(servicename))",
+              "expr": "count(count(requests_total{instance=~\"$node\"}) by(service_name))",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
@@ -734,10 +734,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "(sum(successes_total{instance=~\"$node\"}) by (servicename,appid,version))/(sum(requests_total{instance=~\"$node\"}) by  (servicename,appid,version))",
+              "expr": "(sum(successes_total{instance=~\"$node\"}) by (service_name,app,version))/(sum(requests_total{instance=~\"$node\"}) by  (service_name,app,version))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{servicename}}@{{appid}}#{{version}}",
+              "legendFormat": "{{service_name}}@{{app}}#{{version}}",
               "refId": "A",
               "step": 10
             }
@@ -810,10 +810,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(requests_total{instance=~\"$node\"} [5m])) by(servicename,appid,version)",
+              "expr": "sum(rate(requests_total{instance=~\"$node\"} [5m])) by(service_name,app,version)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{servicename}}@{{appid}}#{{version}}",
+              "legendFormat": "{{service_name}}@{{app}}#{{version}}",
               "refId": "A",
               "step": 10
             }
@@ -934,7 +934,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "requests_total{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\",version=~\"$version\"}",
+              "expr": "requests_total{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\",version=~\"$version\"}",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
@@ -1011,7 +1011,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(successes_total{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\",version=~\"$version\"})/sum(requests_total{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\",version=~\"$version\"}) ",
+              "expr": "sum(successes_total{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\",version=~\"$version\"})/sum(requests_total{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\",version=~\"$version\"}) ",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
@@ -1088,7 +1088,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "rate(status_5xx{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\",version=~\"$version\"} [5m])",
+              "expr": "rate(status_5xx{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\",version=~\"$version\"} [5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
@@ -1165,7 +1165,7 @@
           "tableColumn": "",
           "targets": [
             {
-              "expr": "rate(status_4xx{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\",version=~\"$version\"} [5m])",
+              "expr": "rate(status_4xx{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\",version=~\"$version\"} [5m])",
               "format": "time_series",
               "intervalFactor": 2,
               "refId": "A",
@@ -1217,7 +1217,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(successes_total{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\",version=~\"$version\"})/sum(requests_total{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\",version=~\"$version\"}) ",
+              "expr": "sum(successes_total{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\",version=~\"$version\"})/sum(requests_total{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\",version=~\"$version\"}) ",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Quantile : {{quantile}}",
@@ -1293,10 +1293,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(requests_total{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\",version=~\"$version\"} [5m])",
+              "expr": "rate(requests_total{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\",version=~\"$version\"} [5m])",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{servicename}}",
+              "legendFormat": "{{service_name}}",
               "refId": "A",
               "step": 10
             }
@@ -1369,7 +1369,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "request_latency_seconds{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\",version=~\"$version\"} ",
+              "expr": "request_latency_seconds{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\",version=~\"$version\"} ",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "Quantile : {{quantile}}",
@@ -1945,7 +1945,7 @@
         "multi": false,
         "name": "service",
         "options": [],
-        "query": "label_values(requests_total{instance=~\"$node\"},servicename)",
+        "query": "label_values(requests_total{instance=~\"$node\"},service_name)",
         "refresh": 2,
         "regex": "",
         "sort": 1,
@@ -1967,9 +1967,9 @@
         "includeAll": false,
         "label": "",
         "multi": false,
-        "name": "appid",
+        "name": "app",
         "options": [],
-        "query": "label_values(requests_total{instance=~\"$node\",servicename=~\"$service\"},appid)",
+        "query": "label_values(requests_total{instance=~\"$node\",service_name=~\"$service\"},app)",
         "refresh": 2,
         "regex": "",
         "sort": 1,
@@ -1992,7 +1992,7 @@
         "multi": false,
         "name": "version",
         "options": [],
-        "query": "label_values(requests_total{instance=~\"$node\",servicename=~\"$service\",appid=~\"$appid\"},version)",
+        "query": "label_values(requests_total{instance=~\"$node\",service_name=~\"$service\",app=~\"$app\"},version)",
         "refresh": 2,
         "regex": "",
         "sort": 1,

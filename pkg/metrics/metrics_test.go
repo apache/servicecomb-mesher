@@ -15,100 +15,54 @@
  * limitations under the License.
  */
 
-package metrics
+package metrics_test
 
 import (
 	"net/http"
 	"strings"
 	"testing"
 
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/prometheus/client_golang/prometheus"
-	dto "github.com/prometheus/client_model/go"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/go-chassis/go-chassis/core/config/model"
+	"github.com/go-chassis/go-chassis/pkg/runtime"
+	mc "github.com/go-mesh/mesher/config"
+	"github.com/go-mesh/mesher/pkg/metrics"
 )
 
-var (
-	labelNames  = []string{"APPID", "VERSION"}
-	labelValues = map[string]string{"APPID": "sockshop", "VERSION": "0.1"}
-)
-
-func TestPrometheusConfig_CounterFromNameAndLabelValues(t *testing.T) {
-	assert := assert.New(t)
-	var totalMetricCreated int
-	DefaultPrometheusExporter.Count("total_request", labelNames, labelValues)
-	metricFamilies, err := prometheus.DefaultGatherer.Gather()
-	assert.Nil(err, "error should be nil while collecting metrics from prometheus")
-	for _, metricFamily := range metricFamilies {
-		if metricName := metricFamily.GetName(); strings.Contains(metricName, "total_request") {
-			assert.Equal(metricFamily.GetType(), dto.MetricType_COUNTER)
-			totalMetricCreated++
-		}
-	}
-	assert.Equal(totalMetricCreated, 1)
+func TestInit(t *testing.T) {
+	mc.SetConfig(&mc.MesherConfig{
+		Admin: mc.Admin{
+			GoRuntimeMetrics: false,
+		},
+	})
+	err := metrics.Init()
+	runtime.ServiceName = "A"
+	runtime.Version = "v1.1"
+	runtime.App = "app"
+	assert.NoError(t, err)
 }
-
-func TestPrometheusConfig_GaugeFromNameAndLabelValues(t *testing.T) {
+func TestRecordStatus(t *testing.T) {
 	assert := assert.New(t)
-	var totalMetricCreated int
-	var gaugeValue *float64
-	DefaultPrometheusExporter.Gauge("memory_used", 12, labelNames, labelValues)
-	metricFamilies, err := prometheus.DefaultGatherer.Gather()
-	assert.Nil(err, "error should be nil while collecting metrics from prometheus")
-	for _, metricFamily := range metricFamilies {
-		if metricName := metricFamily.GetName(); strings.Contains(metricName, "memory_used") {
-			assert.Equal(metricFamily.GetType(), dto.MetricType_GAUGE)
-			totalMetricCreated++
-			gaugeValue = metricFamily.Metric[0].Gauge.Value
-		}
-	}
-	assert.Equal(totalMetricCreated, 1)
-	assert.Equal(*gaugeValue, float64(12))
-}
-
-func TestPrometheusConfig_SummaryFromNameAndLabelValues(t *testing.T) {
-	assert := assert.New(t)
-	var totalMetricCreated int
-	var sampleCount *uint64
-	DefaultPrometheusExporter.Summary("request_latency", 12, labelNames, labelValues)
-	metricFamilies, err := prometheus.DefaultGatherer.Gather()
-	assert.Nil(err, "error should be nil while collecting metrics from prometheus")
-	for _, metricFamily := range metricFamilies {
-		if metricName := metricFamily.GetName(); strings.Contains(metricName, "request_latency") {
-			assert.Equal(metricFamily.GetType(), dto.MetricType_SUMMARY)
-			totalMetricCreated++
-			sampleCount = metricFamily.Metric[0].Summary.SampleCount
-		}
-	}
-	assert.Equal(totalMetricCreated, 1)
-	assert.Equal(*sampleCount, uint64(1))
-}
-
-func TestPrepare(t *testing.T) {
-	assert := assert.New(t)
-	config.GlobalDefinition = new(model.GlobalCfg)
-	config.GlobalDefinition.AppID = "sockshop"
-	config.SelfVersion = "0.1"
-	var inv = &invocation.Invocation{
-		MicroServiceName: "service",
-	}
 	var errorcount4xx float64
 	var errorcount5xx float64
-	RecordStatus(inv, http.StatusOK)
-	RecordStatus(inv, http.StatusNotFound)
-	RecordStatus(inv, http.StatusInternalServerError)
+	lvs := map[string]string{
+		metrics.LServiceName: "service",
+		metrics.LVersion:     "",
+		metrics.LApp:         "",
+	}
+	metrics.RecordStatus(lvs, http.StatusOK, nil)
+	metrics.RecordStatus(lvs, http.StatusNotFound, nil)
+	metrics.RecordStatus(lvs, http.StatusInternalServerError, nil)
 	metricFamilies, err := prometheus.DefaultGatherer.Gather()
 	assert.Nil(err, "error should be nil while collecting metrics from prometheus")
 	for _, metricFamily := range metricFamilies {
-		if name := metricFamily.GetName(); strings.Contains(name, LError5XX) {
+		if name := metricFamily.GetName(); strings.Contains(name, metrics.LError5XX) {
 			errorcount4xx += *metricFamily.Metric[0].Counter.Value
 		}
 	}
 	for _, metricFamily := range metricFamilies {
-		if name := metricFamily.GetName(); strings.Contains(name, LError5XX) {
+		if name := metricFamily.GetName(); strings.Contains(name, metrics.LError5XX) {
 			errorcount5xx += *metricFamily.Metric[0].Counter.Value
 		}
 	}

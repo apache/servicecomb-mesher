@@ -33,6 +33,7 @@ import (
 	chassisHandler "github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/metadata"
+	"github.com/go-mesh/mesher/pkg/metrics"
 )
 
 // Start initialize configs and components
@@ -49,6 +50,7 @@ func Start() error {
 	if err := DecideMode(); err != nil {
 		return err
 	}
+	metrics.Init()
 	if err := adminapi.Init(); err != nil {
 		log.Println("Error occurred in starting admin server", err)
 	}

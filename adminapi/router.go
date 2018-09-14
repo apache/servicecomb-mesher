@@ -26,14 +26,13 @@ import (
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
 	"github.com/go-mesh/mesher/common"
 	"github.com/go-mesh/mesher/config"
-	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/openlogging"
 )
 
 //Init function initiates admin server config and runs it
 func Init() (err error) {
 	isAdminEnable := config.GetConfig().Admin.Enable
-	metrics.Init()
+
 	if !isAdminEnable {
 		lager.Logger.Infof("admin api are not enable")
 		return nil
