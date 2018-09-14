@@ -122,7 +122,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	defer func(begin time.Time) {
 		timeTaken := time.Since(begin).Seconds()
 		serviceLabelValues := map[string]string{metrics.LServiceName: inv.MicroServiceName, metrics.LApp: inv.RouteTags.AppID(), metrics.LVersion: inv.RouteTags.Version()}
-		metrics.DefaultPrometheusExporter.Summary(metrics.LRequestLatencySeconds, timeTaken, metrics.LabelNames, serviceLabelValues)
+		metrics.RecordLatency(serviceLabelValues, timeTaken, nil)
 	}(time.Now())
 	var invRsp *invocation.Response
 	c.Next(inv, func(ir *invocation.Response) error {
@@ -138,7 +138,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		lager.Logger.Error("Handle request failed: " + err.Error())
 		return
 	}
-	metrics.RecordStatus(inv, resp.GetStatusCode())
+	RecordStatus(inv, resp.GetStatusCode())
 }
 
 //RemoteRequestHandler is for request from remote
@@ -237,7 +237,7 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 							return nil, ir.Err
 						}
 						copyChassisResp2HttpResp(w, resp)
-						metrics.RecordStatus(inv, resp.Resp.StatusCode)
+						RecordStatus(inv, resp.Resp.StatusCode)
 					} else {
 						// unknown error, resp is nil, e.g. connection refused
 						handleErrorResponse(inv, w, http.StatusBadGateway, ir.Err)
@@ -283,9 +283,14 @@ func handleErrorResponse(inv *invocation.Invocation, w http.ResponseWriter, stat
 	if err != nil {
 		w.Write([]byte(err.Error()))
 	}
-	metrics.RecordStatus(inv, statusCode)
+	RecordStatus(inv, statusCode)
 }
 
+//RecordStatus record an operation status
+func RecordStatus(inv *invocation.Invocation, statusCode int) {
+	LabelValues := map[string]string{metrics.LServiceName: inv.MicroServiceName, metrics.LApp: inv.RouteTags.AppID(), metrics.LVersion: inv.RouteTags.Version()}
+	metrics.RecordStatus(LabelValues, statusCode, nil)
+}
 func copyHeader(dst, src http.Header) {
 	for k, vs := range src {
 		for _, v := range vs {

@@ -13,8 +13,9 @@ replace (
 require (
 	github.com/emicklei/go-restful-swagger12 v0.0.0-20170926063155-7524189396c6 // indirect
 	github.com/go-chassis/go-cc-client v0.0.0-20180831085349-c2bb6cef1640
-	github.com/go-chassis/go-chassis v0.8.3-0.20180904011159-fcc43e7cb6ea
+	github.com/go-chassis/go-chassis v0.8.3-0.20180914033538-0791a5cec8b4
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
+	github.com/go-mesh/openlogging v0.0.0-20180831021158-f5d1c4e7e506
 	github.com/gogo/protobuf v1.1.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v0.8.0
