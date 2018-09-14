@@ -10,16 +10,16 @@ export BUILD_DIR=/var/lib/jenkins/workspace/Mesher
 export WORK_DIR=$BUILD_DIR/src/$repo/$project/mesher
 cd $WORK_DIR
 
-docker build -t gochassis/mesher:$VERSION .
+docker build -t gomesh/mesher:$VERSION .
 
 cp /var/lib/jenkins/workspace/docker_login.sh .
 bash docker_login.sh &> /dev/null
 
 if [ $PUSH_WITH_LATEST_TAG == "YES" ]; then
-    docker build -t gochassis/mesher:latest .
-    docker push gochassis/mesher:latest
+    docker build -t gomesh/mesher:latest .
+    docker push gomesh/mesher:latest
 fi
 
-docker push gochassis/mesher:$VERSION
+docker push gomesh/mesher:$VERSION
 
 exit 0
