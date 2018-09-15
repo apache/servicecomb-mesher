@@ -24,14 +24,6 @@ import (
 	"net/http"
 	"net/url"
 
-	mesherCommon "github.com/go-mesh/mesher/common"
-	"github.com/go-mesh/mesher/config"
-	"github.com/go-mesh/mesher/protocol/dubbo/client"
-	"github.com/go-mesh/mesher/protocol/dubbo/dubbo"
-	"github.com/go-mesh/mesher/protocol/dubbo/schema"
-	"github.com/go-mesh/mesher/protocol/dubbo/utils"
-	"github.com/go-mesh/mesher/resolver"
-
 	"github.com/go-chassis/go-chassis/client/rest"
 	"github.com/go-chassis/go-chassis/core/common"
 	chassisconfig "github.com/go-chassis/go-chassis/core/config"
@@ -43,7 +35,14 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/runtime"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
+	mesherCommon "github.com/go-mesh/mesher/common"
+	mesherRuntime "github.com/go-mesh/mesher/pkg/runtime"
 	"github.com/go-mesh/mesher/protocol"
+	"github.com/go-mesh/mesher/protocol/dubbo/client"
+	"github.com/go-mesh/mesher/protocol/dubbo/dubbo"
+	"github.com/go-mesh/mesher/protocol/dubbo/schema"
+	"github.com/go-mesh/mesher/protocol/dubbo/utils"
+	"github.com/go-mesh/mesher/resolver"
 )
 
 var dr = resolver.GetDestinationResolver("http")
@@ -197,7 +196,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 			ctx.Req.SetAttachment(common.HeaderSourceName, chassisconfig.SelfServiceName)
 			ctx.Req.SetAttachment(ProxyTag, "true")
 
-			if config.Mode == mesherCommon.ModeSidecar {
+			if mesherRuntime.Mode == mesherCommon.ModeSidecar {
 				c, err = handler.GetChain(common.Consumer, mesherCommon.ChainConsumerOutgoing)
 				if err != nil {
 					lager.Logger.Error("Get Consumer chain failed: " + err.Error())
@@ -303,7 +302,7 @@ func ProxyRestHandler(ctx *dubbo.InvokeContext) error {
 		return err
 	}
 
-	if config.Mode == mesherCommon.ModeSidecar {
+	if mesherRuntime.Mode == mesherCommon.ModeSidecar {
 		c, err = handler.GetChain(common.Consumer, mesherCommon.ChainConsumerOutgoing)
 		if err != nil {
 			lager.Logger.Error("Get chain failed: " + err.Error())
