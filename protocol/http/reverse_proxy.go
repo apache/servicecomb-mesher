@@ -74,8 +74,7 @@ func preHandler(req *http.Request) *invocation.Invocation {
 func consumerPreHandler(req *http.Request) *invocation.Invocation {
 	inv := preHandler(req)
 	inv.SourceServiceID = runtime.ServiceID
-	inv.SourceMicroService = chassisconfig.SelfServiceName
-	req.Header.Set(chassisCommon.HeaderSourceName, inv.SourceMicroService)
+	req.Header.Set(chassisCommon.HeaderSourceName, runtime.ServiceName)
 	inv.Ctx = context.TODO()
 	return inv
 }

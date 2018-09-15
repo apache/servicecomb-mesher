@@ -34,6 +34,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/server"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
+	"github.com/go-mesh/mesher/pkg/runtime"
 )
 
 const (
@@ -72,7 +73,7 @@ func (hs *httpServer) Start() error {
 		return fmt.Errorf("only support ipv4, input is [%s]", hs.opts.Address)
 	}
 
-	switch config.Mode {
+	switch runtime.Mode {
 	case common.ModeSidecar:
 		err = hs.startSidecar(host, port)
 	case common.ModePerHost:

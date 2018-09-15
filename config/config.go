@@ -37,8 +37,6 @@ const (
 	ConfFile = "mesher.yaml"
 )
 
-//Mode is of type string which gives mode of mesher deployment
-var Mode string
 var mesherConfig *MesherConfig
 
 //GetConfig returns mesher config

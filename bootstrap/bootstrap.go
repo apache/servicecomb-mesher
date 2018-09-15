@@ -34,6 +34,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/metadata"
 	"github.com/go-mesh/mesher/pkg/metrics"
+	"github.com/go-mesh/mesher/pkg/runtime"
 )
 
 // Start initialize configs and components
@@ -67,8 +68,8 @@ func Start() error {
 
 //DecideMode get config mode
 func DecideMode() error {
-	config.Mode = cmd.Configs.Mode
-	lager.Logger.Info("Running as "+config.Mode, nil)
+	runtime.Mode = cmd.Configs.Mode
+	lager.Logger.Info("Running as "+runtime.Mode, nil)
 	return nil
 }
 
