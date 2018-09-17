@@ -138,8 +138,12 @@ func (discovery *ServiceDiscovery) GetMicroServiceInstances(consumerID, provider
 }
 
 func (discovery *ServiceDiscovery) FindMicroServiceInstances(consumerID, microServiceName string, tags utiltags.Tags) ([]*registry.MicroServiceInstance, error) {
+	if tags.KV == nil || tags.Label == "" { // Chassis might pass an empty tags
+		return discovery.GetMicroServiceInstances(consumerID, microServiceName)
+	}
+
 	instances := simpleCache.GetWithTags(microServiceName, tags.KV)
-	if instances == nil {
+	if len(instances) == 0 {
 		var lbendpoints []apiv2endpoint.LbEndpoint
 		var err error
 		lbendpoints, clusterName, err := discovery.client.GetEndpointsByTags(microServiceName, tags.KV)
