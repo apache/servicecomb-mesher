@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
+	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
 )
 
 const (
@@ -18,9 +19,9 @@ var (
 	KubeConfig     string
 	ValidPilotAddr string
 	LocalIPAddress string
-	nodeInfo       *NodeInfo
+	nodeInfo       *istioinfra.NodeInfo
 
-	testXdsClient    *XdsClient
+	testXdsClient    *istioinfra.XdsClient
 	testCacheManager *CacheManager
 	err              error
 )
@@ -50,13 +51,13 @@ func init() {
 		panic("Failed to get the local ip address, please check the network environment")
 	}
 
-	nodeInfo = &NodeInfo{
+	nodeInfo = &istioinfra.NodeInfo{
 		PodName:    TEST_POD_NAME,
 		Namespace:  NAMESPACE_DEFAULT,
 		InstanceIP: LocalIPAddress,
 	}
 
-	testXdsClient, err = NewXdsClient(ValidPilotAddr, nil, nodeInfo, KubeConfig)
+	testXdsClient, err = istioinfra.NewXdsClient(ValidPilotAddr, nil, nodeInfo, KubeConfig)
 	if err != nil {
 		panic("Failed to prepare test, xds client creation failed: " + err.Error())
 	}

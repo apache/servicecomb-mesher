@@ -11,6 +11,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
+	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
 )
 
 const (
@@ -26,7 +27,7 @@ func init() {
 }
 
 type CacheManager struct {
-	xdsClient *XdsClient
+	xdsClient *istioinfra.XdsClient
 }
 
 func (cm *CacheManager) AutoSync() {
@@ -133,7 +134,7 @@ func (cm *CacheManager) MakeIPIndex() error {
 	return nil
 }
 
-func NewCacheManager(xdsClient *XdsClient) (*CacheManager, error) {
+func NewCacheManager(xdsClient *istioinfra.XdsClient) (*CacheManager, error) {
 	cacheManager := &CacheManager{
 		xdsClient: xdsClient,
 	}
@@ -141,8 +142,8 @@ func NewCacheManager(xdsClient *XdsClient) (*CacheManager, error) {
 	return cacheManager, nil
 }
 
-func (cm *CacheManager) getClusterInfos() ([]XdsClusterInfo, error) {
-	clusterInfos := []XdsClusterInfo{}
+func (cm *CacheManager) getClusterInfos() ([]istioinfra.XdsClusterInfo, error) {
+	clusterInfos := []istioinfra.XdsClusterInfo{}
 
 	clusters, err := cm.xdsClient.CDS()
 	if err != nil {
@@ -152,7 +153,7 @@ func (cm *CacheManager) getClusterInfos() ([]XdsClusterInfo, error) {
 	for _, cluster := range clusters {
 		// xDS v2 API: CDS won't obtain the cluster's endpoints, call EDS to get the endpoints
 
-		clusterInfo := ParseClusterName(cluster.Name)
+		clusterInfo := istioinfra.ParseClusterName(cluster.Name)
 		if clusterInfo == nil {
 			continue
 		}
@@ -200,7 +201,7 @@ func updateInstanceIndexCache(lbendpoints []apiv2endpoint.LbEndpoint, clusterNam
 		instances: instances,
 	}
 
-	info := ParseClusterName(clusterName)
+	info := istioinfra.ParseClusterName(clusterName)
 	if info != nil {
 		subset.subsetName = info.Subset
 	}
@@ -230,7 +231,7 @@ func (c EndpointCache) GetWithTags(serviceName string, tags map[string]string) [
 	// Get subsets whose clusterName matches the service name
 	matchedSubsets := []EndpointSubset{}
 	for clusterName, subset := range c.cache {
-		info := ParseClusterName(clusterName)
+		info := istioinfra.ParseClusterName(clusterName)
 		if info != nil && info.ServiceName == serviceName {
 			matchedSubsets = append(matchedSubsets, subset)
 		}

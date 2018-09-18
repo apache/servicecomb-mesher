@@ -1,6 +1,27 @@
 package pilotv2
 
-import "testing"
+import (
+	"fmt"
+	"os"
+	"os/user"
+	"testing"
+)
+
+var KubeConfig string
+
+func init() {
+	if KUBE_CONFIG := os.Getenv("KUBE_CONFIG"); KUBE_CONFIG != "" {
+		KubeConfig = KUBE_CONFIG
+	} else {
+		usr, err := user.Current()
+		if err != nil {
+			panic(fmt.Sprintf("Failed to get current user info: %s", err.Error()))
+		} else {
+			KubeConfig = fmt.Sprintf("%s/%s", usr.HomeDir, ".kube/config")
+		}
+	}
+
+}
 
 func TestCreateK8sClient(t *testing.T) {
 	_, err := CreateK8SRestClient(KubeConfig, "apis", "networking.istio.io", "v1alpha3")
@@ -12,5 +33,4 @@ func TestCreateK8sClient(t *testing.T) {
 	if err == nil {
 		t.Errorf("Test failed, should return error with invalid kube config path")
 	}
-
 }

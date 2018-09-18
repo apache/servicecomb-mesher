@@ -14,6 +14,7 @@ import (
 
 	apiv2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
+	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
 )
 
 var (
@@ -28,7 +29,7 @@ const (
 
 type ServiceDiscovery struct {
 	Name    string
-	client  *XdsClient
+	client  *istioinfra.XdsClient
 	options registry.Options
 }
 
@@ -182,12 +183,12 @@ func NewDiscoveryService(options registry.Options) registry.ServiceDiscovery {
 		panic("Failed to create discovery service: Address not specified")
 	}
 	pilotAddr := options.Addrs[0]
-	nodeInfo := &NodeInfo{
+	nodeInfo := &istioinfra.NodeInfo{
 		PodName:    POD_NAME,
 		Namespace:  POD_NAMESPACE,
 		InstanceIP: INSTANCE_IP,
 	}
-	xdsClient, err := NewXdsClient(pilotAddr, options.TLSConfig, nodeInfo, options.ConfigPath)
+	xdsClient, err := istioinfra.NewXdsClient(pilotAddr, options.TLSConfig, nodeInfo, options.ConfigPath)
 	if err != nil {
 		panic("Failed to create XDS client: " + err.Error())
 	}

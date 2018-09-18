@@ -2,19 +2,67 @@ package pilotv2
 
 import (
 	"fmt"
+	"os"
+	"os/user"
 	"testing"
 	"time"
 
 	apiv2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
+	"github.com/go-chassis/go-chassis/pkg/util/iputil"
 	// apiv2core "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
 	// apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
 	// apiv2route "github.com/envoyproxy/go-control-plane/envoy/api/v2/route"
+)
+
+const (
+	TEST_POD_NAME     = "testpod"
+	NAMESPACE_DEFAULT = "default"
 )
 
 var (
 	ValidXdsClient *XdsClient
 	TestClusters   []apiv2.Cluster
 )
+var (
+	KubeConfig     string
+	ValidPilotAddr string
+	LocalIPAddress string
+	nodeInfo       *NodeInfo
+
+	err error
+)
+
+func init() {
+	// Get kube config path and local ip
+	if KUBE_CONFIG := os.Getenv("KUBE_CONFIG"); KUBE_CONFIG != "" {
+		KubeConfig = KUBE_CONFIG
+	} else {
+		usr, err := user.Current()
+		if err != nil {
+			panic(fmt.Sprintf("Failed to get current user info: %s", err.Error()))
+		} else {
+			KubeConfig = fmt.Sprintf("%s/%s", usr.HomeDir, ".kube/config")
+		}
+	}
+
+	if PILOT_ADDR := os.Getenv("PILOT_ADDR"); PILOT_ADDR != "" {
+		ValidPilotAddr = PILOT_ADDR
+	} else {
+		panic("PILOT_ADDR should be specified to pass the pilot address")
+	}
+
+	if INSTANCE_IP := os.Getenv("INSTANCE_IP"); INSTANCE_IP != "" {
+		LocalIPAddress = INSTANCE_IP
+	} else if LocalIPAddress = iputil.GetLocalIP(); LocalIPAddress == "" {
+		panic("Failed to get the local ip address, please check the network environment")
+	}
+
+	nodeInfo = &NodeInfo{
+		PodName:    TEST_POD_NAME,
+		Namespace:  NAMESPACE_DEFAULT,
+		InstanceIP: LocalIPAddress,
+	}
+}
 
 func TestNewXdsClient(t *testing.T) {
 	client, err := NewXdsClient(ValidPilotAddr, nil, nodeInfo, KubeConfig)

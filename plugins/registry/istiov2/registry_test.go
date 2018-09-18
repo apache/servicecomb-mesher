@@ -10,6 +10,7 @@ import (
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
+	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
 )
 
 var VaildServiceDiscovery registry.ServiceDiscovery
@@ -88,9 +89,9 @@ func TestFindMicroServiceInstances(t *testing.T) {
 		t.Errorf("Failed to teset FindMicroServiceInstances, CDS failed: %s", err.Error())
 	}
 
-	var clusterWithSubset *XdsClusterInfo = nil
+	var clusterWithSubset *istioinfra.XdsClusterInfo = nil
 	for _, c := range clusters {
-		if info := ParseClusterName(c.Name); info != nil && info.Subset != "" {
+		if info := istioinfra.ParseClusterName(c.Name); info != nil && info.Subset != "" {
 			clusterWithSubset = info
 		}
 	}

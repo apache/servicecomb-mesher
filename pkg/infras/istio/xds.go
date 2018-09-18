@@ -13,6 +13,7 @@ import (
 	apiv2route "github.com/envoyproxy/go-control-plane/envoy/api/v2/route"
 	"github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	"github.com/go-chassis/go-chassis/core/lager"
+	k8sinfra "github.com/go-mesh/mesher/pkg/infras/k8s"
 	"github.com/gogo/protobuf/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -78,7 +79,7 @@ func NewXdsClient(pilotAddr string, tlsConfig *tls.Config, nodeInfo *NodeInfo, k
 		TypeRds: &XdsReqCache{},
 	}
 
-	if k8sClient, err := CreateK8SRestClient(kubeconfigPath, "apis", "networking.istio.io", "v1alpha3"); err != nil {
+	if k8sClient, err := k8sinfra.CreateK8SRestClient(kubeconfigPath, "apis", "networking.istio.io", "v1alpha3"); err != nil {
 		return nil, err
 	} else {
 		xdsClient.k8sClient = k8sClient
@@ -98,7 +99,7 @@ func (client *XdsClient) GetSubsetTags(namespace, hostName, subsetName string) (
 		return nil, err
 	}
 
-	var drResult DestinationRuleResult
+	var drResult k8sinfra.DestinationRuleResult
 	if err := json.Unmarshal(rawBody, &drResult); err != nil {
 		return nil, err
 	}
