@@ -11,9 +11,10 @@ import (
 	apiv2core "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
 	apiv2route "github.com/envoyproxy/go-control-plane/envoy/api/v2/route"
-	"github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
-	"github.com/go-chassis/go-chassis/core/lager"
 	k8sinfra "github.com/go-mesh/mesher/pkg/infras/k8s"
+
+	"github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
+	"github.com/go-mesh/openlogging"
 	"github.com/gogo/protobuf/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -69,7 +70,7 @@ func NewXdsClient(pilotAddr string, tlsConfig *tls.Config, nodeInfo *NodeInfo, k
 		PilotAddr: pilotAddr,
 		nodeInfo:  nodeInfo,
 	}
-	xdsClient.NodeID = fmt.Sprintf("sidecar~%s~%s~%s", nodeInfo.InstanceIP, nodeInfo.PodName, nodeInfo.Namespace)
+	xdsClient.NodeID = "sidecar~" + nodeInfo.InstanceIP + "~" + nodeInfo.PodName + "~" + nodeInfo.Namespace
 	xdsClient.NodeCluster = nodeInfo.PodName
 
 	xdsClient.ReqCaches = map[XdsType]*XdsReqCache{
@@ -219,7 +220,7 @@ func (client *XdsClient) CDS() ([]apiv2.Cluster, error) {
 	clusters := []apiv2.Cluster{}
 	for _, res := range resources {
 		if err := proto.Unmarshal(res.GetValue(), &cluster); err != nil {
-			lager.Logger.Warnf("Failed to unmarshal cluster resource: %s", err.Error())
+			openlogging.GetLogger().Warnf("Failed to unmarshal cluster resource: %s", err.Error())
 		} else {
 			clusters = append(clusters, cluster)
 		}
@@ -357,11 +358,11 @@ func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, erro
 
 	for _, res := range resources {
 		if err := proto.Unmarshal(res.GetValue(), &route); err != nil {
-			lager.Logger.Warnf("Failed to unmarshal router resource: ", err.Error())
+			openlogging.GetLogger().Warnf("Failed to unmarshal router resource: ", err.Error())
 		} else {
 			vhosts := route.GetVirtualHosts()
 			for _, vhost := range vhosts {
-				if vhost.Name == fmt.Sprintf("%s:%s", clusterInfo.ServiceName, clusterInfo.Port) {
+				if vhost.Name == clusterInfo.ServiceName+":"+clusterInfo.Port {
 					virtualHosts = append(virtualHosts, vhost)
 				}
 			}
@@ -405,7 +406,7 @@ func (client *XdsClient) LDS() ([]apiv2.Listener, error) {
 
 	for _, res := range resources {
 		if err := proto.Unmarshal(res.GetValue(), &listener); err != nil {
-			lager.Logger.Warnf("Failed to unmarshal listener resource: ", err.Error())
+			openlogging.GetLogger().Warnf("Failed to unmarshal listener resource: ", err.Error())
 		} else {
 			listeners = append(listeners, listener)
 		}

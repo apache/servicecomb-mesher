@@ -1,16 +1,17 @@
 package pilotv2
 
 import (
-	"fmt"
 	"os"
+	"strconv"
 	"testing"
 
 	apiv2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	apiv2core "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
+	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
+
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
-	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
 )
 
 var VaildServiceDiscovery registry.ServiceDiscovery
@@ -38,7 +39,7 @@ func TestGetAllMicroServices(t *testing.T) {
 	}
 
 	if len(services) == 0 {
-		fmt.Println("Warn: no micro services found")
+		t.Log("Warn: no micro services found")
 	}
 }
 
@@ -97,7 +98,7 @@ func TestFindMicroServiceInstances(t *testing.T) {
 	}
 
 	if clusterWithSubset == nil {
-		fmt.Println("No clusters are with subsets, skip")
+		t.Log("No clusters are with subsets, skip")
 	} else {
 		// an empty tags will make sure target tag always match
 		emptyTags := utiltags.Tags{
@@ -109,8 +110,8 @@ func TestFindMicroServiceInstances(t *testing.T) {
 			t.Errorf("Failed to FindMicroServiceInstances of %s: %s", clusterWithSubset.ServiceName, err.Error())
 		}
 		if len(instances) == 0 {
-			fmt.Printf("%s's service instances is empty\n", clusterWithSubset.ServiceName)
-			fmt.Println("Pls check if the destinationrule and corresponding pod tags are matching")
+			t.Logf("%s's service instances is empty\n", clusterWithSubset.ServiceName)
+			t.Logf("Pls check if the destinationrule and corresponding pod tags are matching")
 		}
 	}
 
@@ -147,10 +148,10 @@ func TestToMicroServiceInstance(t *testing.T) {
 	msi := toMicroServiceInstance(clusterName, lbendpoint, tags)
 
 	socketAddr := lbendpoint.Endpoint.Address.GetSocketAddress()
-	addr := socketAddr.Address
+	addr := socketAddr.GetAddress()
 	port := socketAddr.GetPortValue()
 
-	if msi.InstanceID != fmt.Sprintf("%s_%d", addr, port) {
+	if msi.InstanceID != addr+"_"+strconv.FormatUint(uint64(port), 10) {
 		t.Errorf("Invalid msi.InstanceID: %s should be equal to %s_%d", msi.InstanceID, addr, port)
 	}
 

@@ -3,18 +3,19 @@ package pilotv2
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
-
-	"github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/metadata"
-	"github.com/go-chassis/go-chassis/core/registry"
-	"github.com/go-chassis/go-chassis/pkg/util/iputil"
-	"github.com/go-chassis/go-chassis/pkg/util/tags"
 
 	apiv2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
 	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
+
+	"github.com/go-chassis/go-chassis/core/common"
+	"github.com/go-chassis/go-chassis/core/metadata"
+	"github.com/go-chassis/go-chassis/core/registry"
+	"github.com/go-chassis/go-chassis/pkg/util/iputil"
+	"github.com/go-chassis/go-chassis/pkg/util/tags"
+	"github.com/go-mesh/openlogging"
 )
 
 var (
@@ -70,13 +71,14 @@ func toMicroServiceInstance(clusterName string, lbendpoint *apiv2endpoint.LbEndp
 	socketAddress := lbendpoint.Endpoint.Address.GetSocketAddress()
 	addr := socketAddress.Address
 	port := socketAddress.GetPortValue()
+	portStr := strconv.FormatUint(uint64(port), 10)
 	msi := &registry.MicroServiceInstance{}
-	msi.InstanceID = fmt.Sprintf("%s_%d", addr, port)
+	msi.InstanceID = addr + "_" + portStr
 	msi.HostName = clusterName
+	msi.DefaultEndpoint = addr + ":" + portStr
 	msi.EndpointsMap = map[string]string{
-		common.ProtocolRest: fmt.Sprintf("%s:%d", addr, port),
+		common.ProtocolRest: msi.DefaultEndpoint,
 	}
-	msi.DefaultEndpoint = fmt.Sprintf("%s:%d", addr, port)
 	msi.DefaultProtocol = common.ProtocolRest
 	msi.Metadata = tags
 
@@ -95,7 +97,7 @@ func (discovery *ServiceDiscovery) GetMicroService(microServiceID string) (*regi
 	for _, cluster := range clusters {
 		parts := strings.Split(cluster.Name, "|")
 		if len(parts) < 4 {
-			lager.Logger.Warnf("Invalid cluster name: %s", cluster.Name)
+			openlogging.GetLogger().Warnf("Invalid cluster name: %s", cluster.Name)
 			continue
 		}
 
@@ -168,7 +170,7 @@ func (discovery *ServiceDiscovery) AutoSync() {
 	var err error
 	cacheManager, err = NewCacheManager(discovery.client)
 	if err != nil {
-		lager.Logger.Errorf("Failed to create cache manager, indexing will not work: %s", err.Error())
+		openlogging.GetLogger().Errorf("Failed to create cache manager, indexing will not work: %s", err.Error())
 	} else {
 		cacheManager.AutoSync()
 	}
@@ -216,7 +218,7 @@ func init() {
 		POD_NAMESPACE = "default"
 	}
 	if INSTANCE_IP == "" {
-		fmt.Println("[WARN] Env var INSTANCE_IP not set, try to get instance ip from local network, the service might not work properly.")
+		openlogging.GetLogger().Warnf("[WARN] Env var INSTANCE_IP not set, try to get instance ip from local network, the service might not work properly.")
 		INSTANCE_IP = iputil.GetLocalIP()
 		if INSTANCE_IP == "" {
 			// Won't work without instance ip

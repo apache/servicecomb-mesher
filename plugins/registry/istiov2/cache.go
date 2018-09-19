@@ -1,17 +1,18 @@
 package pilotv2
 
 import (
-	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
+	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
+
 	"github.com/go-chassis/go-chassis/core/archaius"
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
-	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
 )
 
 const (
@@ -174,7 +175,9 @@ func (cm *CacheManager) getClusterInfos() ([]istioinfra.XdsClusterInfo, error) {
 		for _, endpoint := range endpoints {
 			for _, lbendpoint := range endpoint.LbEndpoints {
 				socketAddress := lbendpoint.Endpoint.Address.GetSocketAddress()
-				ipAddr := fmt.Sprintf("%s:%d", socketAddress.GetAddress(), socketAddress.GetPortValue())
+				addr := socketAddress.GetAddress()
+				port := socketAddress.GetPortValue()
+				ipAddr := addr + ":" + strconv.FormatUint(uint64(port), 10)
 				clusterInfo.Addrs = append(clusterInfo.Addrs, ipAddr)
 			}
 		}

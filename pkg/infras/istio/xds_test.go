@@ -1,7 +1,6 @@
 package pilotv2
 
 import (
-	"fmt"
 	"os"
 	"os/user"
 	"testing"
@@ -9,9 +8,6 @@ import (
 
 	apiv2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
-	// apiv2core "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
-	// apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
-	// apiv2route "github.com/envoyproxy/go-control-plane/envoy/api/v2/route"
 )
 
 const (
@@ -39,9 +35,9 @@ func init() {
 	} else {
 		usr, err := user.Current()
 		if err != nil {
-			panic(fmt.Sprintf("Failed to get current user info: %s", err.Error()))
+			panic("Failed to get current user info: " + err.Error())
 		} else {
-			KubeConfig = fmt.Sprintf("%s/%s", usr.HomeDir, ".kube/config")
+			KubeConfig = usr.HomeDir + "/" + ".kube/config"
 		}
 	}
 
@@ -80,7 +76,7 @@ func TestCDS(t *testing.T) {
 		t.Errorf("Failed to get clusters by CDS: %s", err.Error())
 	}
 
-	fmt.Printf("Got %d clusters\n", len(clusters))
+	t.Logf("Got %d clusters\n", len(clusters))
 	TestClusters = clusters
 }
 
@@ -110,7 +106,7 @@ func TestRDS(t *testing.T) {
 	}
 
 	if targetClusterName == "" {
-		fmt.Println("We don't find a valid cluster")
+		t.Log("We don't find a valid cluster")
 	}
 
 	_, err := ValidXdsClient.RDS(targetClusterName)
@@ -125,7 +121,7 @@ func TestLDS(t *testing.T) {
 		t.Errorf("Failed to get listeners with LDS: %s", err.Error())
 	}
 
-	fmt.Printf("%d listeners found\n", len(listeners))
+	t.Logf("%d listeners found\n", len(listeners))
 }
 
 func TestNonce(t *testing.T) {
@@ -194,7 +190,7 @@ func TestGetSubsetTags(t *testing.T) {
 	}
 
 	if targetClusterInfo == nil {
-		fmt.Println("No tagged services in test environment, skip")
+		t.Log("No tagged services in test environment, skip")
 	} else {
 		tags, err := ValidXdsClient.GetSubsetTags(targetClusterInfo.Namespace, targetClusterInfo.ServiceName, targetClusterInfo.Subset)
 		if err != nil {

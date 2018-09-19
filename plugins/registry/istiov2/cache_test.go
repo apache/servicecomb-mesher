@@ -1,7 +1,6 @@
 package pilotv2
 
 import (
-	"fmt"
 	"os"
 	"os/user"
 	"testing"
@@ -33,9 +32,9 @@ func init() {
 	} else {
 		usr, err := user.Current()
 		if err != nil {
-			panic(fmt.Sprintf("Failed to get current user info: %s", err.Error()))
+			panic("Failed to get current user info: " + err.Error())
 		} else {
-			KubeConfig = fmt.Sprintf("%s/%s", usr.HomeDir, ".kube/config")
+			KubeConfig = usr.HomeDir + "/" + ".kube/config"
 		}
 	}
 
