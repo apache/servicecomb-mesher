@@ -2,6 +2,7 @@ package pilotv2
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -230,7 +231,7 @@ func init() {
 		PodNamespace = "default"
 	}
 	if InstanceIP == "" {
-		openlogging.GetLogger().Warnf("[WARN] Env var INSTANCE_IP not set, try to get instance ip from local network, the service might not work properly.")
+		log.Println("[WARN] Env var INSTANCE_IP not set, try to get instance ip from local network, the service might not work properly.")
 		InstanceIP = iputil.GetLocalIP()
 		if InstanceIP == "" {
 			// Won't work without instance ip
