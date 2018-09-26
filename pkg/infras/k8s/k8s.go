@@ -8,6 +8,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 )
 
+//DestinationRuleResult is the list of MinDestinationRules
 type DestinationRuleResult struct {
 	Items []MinDestinationRule
 }
@@ -27,6 +28,7 @@ type MinDestinationRule struct {
 	} `json:"spec"`
 }
 
+//CreateK8SRestClient returns the kubernetes client for RESTful API calls
 func CreateK8SRestClient(kubeconfig, apiPath, group, version string) (*rest.RESTClient, error) {
 	var config *rest.Config
 	var err error

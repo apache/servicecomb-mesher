@@ -21,6 +21,7 @@ import (
 	"k8s.io/client-go/rest"
 )
 
+//XdsClient provides the XDS API calls.
 type XdsClient struct {
 	PilotAddr   string
 	TlsConfig   *tls.Config
@@ -31,6 +32,7 @@ type XdsClient struct {
 	k8sClient   *rest.RESTClient
 }
 
+//XdsType is the wrapper of string, the wrapper type should be "cds", "eds", "lds" or "rds"
 type XdsType string
 
 const (
@@ -40,17 +42,22 @@ const (
 	TypeRds XdsType = "rds"
 )
 
+//XdsReqCache stores the VersionInfo and Nonce for the XDS calls
 type XdsReqCache struct {
 	Nonce       string
 	VersionInfo string
 }
 
+//NodeInfo stores the info of the node, which will be used to make a
+//XDS call
 type NodeInfo struct {
 	PodName    string
 	Namespace  string
 	InstanceIP string
 }
 
+//XdsClusterInfo stores all the infos from a cluster name, which is in
+//the format direction|port|subset|hostName
 type XdsClusterInfo struct {
 	ClusterName  string
 	Direction    string
@@ -64,6 +71,7 @@ type XdsClusterInfo struct {
 	Addrs        []string // The accessible addresses of the endpoints
 }
 
+//NewXdsClient returns the new XDS client.
 func NewXdsClient(pilotAddr string, tlsConfig *tls.Config, nodeInfo *NodeInfo, kubeconfigPath string) (*XdsClient, error) {
 	// TODO Handle the array
 	xdsClient := &XdsClient{
@@ -89,6 +97,7 @@ func NewXdsClient(pilotAddr string, tlsConfig *tls.Config, nodeInfo *NodeInfo, k
 	return xdsClient, nil
 }
 
+//GetSubsetTags returns the tags of the specified subset.
 func (client *XdsClient) GetSubsetTags(namespace, hostName, subsetName string) (map[string]string, error) {
 	req := client.k8sClient.Get()
 	req.Resource("destinationrules")
@@ -183,6 +192,7 @@ func (client *XdsClient) setNonce(resType XdsType, nonce string) {
 	client.ReqCaches[resType].Nonce = nonce
 }
 
+//CDS s the Clsuter Discovery Service API, which fetches all the clusters from istio pilot
 func (client *XdsClient) CDS() ([]apiv2.Cluster, error) {
 	adsResClient, conn, err := getAdsResClient(client)
 	if err != nil {
@@ -228,6 +238,7 @@ func (client *XdsClient) CDS() ([]apiv2.Cluster, error) {
 	return clusters, nil
 }
 
+//EDS is the Endpoint Discovery Service API, the API takes the cluster's name and return all its endpoints(which provide address and port)
 func (client *XdsClient) EDS(clusterName string) (*apiv2.ClusterLoadAssignment, error) {
 	adsResClient, conn, err := getAdsResClient(client)
 	if err != nil {
@@ -274,6 +285,7 @@ func (client *XdsClient) EDS(clusterName string) (*apiv2.ClusterLoadAssignment, 
 	return &loadAssignment, e
 }
 
+//GetEndpointsByTags fetches the cluster's endpoints with tags. The tags is usually specified in a DestinationRule.
 func (client *XdsClient) GetEndpointsByTags(serviceName string, tags map[string]string) ([]apiv2endpoint.LbEndpoint, string, error) {
 	clusters, err := client.CDS()
 	if err != nil {
@@ -317,6 +329,7 @@ func (client *XdsClient) GetEndpointsByTags(serviceName string, tags map[string]
 	return lbendpoints, clusterName, nil
 }
 
+//RDS is the Router Discovery Service API, it returns the virtual hosts which contains Routes
 func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, error) {
 	clusterInfo := ParseClusterName(clusterName)
 	if clusterInfo == nil {
@@ -371,6 +384,7 @@ func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, erro
 	return virtualHosts, nil
 }
 
+//LDS is the Listener Discovery Service API, which returns all the listerns
 func (client *XdsClient) LDS() ([]apiv2.Listener, error) {
 	adsResClient, conn, err := getAdsResClient(client)
 	if err != nil {
@@ -414,8 +428,9 @@ func (client *XdsClient) LDS() ([]apiv2.Listener, error) {
 	return listeners, nil
 }
 
+//ParseClusterName parse the cluster's name, which is in the format direction|port|subset|hostName, the 4 items will be parsed into different fields. The hostName item will also be parsed into ServcieName, Namespace etc.
 func ParseClusterName(clusterName string) *XdsClusterInfo {
-	// clusterName format: |direction|port|subset|hostName|
+	// clusterName format: direction|port|subset|hostName
 	// hostName format: |svc.namespace.svc.cluster.local
 
 	parts := strings.Split(clusterName, "|")

@@ -27,10 +27,12 @@ func init() {
 	}
 }
 
+//CacheManager manages the caches for istio pilot results.
 type CacheManager struct {
 	xdsClient *istioinfra.XdsClient
 }
 
+//AutoSync fetches and updates the cluster and endpoint info periodically
 func (cm *CacheManager) AutoSync() {
 	cm.refreshCache()
 
@@ -113,8 +115,9 @@ func (cm *CacheManager) pullMicroserviceInstance() error {
 	return nil
 }
 
-// TODO Use getClusterInfo to replace the logic
+//MakeIPIndex caches the cluster info with address as the key
 func (cm *CacheManager) MakeIPIndex() error {
+	// TODO Use getClusterInfo to replace the logic
 	clusterInfos, err := cm.getClusterInfos()
 	if err != nil {
 		return err
@@ -135,6 +138,7 @@ func (cm *CacheManager) MakeIPIndex() error {
 	return nil
 }
 
+//NewCacheManager creates the CacheManager instance.
 func NewCacheManager(xdsClient *istioinfra.XdsClient) (*CacheManager, error) {
 	cacheManager := &CacheManager{
 		xdsClient: xdsClient,
@@ -212,24 +216,29 @@ func updateInstanceIndexCache(lbendpoints []apiv2endpoint.LbEndpoint, clusterNam
 	simpleCache.Set(clusterName, subset)
 }
 
+//EndpointCache caches the clusters' endpoint and tags
 type EndpointCache struct {
 	cache map[string]EndpointSubset
 }
 
+//EndpointSubset stores the tags and instances of a service
 type EndpointSubset struct {
 	subsetName string
 	tags       map[string]string
 	instances  []*registry.MicroServiceInstance
 }
 
+//Delete removes the cached instances of the specified cluster
 func (c EndpointCache) Delete(clusterName string) {
 	delete(c.cache, clusterName)
 }
 
+//Set updates the cluster's instance info
 func (c EndpointCache) Set(clusterName string, subset EndpointSubset) {
 	c.cache[clusterName] = subset
 }
 
+//GetWithTags returns the instances of the service, filtered with tags
 func (c EndpointCache) GetWithTags(serviceName string, tags map[string]string) []*registry.MicroServiceInstance {
 	// Get subsets whose clusterName matches the service name
 	matchedSubsets := []EndpointSubset{}
