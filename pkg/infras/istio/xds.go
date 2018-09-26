@@ -74,10 +74,10 @@ func NewXdsClient(pilotAddr string, tlsConfig *tls.Config, nodeInfo *NodeInfo, k
 	xdsClient.NodeCluster = nodeInfo.PodName
 
 	xdsClient.ReqCaches = map[XdsType]*XdsReqCache{
-		TypeCds: &XdsReqCache{},
-		TypeEds: &XdsReqCache{},
-		TypeLds: &XdsReqCache{},
-		TypeRds: &XdsReqCache{},
+		TypeCds: {},
+		TypeEds: {},
+		TypeLds: {},
+		TypeRds: {},
 	}
 
 	if k8sClient, err := k8sinfra.CreateK8SRestClient(kubeconfigPath, "apis", "networking.istio.io", "v1alpha3"); err != nil {
