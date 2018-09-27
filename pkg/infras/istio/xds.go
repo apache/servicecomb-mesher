@@ -393,7 +393,7 @@ func (client *XdsClient) LDS() ([]apiv2.Listener, error) {
 	defer conn.Close()
 
 	req := &apiv2.DiscoveryRequest{
-		TypeUrl:       "type.googleapis.com/envoy.api.v2.ClusterLoadAssignment",
+		TypeUrl:       "type.googleapis.com/envoy.api.v2.Listener",
 		VersionInfo:   client.getVersionInfo(TypeLds),
 		ResponseNonce: client.getNonce(TypeLds),
 	}

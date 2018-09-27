@@ -5,8 +5,11 @@ import (
 	"os/user"
 	"testing"
 
+	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
 	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
+	testutil "github.com/go-mesh/mesher/test/util"
+	"istio.io/istio/tests/util"
 )
 
 const (
@@ -25,7 +28,8 @@ var (
 	err              error
 )
 
-func init() {
+func TestMain(t *testing.T) {
+	lager.Initialize("", "DEBUG", "", "size", true, 1, 10, 7)
 	// Get kube config path and local ip
 	if KUBE_CONFIG := os.Getenv("KUBE_CONFIG"); KUBE_CONFIG != "" {
 		KubeConfig = KUBE_CONFIG
@@ -41,7 +45,9 @@ func init() {
 	if PILOT_ADDR := os.Getenv("PILOT_ADDR"); PILOT_ADDR != "" {
 		ValidPilotAddr = PILOT_ADDR
 	} else {
-		panic("PILOT_ADDR should be specified to pass the pilot address")
+		// panic("PILOT_ADDR should be specified to pass the pilot address")
+		testutil.InitLocalPilotTestEnv(t)
+		ValidPilotAddr = util.MockPilotGrpcAddr
 	}
 
 	if INSTANCE_IP := os.Getenv("INSTANCE_IP"); INSTANCE_IP != "" {

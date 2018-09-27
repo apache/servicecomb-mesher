@@ -30,6 +30,26 @@ func TestNewDiscoveryService(t *testing.T) {
 
 	// No panic should happen
 	VaildServiceDiscovery = NewDiscoveryService(options)
+
+}
+
+// func TestAutoSync(t *testing.T) {
+//     archaius.Init()
+//     VaildServiceDiscovery.AutoSync()
+// }
+
+func TestEmptyPilotAddrs(t *testing.T) {
+	defer func() {
+		if err := recover(); err == nil {
+			t.Errorf("Panic should be caught")
+		}
+	}()
+
+	emptyAddrsOptions := registry.Options{
+		Addrs:      []string{},
+		ConfigPath: KubeConfig,
+	}
+	NewDiscoveryService(emptyAddrsOptions)
 }
 
 func TestGetAllMicroServices(t *testing.T) {
@@ -41,6 +61,7 @@ func TestGetAllMicroServices(t *testing.T) {
 	if len(services) == 0 {
 		t.Log("Warn: no micro services found")
 	}
+
 }
 
 func TestGetMicroServiceID(t *testing.T) {
@@ -67,7 +88,8 @@ func TestGetMicroService(t *testing.T) {
 }
 
 func TestGetMicroServiceInstance(t *testing.T) {
-	serviceName := "istio-pilot"
+	// serviceName := "istio-pilot"
+	serviceName := "hello"
 	instances, err := VaildServiceDiscovery.GetMicroServiceInstances("pilotv2client", serviceName)
 	if err != nil {
 		t.Errorf("Failed to get micro service instances of istio-pilot: %s", err.Error())
@@ -97,9 +119,7 @@ func TestFindMicroServiceInstances(t *testing.T) {
 		}
 	}
 
-	if clusterWithSubset == nil {
-		t.Log("No clusters are with subsets, skip")
-	} else {
+	if clusterWithSubset != nil {
 		// an empty tags will make sure target tag always match
 		emptyTags := utiltags.Tags{
 			KV:    map[string]string{},
@@ -112,6 +132,20 @@ func TestFindMicroServiceInstances(t *testing.T) {
 		if len(instances) == 0 {
 			t.Logf("%s's service instances is empty\n", clusterWithSubset.ServiceName)
 			t.Logf("Pls check if the destinationrule and corresponding pod tags are matching")
+		}
+	} else if len(clusters) != 0 {
+		t.Log("No clusters are with subsets")
+		targetCluster := clusters[0]
+
+		tags := utiltags.Tags{
+			KV: map[string]string{
+				"version": "v1",
+			},
+			Label: "version=v1",
+		}
+		_, err := VaildServiceDiscovery.FindMicroServiceInstances("pilotv2client", targetCluster.Name, tags)
+		if err == nil {
+			t.Errorf("Should caught error to get the endpoints of cluster without tags")
 		}
 	}
 
@@ -162,5 +196,11 @@ func TestToMicroServiceInstance(t *testing.T) {
 	// Test if the tags match
 	if !tagsMatch(tags, msi.Metadata) {
 		t.Errorf("Tags not match, %v should be subset of %s", tags, msi.Metadata)
+	}
+}
+
+func TestClose(t *testing.T) {
+	if err := VaildServiceDiscovery.Close(); err != nil {
+		t.Error(err)
 	}
 }
