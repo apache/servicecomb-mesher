@@ -24,7 +24,7 @@ var (
 	app3Ip    = "10.2.0.1"
 	gatewayIP = "10.3.0.1"
 	ingressIP = "10.3.0.2"
-	localIp   = "10.3.0.3"
+	localIP   = "10.3.0.3"
 )
 
 // InitLocalPilotTestEnv creates a local, in process Pilot with XDSv2 support and a set
@@ -40,7 +40,7 @@ func InitLocalPilotTestEnv(t *testing.T) *bootstrap.Server {
 
 	server := istiotestutil.EnsureTestServer()
 
-	localIp = iputil.GetLocalIP()
+	localIP = iputil.GetLocalIP()
 
 	// Service and endpoints for hello.default - used in v1 pilot tests
 	hostname := model.Hostname("hello.default.svc.cluster.local")
@@ -75,7 +75,7 @@ func InitLocalPilotTestEnv(t *testing.T) *bootstrap.Server {
 	})
 	server.EnvoyXdsServer.MemRegistry.AddInstance("local.default.svc.cluster.local", &model.ServiceInstance{
 		Endpoint: model.NetworkEndpoint{
-			Address: localIp,
+			Address: localIP,
 			Port:    int(ports.BackendPort),
 			ServicePort: &model.Port{
 				Name:     "http",
