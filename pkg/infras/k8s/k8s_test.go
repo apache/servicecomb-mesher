@@ -33,3 +33,10 @@ func TestCreateK8sClient(t *testing.T) {
 		t.Errorf("Test failed, should return error with invalid kube config path")
 	}
 }
+
+func TestCreateInvalidK8sClient(t *testing.T) {
+	_, err := CreateK8SRestClient("", "apis", "networking.istio.io", "v1alpha3")
+	if err == nil {
+		t.Errorf("Passing a nil config for k8s client should return error")
+	}
+}
