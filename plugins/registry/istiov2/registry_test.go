@@ -1,4 +1,4 @@
-package pilotv2
+package istiov2
 
 import (
 	"os"

@@ -1,4 +1,4 @@
-package pilotv2
+package istiov2
 
 import (
 	"os"
@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
 	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
 	testutil "github.com/go-mesh/mesher/test/util"
@@ -92,3 +93,34 @@ func TestPullImcroserviceInstance(t *testing.T) {
 //         t.Errorf("Failed to make ip index: %s", err.Error())
 //     }
 // }
+
+func TestEndpointCache(t *testing.T) {
+	ec := EndpointCache{
+		cache: map[string]EndpointSubset{},
+	}
+
+	subset := EndpointSubset{
+		subsetName: "foo",
+		tags:       map[string]string{},
+		instances:  []*registry.MicroServiceInstance{},
+	}
+
+	defer func() {
+		if r := recover(); r != nil {
+			t.Error("should not panic")
+		}
+	}()
+
+	waitChannel := make(chan int)
+	for i := 0; i < 1000; i++ {
+		go func() {
+			ec.Set("foo", subset)
+			waitChannel <- 0
+
+		}()
+	}
+
+	for i := 0; i < 1000; i++ {
+		<-waitChannel
+	}
+}

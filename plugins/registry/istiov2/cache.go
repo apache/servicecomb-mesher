@@ -1,8 +1,9 @@
-package pilotv2
+package istiov2
 
 import (
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
@@ -19,10 +20,10 @@ const (
 	DefaultRefreshInterval = time.Second * 30
 )
 
-var simpleCache EndpointCache
+var simpleCache *EndpointCache
 
 func init() {
-	simpleCache = EndpointCache{
+	simpleCache = &EndpointCache{
 		cache: map[string]EndpointSubset{},
 	}
 }
@@ -218,6 +219,7 @@ func updateInstanceIndexCache(lbendpoints []apiv2endpoint.LbEndpoint, clusterNam
 
 //EndpointCache caches the clusters' endpoint and tags
 type EndpointCache struct {
+	mux   sync.Mutex
 	cache map[string]EndpointSubset
 }
 
@@ -229,25 +231,31 @@ type EndpointSubset struct {
 }
 
 //Delete removes the cached instances of the specified cluster
-func (c EndpointCache) Delete(clusterName string) {
+func (c *EndpointCache) Delete(clusterName string) {
+	c.mux.Lock()
 	delete(c.cache, clusterName)
+	c.mux.Unlock()
 }
 
 //Set updates the cluster's instance info
-func (c EndpointCache) Set(clusterName string, subset EndpointSubset) {
+func (c *EndpointCache) Set(clusterName string, subset EndpointSubset) {
+	c.mux.Lock()
 	c.cache[clusterName] = subset
+	c.mux.Unlock()
 }
 
 //GetWithTags returns the instances of the service, filtered with tags
-func (c EndpointCache) GetWithTags(serviceName string, tags map[string]string) []*registry.MicroServiceInstance {
+func (c *EndpointCache) GetWithTags(serviceName string, tags map[string]string) []*registry.MicroServiceInstance {
 	// Get subsets whose clusterName matches the service name
 	matchedSubsets := []EndpointSubset{}
+	c.mux.Lock()
 	for clusterName, subset := range c.cache {
 		info := istioinfra.ParseClusterName(clusterName)
 		if info != nil && info.ServiceName == serviceName {
 			matchedSubsets = append(matchedSubsets, subset)
 		}
 	}
+	c.mux.Unlock()
 
 	if len(matchedSubsets) == 0 {
 		return nil
