@@ -10,6 +10,7 @@ require (
 	github.com/go-chassis/go-cc-client v0.0.0-20180831085349-c2bb6cef1640
 	github.com/go-chassis/go-chassis v0.8.3-0.20180914033538-0791a5cec8b4
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
+	github.com/go-mesh/mesher-tools v0.0.0-20181006103649-cdc091b78a72
 	github.com/go-mesh/openlogging v0.0.0-20180831021158-f5d1c4e7e506
 	github.com/gogo/protobuf v1.1.1
 	github.com/gogo/status v1.0.3 // indirect

@@ -8,8 +8,8 @@ import (
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
+	testutil "github.com/go-mesh/mesher-tools/test/util"
 	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
-	testutil "github.com/go-mesh/mesher/test/util"
 	"istio.io/istio/tests/util"
 )
 

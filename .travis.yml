@@ -8,7 +8,7 @@ before_script:
   - mkdir -p $HOME/gopath/src/github.com/go-mesh/mesher
   - rsync -az ${TRAVIS_BUILD_DIR}/ $HOME/gopath/src/github.com/go-mesh/mesher
   - export TRAVIS_BUILD_DIR=$HOME/gopath/src/github.com/go-mesh/mesher
-  - export KUBE_CONFIG=$HOME/gopath/src/github.com/go-mesh/mesher/test/util/sample_kubeconfig
+  - export KUBE_CONFIG=$HOME/gopath/src/github.com/go-mesh/mesher/vendor/github.com/go-mesh/mesher-tools/test/util/sample_kubeconfig
   - cd $HOME/gopath/src/github.com/go-mesh/mesher
 jobs:
   include:

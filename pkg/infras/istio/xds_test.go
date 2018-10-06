@@ -9,7 +9,7 @@ import (
 	apiv2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
-	testutil "github.com/go-mesh/mesher/test/util"
+	testutil "github.com/go-mesh/mesher-tools/test/util"
 	"istio.io/istio/tests/util"
 )
 
