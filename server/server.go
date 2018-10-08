@@ -48,7 +48,7 @@ func profile() {
 				if config.GetConfig().PProf.Listen == "" {
 					config.GetConfig().PProf.Listen = "127.0.0.1:6060"
 				}
-				lager.Logger.Warn("Enable pprof on "+config.GetConfig().PProf.Listen, nil)
+				lager.Logger.Warn("Enable pprof on " + config.GetConfig().PProf.Listen)
 				if err := http.ListenAndServe(config.GetConfig().PProf.Listen, nil); err != nil {
 					lager.Logger.Error("Can not enable pprof: " + err.Error())
 				}

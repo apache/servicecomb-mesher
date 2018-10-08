@@ -24,6 +24,7 @@ import (
 	"github.com/go-mesh/mesher/common"
 	"github.com/go-mesh/mesher/resolver"
 	"net"
+	"net/http"
 	"strings"
 
 	chassisCom "github.com/go-chassis/go-chassis/core/common"
@@ -32,34 +33,33 @@ import (
 	"github.com/go-chassis/go-chassis/core/server"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
 	"github.com/go-mesh/mesher/pkg/runtime"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
+	"golang.org/x/net/http2"
 )
 
 const (
-	protocolName = "grpc"
+	Name = "grpc"
 )
 
 func init() {
-	server.InstallPlugin(protocolName, newServer)
-}
-
-type grpcServer struct {
-	opts   server.Options
-	server *grpc.Server
+	server.InstallPlugin(Name, newServer)
 }
 
 func newServer(opts server.Options) server.ProtocolServer {
-	return &grpcServer{
+	return &httpServer{
 		opts: opts,
 	}
 }
 
-func (hs *grpcServer) Register(schema interface{}, options ...server.RegisterOption) (string, error) {
+type httpServer struct {
+	opts   server.Options
+	server *http2.Server
+}
+
+func (hs *httpServer) Register(schema interface{}, options ...server.RegisterOption) (string, error) {
 	return "", nil
 }
 
-func (hs *grpcServer) Start() error {
+func (hs *httpServer) Start() error {
 	host, port, err := net.SplitHostPort(hs.opts.Address)
 	if err != nil {
 		return err
@@ -76,17 +76,18 @@ func (hs *grpcServer) Start() error {
 	case common.ModeSidecar:
 		err = hs.startSidecar(host, port)
 	case common.ModePerHost:
-		err = errors.New("do not support per host")
+		err = hs.startPerHost()
 	}
+
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (hs *grpcServer) startSidecar(host, port string) error {
+func (hs *httpServer) startSidecar(host, port string) error {
 	mesherTLSConfig, mesherSSLConfig, mesherErr := chassisTLS.GetTLSConfigByService(
-		common.ComponentName, protocolName, chassisCom.Provider)
+		common.ComponentName, "", chassisCom.Provider)
 	if mesherErr != nil {
 		if !chassisTLS.IsSSLConfigNotExist(mesherErr) {
 			return mesherErr
@@ -97,7 +98,8 @@ func (hs *grpcServer) startSidecar(host, port string) error {
 			sslTag, mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin)
 	}
 
-	if err := hs.listenAndServe("127.0.0.1"+":"+port, mesherTLSConfig, LocalRequestHandler); err != nil {
+	err := hs.listenAndServe("127.0.0.1"+":"+port, mesherTLSConfig, http.HandlerFunc(LocalRequestHandler))
+	if err != nil {
 		return err
 	}
 	resolver.SelfEndpoint = "127.0.0.1" + ":" + port
@@ -111,7 +113,7 @@ func (hs *grpcServer) startSidecar(host, port string) error {
 		return nil
 	default:
 		serverTLSConfig, serverSSLConfig, serverErr := chassisTLS.GetTLSConfigByService(
-			chassisConfig.SelfServiceName, protocolName, chassisCom.Provider)
+			chassisConfig.SelfServiceName, chassisCom.ProtocolRest, chassisCom.Provider)
 		if serverErr != nil {
 			if !chassisTLS.IsSSLConfigNotExist(serverErr) {
 				return serverErr
@@ -121,7 +123,9 @@ func (hs *grpcServer) startSidecar(host, port string) error {
 			lager.Logger.Warnf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
 				sslTag, serverSSLConfig.VerifyPeer, serverSSLConfig.CipherPlugin)
 		}
-		if err := hs.listenAndServe(hs.opts.Address, serverTLSConfig, RemoteRequestHandler); err != nil {
+
+		err = hs.listenAndServe(hs.opts.Address, serverTLSConfig, http.HandlerFunc(RemoteRequestHandler))
+		if err != nil {
 			return err
 		}
 	}
@@ -129,44 +133,61 @@ func (hs *grpcServer) startSidecar(host, port string) error {
 	return nil
 }
 
-func (hs *grpcServer) listenAndServe(addr string, tlsConfig *tls.Config, h grpc.StreamHandler) error {
+func (hs *httpServer) startPerHost() error {
+	sslTag := genTag(common.ComponentName, chassisCom.Provider)
+	mesherTLSConfig, mesherSSLConfig, err := chassisTLS.GetTLSConfigByService(
+		common.ComponentName, "", chassisCom.Provider)
+	if err != nil {
+		if !chassisTLS.IsSSLConfigNotExist(err) {
+			return err
+		}
+	} else {
+		lager.Logger.Warnf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
+			sslTag, mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin)
+	}
+
+	err = hs.listenAndServe(hs.opts.Address, mesherTLSConfig, http.HandlerFunc(LocalRequestHandler))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (hs *httpServer) listenAndServe(addr string, t *tls.Config, h http.HandlerFunc) error {
+
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		return err
 	}
+	if t != nil {
+		lnTLS := tls.NewListener(ln, t)
+		ln = lnTLS
+	}
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", h)
+	hs.server = &http2.Server{}
+	opts := &http2.ServeConnOpts{
+		Handler: mux,
+	}
+
 	go func() {
-
-		if tlsConfig != nil {
-			lager.Logger.Info(protocolName + " enable TLS and listen on " + addr)
-			hs.server = grpc.NewServer(grpc.Creds(credentials.NewTLS(tlsConfig)),
-				grpc.UnknownServiceHandler(h),
-				grpc.CustomCodec(&codec{}))
-		} else {
-			lager.Logger.Info(protocolName + " listen on " + addr)
-			hs.server = grpc.NewServer(grpc.UnknownServiceHandler(h), grpc.CustomCodec(&codec{}))
-		}
-
-		if err := hs.server.Serve(ln); err != nil {
-			server.ErrRuntime <- err
-			return
+		for {
+			conn, err := ln.Accept()
+			if err != nil {
+				panic(err)
+			}
+			hs.server.ServeConn(conn, opts)
 		}
 	}()
 	return nil
 }
 
-func (hs *grpcServer) Stop() error {
-	//go 1.8+ drain connections before stop server
-	if hs.server == nil {
-		lager.Logger.Info("grpc server doesn't need to be stopped")
-		return nil
-	}
-	hs.server.GracefulStop()
-	lager.Logger.Info("grpc server gracefully stopped")
+func (hs *httpServer) Stop() error {
 	return nil
 }
 
-func (hs *grpcServer) String() string {
-	return protocolName
+func (hs *httpServer) String() string {
+	return Name
 }
 
 func genTag(s ...string) string {
