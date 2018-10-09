@@ -26,6 +26,7 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
 	"github.com/go-mesh/mesher/cmd"
 	"github.com/go-mesh/mesher/common"
+	"github.com/go-mesh/openlogging"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -107,7 +108,7 @@ func GetConfigContents(key string) (string, error) {
 func SetKeyValueByFile(key, f string) string {
 	var contents string
 	if _, err := os.Stat(f); err != nil {
-		lager.Logger.Warn(err.Error(), nil)
+		openlogging.GetLogger().Warn(err.Error())
 		return ""
 	}
 	b, err := ioutil.ReadFile(f)

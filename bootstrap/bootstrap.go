@@ -35,6 +35,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/metadata"
 	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/mesher/pkg/runtime"
+	"github.com/go-mesh/openlogging"
 )
 
 // Start initialize configs and components
@@ -69,7 +70,7 @@ func Start() error {
 //DecideMode get config mode
 func DecideMode() error {
 	runtime.Mode = cmd.Configs.Mode
-	lager.Logger.Info("Running as "+runtime.Mode, nil)
+	openlogging.GetLogger().Info("Running as " + runtime.Mode)
 	return nil
 }
 
