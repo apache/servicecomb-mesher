@@ -1,4 +1,4 @@
-# Use Istio Pilot for service discovery
+# Get started
 
 Istio Pilot can be configured as the service discovery component for mesher. By default the Pilot plugin is not compiled into mesher binary. To make mesher work with Pilot, import the plugin in mesher's entrypoint source code:
 
