@@ -89,10 +89,22 @@ func TestGetMicroService(t *testing.T) {
 
 func TestGetMicroServiceInstance(t *testing.T) {
 	// serviceName := "istio-pilot"
-	serviceName := "hello"
-	instances, err := VaildServiceDiscovery.GetMicroServiceInstances("pilotv2client", serviceName)
+	ms, err := VaildServiceDiscovery.GetAllMicroServices()
 	if err != nil {
-		t.Errorf("Failed to get micro service instances of istio-pilot: %s", err.Error())
+		t.Errorf("Failed to get micro services: %s", err.Error())
+	}
+	if len(ms) == 0 {
+		t.Log("[WARN] No micro service found, skip")
+		return
+	}
+
+	clusterInfo := istioinfra.ParseClusterName(ms[0].ServiceName)
+	if clusterInfo == nil {
+		t.Errorf("Failed to parse micro service: %s", ms[0].ServiceName)
+	}
+	instances, err := VaildServiceDiscovery.GetMicroServiceInstances("pilotv2client", clusterInfo.ServiceName)
+	if err != nil {
+		t.Errorf("Failed to get micro service instances of %s: %s", clusterInfo.ServiceName, err.Error())
 	}
 	if len(instances) == 0 {
 		t.Errorf("istio-pilot's instances should not be empty")
