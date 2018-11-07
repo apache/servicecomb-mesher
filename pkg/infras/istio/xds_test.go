@@ -42,7 +42,7 @@ func TestMain(t *testing.T) {
 			KubeConfig = usr.HomeDir + "/" + ".kube/config"
 		}
 	}
-
+	ValidPilotAddr = "localhost:15010"
 	if PILOT_ADDR := os.Getenv("PILOT_ADDR"); PILOT_ADDR != "" {
 		ValidPilotAddr = PILOT_ADDR
 	}
