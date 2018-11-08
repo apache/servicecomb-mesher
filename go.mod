@@ -1,64 +1,55 @@
 module github.com/go-mesh/mesher
 
 require (
-	cloud.google.com/go v0.28.0 // indirect
-	code.cloudfoundry.org/copilot v0.0.0-20180928002835-76734bdb9045 // indirect
-	fortio.org/fortio v1.3.0 // indirect
+	github.com/Shopify/toxiproxy v2.1.3+incompatible // indirect
+	github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/eapache/go-resiliency v1.1.0 // indirect
+	github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21 // indirect
+	github.com/eapache/queue v1.1.0 // indirect
 	github.com/emicklei/go-restful-swagger12 v0.0.0-20170926063155-7524189396c6 // indirect
 	github.com/envoyproxy/go-control-plane v0.6.0
+	github.com/ghodss/yaml v1.0.0 // indirect
 
 	github.com/go-chassis/go-cc-client v0.0.0-20180831085349-c2bb6cef1640
 	github.com/go-chassis/go-chassis v0.8.4-0.20180928015049-b4c551ac46e1
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
-	github.com/go-mesh/mesher-tools v0.0.0-20181006103649-cdc091b78a72
-	github.com/go-mesh/openlogging v0.0.0-20180831021158-f5d1c4e7e506
+	github.com/go-logfmt/logfmt v0.3.0 // indirect
+	github.com/go-mesh/openlogging v0.0.0-20180912071658-0fd4707a75ab
+	github.com/gogo/googleapis v1.1.0 // indirect
 	github.com/gogo/protobuf v1.1.1
-	github.com/gogo/status v1.0.3 // indirect
-	github.com/golang/groupcache v0.0.0-20180924190550-6f2cf27854a4 // indirect
-	github.com/golang/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
-	github.com/google/go-github v17.0.0+incompatible // indirect
-	github.com/google/go-querystring v1.0.0 // indirect
-	github.com/google/uuid v1.0.0 // indirect
-	github.com/gorilla/context v1.1.1 // indirect
-	github.com/gorilla/mux v1.6.2 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.0.0 // indirect
-	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
-	github.com/hashicorp/consul v1.2.3 // indirect
-	github.com/hashicorp/go-cleanhttp v0.5.0 // indirect
-	github.com/hashicorp/go-multierror v1.0.0 // indirect
-	github.com/hashicorp/go-rootcerts v0.0.0-20160503143440-6bb64b370b90 // indirect
-	github.com/hashicorp/serf v0.8.1 // indirect
-	github.com/howeyc/fsnotify v0.9.0 // indirect
-	github.com/inconshreveable/mousetrap v1.0.0 // indirect
-	github.com/mitchellh/go-homedir v1.0.0 // indirect
-	github.com/mitchellh/mapstructure v1.0.0 // indirect
-	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
+	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
+	github.com/golang/snappy v0.0.0-20180518054509-2e65f85255db // indirect
+	github.com/google/gofuzz v0.0.0-20170612174753-24818f796faf // indirect
+	github.com/imdario/mergo v0.3.6 // indirect
+	github.com/jtolds/gls v4.2.1+incompatible // indirect
+	github.com/kr/logfmt v0.0.0-20140226030751-b84e30acd515 // indirect
+	github.com/lyft/protoc-gen-validate v0.0.10 // indirect
+	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/onsi/gomega v1.4.2 // indirect
+	github.com/opentracing-contrib/go-observer v0.0.0-20170622124052-a52f23424492 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/pkg/errors v0.8.0 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/prometheus/client_golang v0.8.0
 	github.com/prometheus/client_model v0.0.0-20180712105110-5c3871d89910
-	github.com/prometheus/prom2json v0.0.0-20180620215746-7b8ed2aed129 // indirect
-	github.com/spf13/cobra v0.0.3 // indirect
+	github.com/prometheus/common v0.0.0-20181020173914-7e9e6cabbd39 // indirect
+	github.com/spf13/pflag v1.0.3 // indirect
+	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.2.2
+	github.com/uber-go/atomic v1.3.2 // indirect
 	github.com/urfave/cli v0.0.0-20180821064027-934abfb2f102
 	go.uber.org/atomic v1.3.2 // indirect
-	go.uber.org/multierr v1.1.0 // indirect
-	go.uber.org/zap v1.9.1 // indirect
-	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be // indirect
-	google.golang.org/appengine v1.2.0 // indirect
+	golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16 // indirect
+	golang.org/x/net v0.0.0-20180906233101-161cd47e91fd
+	golang.org/x/sys v0.0.0-20181031143558-9b800f95dbbc // indirect
+	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
+	google.golang.org/genproto v0.0.0-20181101192439-c830210a61df // indirect
 	google.golang.org/grpc v1.14.0
-	gopkg.in/validator.v2 v2.0.0-20180514200540-135c24b11c19 // indirect
+	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.2.1
-	istio.io/api v0.0.0-20180926203357-0cf306e2fd19 // indirect
-	istio.io/fortio v1.3.0 // indirect
-	istio.io/istio v0.0.0-20180929031539-a8986e2dc2c3
-	k8s.io/apiextensions-apiserver v0.0.0-20180925155151-ce69c54e57693220512104c84941e2ef1876449a // indirect
 	k8s.io/apimachinery v0.0.0-20180823151430-fda675fbe85280c4550452dae2a5ebf74e4a59b7
 	k8s.io/client-go v8.0.0+incompatible
-	k8s.io/cluster-registry v0.0.6 // indirect
-
-	k8s.io/ingress v0.0.0-20170803151325-fe19ebb09ee2 // indirect
-	k8s.io/kube-openapi v0.0.0-20180928070517-c01ed926f124 // indirect
 )
 
 replace (

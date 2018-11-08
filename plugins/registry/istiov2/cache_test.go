@@ -8,9 +8,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
-	testutil "github.com/go-mesh/mesher-tools/test/util"
 	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
-	"istio.io/istio/tests/util"
 )
 
 const (
@@ -43,12 +41,9 @@ func TestMain(t *testing.T) {
 		}
 	}
 
+	ValidPilotAddr = "localhost:15010"
 	if PILOT_ADDR := os.Getenv("PILOT_ADDR"); PILOT_ADDR != "" {
 		ValidPilotAddr = PILOT_ADDR
-	} else {
-		// panic("PILOT_ADDR should be specified to pass the pilot address")
-		testutil.InitLocalPilotTestEnv(t)
-		ValidPilotAddr = util.MockPilotGrpcAddr
 	}
 
 	if INSTANCE_IP := os.Getenv("INSTANCE_IP"); INSTANCE_IP != "" {
@@ -80,7 +75,7 @@ func TestNewCacheManager(t *testing.T) {
 //     testCacheManager.AutoSync()
 // }
 
-func TestPullImcroserviceInstance(t *testing.T) {
+func TestPullMicroserviceInstance(t *testing.T) {
 	err = testCacheManager.pullMicroserviceInstance()
 	if err != nil {
 		t.Errorf("Failed to pull microservice instances: %s", err.Error())
