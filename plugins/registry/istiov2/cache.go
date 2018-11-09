@@ -9,7 +9,7 @@ import (
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
 	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
 
-	"github.com/go-chassis/go-chassis/core/archaius"
+	"github.com/go-chassis/go-archaius"
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
