@@ -10,7 +10,7 @@ import (
 	_ "github.com/go-mesh/mesher/protocol/dubbo/server"
 	_ "github.com/go-mesh/mesher/protocol/dubbo/simpleRegistry"
 
-	_ "github.com/go-chassis/go-chassis/config-center" //use config center
+	_ "github.com/go-chassis/go-chassis/configcenter" //use config center
 	//protocols
 	_ "github.com/go-mesh/mesher/protocol/grpc"
 	_ "github.com/go-mesh/mesher/protocol/http"
