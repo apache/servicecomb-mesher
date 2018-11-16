@@ -7,3 +7,4 @@ Get started
 
    getstarted/minimum
    getstarted/install.md
+   getstarted/pilot-discovery.md
