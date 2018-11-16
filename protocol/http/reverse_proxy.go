@@ -208,7 +208,7 @@ func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	copyHeader(w.Header(), resp.Header)
 	w.WriteHeader(resp.StatusCode)
 	if resp == nil {
-		openlogging.GetLogger().Warn("response is nil because of unknown reason, plz report issue")
+		openlogging.GetLogger().Warn("response is nil because of unknown reason")
 		return
 	}
 	io.Copy(w, resp.Body)
@@ -227,11 +227,11 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 				handleErrorResponse(inv, w, http.StatusServiceUnavailable, ir.Err)
 			case fault.FaultError:
 				handleErrorResponse(inv, w, ir.Status, ir.Err)
-			default:
+			default: //for other error, check response and response body, if there is body, just transparent response
 				resp, ok := inv.Reply.(*http.Response)
 				if ok { // return raw transport error
 					if resp != nil {
-						if resp == nil {
+						if resp.Body == nil {
 							//resp.Resp can be nil, for example network error, must handle it
 							handleErrorResponse(inv, w, http.StatusBadGateway, ir.Err)
 							return nil, ir.Err
