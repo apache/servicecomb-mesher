@@ -9,8 +9,8 @@ func SaveToEgressCache(egressConfigFromPilot map[string][]*egressmodel.EgressRul
 	{
 		var egressconfig []control.EgressConfig
 		for _, v := range egressConfigFromPilot {
-			var Ports []*control.EgressPort
 			for _, v1 := range v {
+				var Ports []*control.EgressPort
 				for _, v2 := range v1.Ports {
 					p := control.EgressPort{
 						Port:     (*v2).Port,
@@ -22,6 +22,7 @@ func SaveToEgressCache(egressConfigFromPilot map[string][]*egressmodel.EgressRul
 					Hosts: v1.Hosts,
 					Ports: Ports,
 				}
+
 				egressconfig = append(egressconfig, c)
 			}
 		}

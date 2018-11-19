@@ -30,12 +30,13 @@ import (
 	"github.com/go-mesh/mesher/resolver"
 
 	"github.com/go-chassis/go-chassis"
+	"github.com/go-chassis/go-chassis/core/handler"
 	chassisHandler "github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/metadata"
 	"github.com/go-mesh/mesher/control"
-	"github.com/go-mesh/mesher/egress"
-	_ "github.com/go-mesh/mesher/egress/pilot"
+	"github.com/go-mesh/mesher/pkg/egress"
+	_ "github.com/go-mesh/mesher/pkg/egress/pilot"
 	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/mesher/pkg/runtime"
 	"github.com/go-mesh/openlogging"
@@ -71,11 +72,9 @@ func Start() error {
 	if err != nil {
 		return err
 	}
-
 	if err := control.Init(); err != nil {
 		return err
 	}
-
 	return nil
 
 }
@@ -130,4 +129,19 @@ func SetHandlers() {
 	}
 	chassis.SetDefaultConsumerChains(consumerChainMap)
 	chassis.SetDefaultProviderChains(providerChainMap)
+}
+
+func InitEgressChain() error {
+	egresschain := strings.Join([]string{
+		handler.Router,
+		handler.RatelimiterConsumer,
+		handler.BizkeeperConsumer,
+		handler.Transport,
+	}, ",")
+
+	egressChainMap := map[string]string{
+		common.ChainConsumerEgress: egresschain,
+	}
+
+	return handler.CreateChains(common.ConsumerEgress, egressChainMap)
 }

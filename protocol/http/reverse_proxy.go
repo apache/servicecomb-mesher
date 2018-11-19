@@ -39,7 +39,7 @@ import (
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
 	"github.com/go-mesh/mesher/cmd"
 	"github.com/go-mesh/mesher/common"
-	"github.com/go-mesh/mesher/egress"
+	"github.com/go-mesh/mesher/pkg/egress"
 	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/mesher/protocol"
 	"github.com/go-mesh/mesher/resolver"
@@ -128,18 +128,6 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		inv.Endpoint = inv.MicroServiceName + ":" + strconv.Itoa(int(intport))
-		egresschain := strings.Join([]string{
-			handler.Router,
-			handler.RatelimiterConsumer,
-			handler.BizkeeperConsumer,
-			handler.Transport,
-		}, ",")
-
-		egressChainMap := map[string]string{
-			common.ChainConsumerEgress: egresschain,
-		}
-
-		err = handler.CreateChains(common.ConsumerEgress, egressChainMap)
 		c, err = handler.GetChain(common.ConsumerEgress, common.ChainConsumerEgress)
 
 		if err != nil {
@@ -266,6 +254,7 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 				handleErrorResponse(inv, w, ir.Status, ir.Err)
 			default: //for other error, check response and response body, if there is body, just transparent response
 				resp, ok := inv.Reply.(*http.Response)
+
 				if ok { // return raw transport error
 					if resp != nil {
 						if resp.Body == nil {

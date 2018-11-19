@@ -6,7 +6,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
 	meshercontrol "github.com/go-mesh/mesher/control"
-	"github.com/go-mesh/mesher/egress"
+	"github.com/go-mesh/mesher/pkg/egress"
 )
 
 func init() {

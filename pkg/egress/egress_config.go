@@ -52,19 +52,11 @@ func Init() error {
 	egressConfigFromFile := config.GetEgressConfig()
 	BuildEgress(GetEgressType(egressConfigFromFile.Egress))
 
-	if egressConfigFromFile != nil {
-		if egressConfigFromFile.Destinations != nil {
-			DefaultEgress.SetEgressRule(egressConfigFromFile.Destinations)
-		}
-	}
 	op, err := getSpecifiedOptions()
 	if err != nil {
 		return fmt.Errorf("Egress options error: %v", err)
 	}
 	DefaultEgress.Init(op)
-	// storing the egress rules based on host in two maps
-	// one host having wild card and other without wildcard
-	plainHosts, regexHosts = SplitEgressRules()
 	lager.Logger.Info("Egress init success")
 	return nil
 }
@@ -152,7 +144,6 @@ func getSpecifiedOptions() (opts Options, err error) {
 	}
 	opts.Endpoints = hosts
 	// TODO: envoy api v1 or v2
-	// opts.Version = config.GetRouterAPIVersion()
 	opts.TLSConfig, err = chassisTLS.GetTLSConfig(scheme, EgressTLS)
 	if err != nil {
 		return
@@ -163,7 +154,7 @@ func getSpecifiedOptions() (opts Options, err error) {
 	return
 }
 
-// GetRouterType returns the type of router
+// GetEgressType returns the type of egress
 func GetEgressType(egress model.Egress) string {
 	if egress.Infra != "" {
 		return egress.Infra

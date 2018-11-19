@@ -1,7 +1,7 @@
 package control
 
 import (
-        "fmt"
+	"fmt"
 	"github.com/go-chassis/go-chassis/control"
 	"github.com/go-chassis/go-chassis/core/config"
 )

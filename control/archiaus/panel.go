@@ -36,12 +36,11 @@ func (p *Panel) GetRateLimiting(inv invocation.Invocation, serviceType string) c
 //GetFaultInjection get Fault injection config
 func (p *Panel) GetFaultInjection(inv invocation.Invocation) model.Fault {
 	return model.Fault{}
-
 }
 
 //GetEgressRule get egress config
 func (p *Panel) GetEgressRule() []control.EgressConfig {
-	c, ok := EgressConfigCache.Get("")
+	c, ok := EgressConfigCache.Get("egress.yaml")
 	if !ok {
 
 		return nil

@@ -26,8 +26,8 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
 	"github.com/go-mesh/mesher/cmd"
 	"github.com/go-mesh/mesher/common"
-	"github.com/go-mesh/openlogging"
 	egressmodel "github.com/go-mesh/mesher/config/model"
+	"github.com/go-mesh/openlogging"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -59,14 +59,6 @@ func SetConfig(nc *MesherConfig) {
 //GetEgressConfig returns Egress config
 func GetEgressConfig() *egressmodel.EgressConfig {
 	return egressConfig
-}
-
-//SetEgressConfig sets new egress config from input config
-func SetEgressConfig(nc *egressmodel.EgressConfig) {
-	if egressConfig == nil {
-		egressConfig = &egressmodel.EgressConfig{}
-	}
-	*egressConfig = *nc
 }
 
 //GetConfigFilePath returns config file path

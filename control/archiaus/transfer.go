@@ -26,7 +26,7 @@ func SaveToEgressCache(egressConfigFromFile *egressmodel.EgressConfig) {
 					egressconfig = append(egressconfig, c)
 				}
 			}
-			EgressConfigCache.Set("", egressconfig, 0)
+			EgressConfigCache.Set("egress.yaml", egressconfig, 0)
 		}
 	}
 

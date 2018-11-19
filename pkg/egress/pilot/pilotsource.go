@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -11,19 +13,16 @@ import (
 	cm "github.com/go-chassis/go-archaius/core/config-manager"
 	"github.com/go-chassis/go-archaius/core/event-system"
 	"github.com/go-chassis/go-chassis/core/lager"
-	wp "github.com/go-chassis/go-chassis/core/router/weightpool"
 	"github.com/go-chassis/go-chassis/pkg/istio/client"
 	egressmodel "github.com/go-mesh/mesher/config/model"
-	"github.com/go-mesh/mesher/egress"
-	"strconv"
-	"strings"
-
 	"github.com/go-mesh/mesher/control/istio"
+	"github.com/go-mesh/mesher/pkg/egress"
 )
 
 const egressPilotSourceName = "EgressPilotSource"
 const egressPilotSourcePriority = 8
 const OUTBOUND = "outbound"
+const Cluster_ORIGINAL_DST = 4
 
 // DefaultPilotRefresh is default pilot refresh time
 // TODO: use stream instead
@@ -105,7 +104,7 @@ func (r *pilotSource) GetConfigurationByKeyAndDimensionInfo(key, d string) (inte
 func (r *pilotSource) GetConfigurations() (map[string]interface{}, error) {
 	egressConfigs, err := r.getEgressConfigFromPilot()
 	if err != nil {
-		lager.Logger.Error("Get router config from pilot failed" + err.Error())
+		lager.Logger.Error("Get egress config from pilot failed" + err.Error())
 		return nil, err
 	}
 	d := make(map[string]interface{}, 0)
@@ -125,31 +124,32 @@ func (r *pilotSource) GetConfigurationByKey(k string) (interface{}, error) {
 	return nil, fmt.Errorf("not found %s", k)
 }
 
-// get router config from pilot
+// get egress config from pilot
 func (r *pilotSource) getEgressConfigFromPilot() ([]*egressmodel.EgressRule, error) {
 	clusters, _ := r.fetcher.GetAllClusterConfigurations()
 	var egressRules []*egressmodel.EgressRule
 	for _, cluster := range clusters {
-		var rule egressmodel.EgressRule
 
-		if cluster.Type == 4 {
+		if cluster.Type == Cluster_ORIGINAL_DST {
 			data := strings.Split(cluster.Name, "|")
 			if len(data) > 1 && data[0] == OUTBOUND {
 				intport, err := strconv.Atoi(data[1])
 				if err != nil {
 					return nil, nil
 				}
-
+				var rule egressmodel.EgressRule
 				rule.Hosts = []string{data[len(data)-1]}
 				rule.Ports = []*egressmodel.EgressPort{
 					{Port: int32(intport),
 						Protocol: "http"}}
+
 				egressRules = append(egressRules, &rule)
 			}
 
 		}
 
 	}
+
 	return egressRules, nil
 }
 
@@ -171,7 +171,6 @@ func (r *pilotSource) DynamicConfigHandler(callback core.DynamicConfigCallback) 
 				continue
 			}
 			for k, d := range data {
-				SetEgressRuleByKey(k, d.([]*egressmodel.EgressRule))
 				istio.SaveToEgressCache(map[string][]*egressmodel.EgressRule{k: d.([]*egressmodel.EgressRule)})
 			}
 
@@ -201,7 +200,7 @@ func (r *pilotSource) refreshConfigurations() (map[string]interface{}, error) {
 
 	egressConfigs, err := r.getEgressConfigFromPilot()
 	if err != nil {
-		lager.Logger.Error("Get router config from pilot failed" + err.Error())
+		lager.Logger.Error("Get egress config from pilot failed" + err.Error())
 		return nil, err
 	}
 
@@ -254,7 +253,7 @@ func constructEvent(eventType string, key string, value interface{}) *core.Event
 // pilotEventListener handle event dispatcher
 type pilotEventListener struct{}
 
-// update route rule of a service
+// update egress rule of a service
 func (r *pilotEventListener) Event(e *core.Event) {
 	if e == nil {
 		lager.Logger.Warn("pilot event pointer is nil", nil)
@@ -263,7 +262,7 @@ func (r *pilotEventListener) Event(e *core.Event) {
 
 	v := pilotfetcher.GetConfigurationsByKey(e.Key)
 	if v == nil {
-		DeleteEgressRuleByKey(e.Key)
+		istio.SaveToEgressCache(nil)
 		return
 	}
 	egressRules, ok := v.([]*egressmodel.EgressRule)
@@ -273,11 +272,8 @@ func (r *pilotEventListener) Event(e *core.Event) {
 	}
 
 	ok, _ = egress.ValidateEgressRule(map[string][]*egressmodel.EgressRule{e.Key: egressRules})
-
 	if ok {
-		SetEgressRuleByKey(e.Key, egressRules)
 		istio.SaveToEgressCache(map[string][]*egressmodel.EgressRule{e.Key: egressRules})
-		wp.GetPool().Reset(e.Key)
 		lager.Logger.Infof("Update [%s] egress rule of pilot success", e.Key)
 	}
 }
