@@ -5,6 +5,7 @@ import (
 	egressmodel "github.com/go-mesh/mesher/config/model"
 )
 
+//SaveToEgressCache save the egress rules in the cache
 func SaveToEgressCache(egressConfigFromPilot map[string][]*egressmodel.EgressRule) {
 	{
 		var egressconfig []control.EgressConfig

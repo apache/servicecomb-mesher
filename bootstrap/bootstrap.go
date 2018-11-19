@@ -36,7 +36,6 @@ import (
 	"github.com/go-chassis/go-chassis/core/metadata"
 	"github.com/go-mesh/mesher/control"
 	"github.com/go-mesh/mesher/pkg/egress"
-	_ "github.com/go-mesh/mesher/pkg/egress/pilot"
 	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/mesher/pkg/runtime"
 	"github.com/go-mesh/openlogging"
@@ -72,9 +71,11 @@ func Start() error {
 	if err != nil {
 		return err
 	}
+
 	if err := control.Init(); err != nil {
 		return err
 	}
+
 	return nil
 
 }
@@ -131,6 +132,7 @@ func SetHandlers() {
 	chassis.SetDefaultProviderChains(providerChainMap)
 }
 
+//InitEgressChain init the egress handler chain
 func InitEgressChain() error {
 	egresschain := strings.Join([]string{
 		handler.Router,

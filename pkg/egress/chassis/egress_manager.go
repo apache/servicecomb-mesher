@@ -32,6 +32,7 @@ import (
 	"path/filepath"
 )
 
+//EgressYaml egress yaml file name
 const EgressYaml = "egress.yaml"
 
 var egressRuleMgr core.ConfigMgr

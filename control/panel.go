@@ -8,7 +8,7 @@ import (
 
 var panelPlugin = make(map[string]func(options Options) control.Panel)
 
-//DefaultPanel get fetch config
+//DefaultPanelEgress get fetch config
 var DefaultPanelEgress control.Panel
 
 //InstallPlugin install implementation

@@ -21,8 +21,12 @@ import (
 
 const egressPilotSourceName = "EgressPilotSource"
 const egressPilotSourcePriority = 8
+
+//OUTBOUND outbound
 const OUTBOUND = "outbound"
-const Cluster_ORIGINAL_DST = 4
+
+//clusteroriginaldst cluster type
+const clusteroriginaldst = 4
 
 // DefaultPilotRefresh is default pilot refresh time
 // TODO: use stream instead
@@ -130,7 +134,7 @@ func (r *pilotSource) getEgressConfigFromPilot() ([]*egressmodel.EgressRule, err
 	var egressRules []*egressmodel.EgressRule
 	for _, cluster := range clusters {
 
-		if cluster.Type == Cluster_ORIGINAL_DST {
+		if cluster.Type == clusteroriginaldst {
 			data := strings.Split(cluster.Name, "|")
 			if len(data) > 1 && data[0] == OUTBOUND {
 				intport, err := strconv.Atoi(data[1])

@@ -43,7 +43,7 @@ type Egress interface {
 var ErrNoExist = errors.New("Egress not exists")
 var egressServices = make(map[string]func() (Egress, error))
 
-// DefaultEgress is current egress implementationco
+// DefaultEgress is current egress implementation
 var DefaultEgress Egress
 
 // InstallEgressService install egress service for developer
