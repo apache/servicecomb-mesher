@@ -23,10 +23,10 @@ import (
 	"fmt"
 	"github.com/go-chassis/go-chassis/core/lager"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
-	"github.com/go-chassis/go-chassis/pkg/istio/client"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
 	"github.com/go-mesh/mesher/config"
 	"github.com/go-mesh/mesher/config/model"
+	"github.com/go-mesh/mesher/pkg/istio/client"
 	"regexp"
 	"strings"
 )

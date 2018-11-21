@@ -13,10 +13,10 @@ import (
 	cm "github.com/go-chassis/go-archaius/core/config-manager"
 	"github.com/go-chassis/go-archaius/core/event-system"
 	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/pkg/istio/client"
 	egressmodel "github.com/go-mesh/mesher/config/model"
 	"github.com/go-mesh/mesher/control/istio"
 	"github.com/go-mesh/mesher/pkg/egress"
+	"github.com/go-mesh/mesher/pkg/istio/client"
 )
 
 const egressPilotSourceName = "EgressPilotSource"
