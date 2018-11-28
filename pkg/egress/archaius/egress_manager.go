@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package chassis
+package archaius
 
 import (
 	"errors"

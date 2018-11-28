@@ -3,6 +3,7 @@ package pilot
 import (
 	"errors"
 	"fmt"
+	"os"
 	"reflect"
 	"strconv"
 	"strings"
@@ -16,7 +17,7 @@ import (
 	egressmodel "github.com/go-mesh/mesher/config/model"
 	"github.com/go-mesh/mesher/control/istio"
 	"github.com/go-mesh/mesher/pkg/egress"
-	"github.com/go-mesh/mesher/pkg/istio/client"
+	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
 )
 
 const egressPilotSourceName = "EgressPilotSource"
@@ -72,7 +73,7 @@ func addEgressPilotSource(o egress.Options) error {
 // pilotSource keeps the egress rule in istio
 type pilotSource struct {
 	refreshInverval time.Duration
-	fetcher         client.PilotClient
+	fetcher         istioinfra.XdsClient
 
 	mu             sync.RWMutex
 	pmu            sync.RWMutex
@@ -81,7 +82,9 @@ type pilotSource struct {
 }
 
 func newPilotSource(o egress.Options) (*pilotSource, error) {
-	grpcClient, err := client.NewGRPCPilotClient(o.ToPilotOptions())
+	pilotAddr := o.Endpoints[0]
+	nodeInfo := getNodeInfo()
+	xdsClient, err := istioinfra.NewXdsClient(pilotAddr, nil, nodeInfo, o.ConfigPath)
 	if err != nil {
 		return nil, fmt.Errorf("connect to pilot failed: %v", err)
 	}
@@ -91,8 +94,21 @@ func newPilotSource(o egress.Options) (*pilotSource, error) {
 		refreshInverval: DefaultPilotRefresh,
 		Configurations:  map[string]interface{}{},
 		PortToService:   map[string]string{},
-		fetcher:         grpcClient,
+		fetcher:         *xdsClient,
 	}, nil
+}
+
+func getNodeInfo() *istioinfra.NodeInfo {
+	PodName := os.Getenv("POD_NAME")
+	PodNamespace := os.Getenv("POD_NAMESPACE")
+	InstanceIP := os.Getenv("INSTANCE_IP")
+
+	nodeInfo := &istioinfra.NodeInfo{
+		PodName:    PodName,
+		Namespace:  PodNamespace,
+		InstanceIP: InstanceIP,
+	}
+	return nodeInfo
 }
 
 func (r *pilotSource) GetSourceName() string { return egressPilotSourceName }
@@ -130,7 +146,7 @@ func (r *pilotSource) GetConfigurationByKey(k string) (interface{}, error) {
 
 // get egress config from pilot
 func (r *pilotSource) getEgressConfigFromPilot() ([]*egressmodel.EgressRule, error) {
-	clusters, _ := r.fetcher.GetAllClusterConfigurations()
+	clusters, _ := r.fetcher.CDS()
 	var egressRules []*egressmodel.EgressRule
 	for _, cluster := range clusters {
 

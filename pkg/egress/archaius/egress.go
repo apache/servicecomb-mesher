@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package chassis
+package archaius
 
 import (
 	"github.com/go-mesh/mesher/config/model"

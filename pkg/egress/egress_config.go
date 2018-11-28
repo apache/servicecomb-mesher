@@ -21,14 +21,15 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
+	"regexp"
+	"strings"
+
+	gochassisconfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
 	"github.com/go-mesh/mesher/config"
 	"github.com/go-mesh/mesher/config/model"
-	"github.com/go-mesh/mesher/pkg/istio/client"
-	"regexp"
-	"strings"
 )
 
 const (
@@ -123,20 +124,22 @@ func IsDNS1123Label(value string) bool {
 
 // Options defines how to init Egress and its fetcher
 type Options struct {
-	Endpoints []string
-	EnableSSL bool
-	TLSConfig *tls.Config
-	Version   string
+	Endpoints  []string
+	EnableSSL  bool
+	TLSConfig  *tls.Config
+	Version    string
+	ConfigPath string
 
 	//TODO: need timeout for client
 	// TimeOut time.Duration
 }
 
+/*
 // ToPilotOptions translate options to client options
 func (o Options) ToPilotOptions() *client.PilotOptions {
 	return &client.PilotOptions{Endpoints: o.Endpoints}
 }
-
+*/
 func getSpecifiedOptions() (opts Options, err error) {
 	hosts, scheme, err := iputil.URIs2Hosts(strings.Split(config.GetEgressEndpoints(), ","))
 	if err != nil {
@@ -151,6 +154,7 @@ func getSpecifiedOptions() (opts Options, err error) {
 	if opts.TLSConfig != nil {
 		opts.EnableSSL = true
 	}
+	opts.ConfigPath = gochassisconfig.GetServiceDiscoveryConfigPath()
 	return
 }
 

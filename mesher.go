@@ -17,7 +17,7 @@ import (
 
 	"github.com/go-mesh/mesher/server"
 
-	_ "github.com/go-mesh/mesher/pkg/egress/chassis"
+	_ "github.com/go-mesh/mesher/pkg/egress/archaius"
 	_ "github.com/go-mesh/mesher/pkg/egress/pilot"
 
 	_ "github.com/go-mesh/mesher/control/archiaus"
