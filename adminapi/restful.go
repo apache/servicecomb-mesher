@@ -7,7 +7,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/router"
-	"github.com/go-chassis/go-chassis/metrics"
+	"github.com/go-chassis/go-chassis/pkg/metrics"
 	"github.com/go-chassis/go-chassis/server/restful"
 	"github.com/go-mesh/mesher/adminapi/health"
 	"github.com/go-mesh/mesher/adminapi/version"

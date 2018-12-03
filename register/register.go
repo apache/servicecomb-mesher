@@ -29,15 +29,16 @@ import (
 )
 
 // AdaptEndpoints moves http endpoint to rest endpoint
-func AdaptEndpoints() {
+func AdaptEndpoints() error {
+	var err error
 	// To be called by services based on CSE SDK,
 	// mesher has to register endpoint with rest://ip:port
 	oldProtoMap := config.GlobalDefinition.Cse.Protocols
 	if _, ok := oldProtoMap[common.HTTPProtocol]; !ok {
-		return
+		return nil
 	}
 	if _, ok := oldProtoMap[chassisCommon.ProtocolRest]; ok {
-		return
+		return nil
 	}
 
 	newProtoMap := make(map[string]chassisModel.Protocol)
@@ -48,7 +49,10 @@ func AdaptEndpoints() {
 		newProtoMap[n] = proto
 	}
 	newProtoMap[chassisCommon.ProtocolRest] = oldProtoMap[common.HTTPProtocol]
-	registry.InstanceEndpoints = registry.MakeEndpointMap(newProtoMap)
+	registry.InstanceEndpoints, err = registry.MakeEndpointMap(newProtoMap)
+	if err != nil {
+		return err
+	}
 	for protocol, address := range registry.InstanceEndpoints {
 		if address == "" {
 			port := strings.Split(newProtoMap[protocol].Listen, ":")
@@ -59,4 +63,5 @@ func AdaptEndpoints() {
 	}
 
 	lager.Logger.Debug("Adapt endpoints success")
+	return nil
 }

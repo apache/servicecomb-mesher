@@ -8,20 +8,22 @@ require (
 	github.com/go-chassis/go-archaius v0.0.0-20181108111652-ab19b4eae276
 
 	github.com/go-chassis/go-cc-client v0.0.0-20181102101915-dea430061a34
-	github.com/go-chassis/go-chassis v1.0.2-0.20181109020043-b3581bd78ddc
+	github.com/go-chassis/go-chassis v1.1.1-0.20181130101036-30c84e3f6f47
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
-	github.com/go-mesh/openlogging v0.0.0-20180912071658-0fd4707a75ab
+	github.com/go-mesh/openlogging v0.0.0-20181122085847-3daf3ad8ed35
+	github.com/gogo/googleapis v1.1.0 // indirect
 	github.com/gogo/protobuf v1.1.1
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
 	github.com/google/gofuzz v0.0.0-20170612174753-24818f796faf // indirect
 	github.com/imdario/mergo v0.3.6 // indirect
+	github.com/lyft/protoc-gen-validate v0.0.11 // indirect
 	github.com/onsi/gomega v1.4.2 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v0.8.0
 	github.com/prometheus/client_model v0.0.0-20180712105110-5c3871d89910
 	github.com/stretchr/testify v1.2.2
 	github.com/uber-go/atomic v1.3.2 // indirect
-	github.com/urfave/cli v0.0.0-20180821064027-934abfb2f102
+	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
 	go.uber.org/atomic v1.3.2 // indirect
 	golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16 // indirect
 	golang.org/x/net v0.0.0-20180906233101-161cd47e91fd
