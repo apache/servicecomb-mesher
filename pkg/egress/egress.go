@@ -34,9 +34,8 @@ var regexHosts = make(map[string]*model.EgressRule)
 //Egress return egress rule, you can also set custom egress rule
 type Egress interface {
 	Init(Options) error
-	//	SetEgressRule(map[string][]*model.EgressRule)
+	SetEgressRule(map[string][]*model.EgressRule)
 	FetchEgressRule() map[string][]*model.EgressRule
-	//	FetchEgressRuleByName(string) []*model.EgressRule
 }
 
 // ErrNoExist means if there is no egress implementation
@@ -67,7 +66,30 @@ func BuildEgress(name string) error {
 
 //Match Check Egress rule matches
 func Match(hostname string) (bool, *control.EgressConfig) {
-	EgressRules := meshercontrol.DefaultPanelEgress.GetEgressRule()
+	var EgressRules []control.EgressConfig
+	if meshercontrol.DefaultPanelEgress != nil {
+		EgressRules = meshercontrol.DefaultPanelEgress.GetEgressRule()
+	} else {
+		mapEgressRules := DefaultEgress.FetchEgressRule()
+		for _, value := range mapEgressRules {
+			for _, rule := range value {
+				var Ports []*control.EgressPort
+				for _, port := range rule.Ports {
+					p := control.EgressPort{
+						Port:     (*port).Port,
+						Protocol: (*port).Protocol,
+					}
+					Ports = append(Ports, &p)
+				}
+				c := control.EgressConfig{
+					Hosts: rule.Hosts,
+					Ports: Ports,
+				}
+				EgressRules = append(EgressRules, c)
+			}
+		}
+	}
+
 	for _, egress := range EgressRules {
 
 		for _, host := range egress.Hosts {

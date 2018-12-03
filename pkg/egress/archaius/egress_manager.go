@@ -18,24 +18,21 @@
 package archaius
 
 import (
-	"errors"
+	"gopkg.in/yaml.v2"
+	"path/filepath"
+	"strings"
+
+	"github.com/go-chassis/go-archaius"
 	"github.com/go-chassis/go-archaius/core"
-	"github.com/go-chassis/go-archaius/core/config-manager"
-	"github.com/go-chassis/go-archaius/core/event-system"
 	"github.com/go-chassis/go-archaius/sources/file-source"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
 	"github.com/go-mesh/mesher/config/model"
-	controlarchaius "github.com/go-mesh/mesher/control/archiaus"
 	"github.com/go-mesh/mesher/pkg/egress"
-	"gopkg.in/yaml.v2"
-	"path/filepath"
 )
 
 //EgressYaml egress yaml file name
 const EgressYaml = "egress.yaml"
-
-var egressRuleMgr core.ConfigMgr
 
 type egressRuleEventListener struct{}
 
@@ -45,13 +42,15 @@ func (r *egressRuleEventListener) Event(e *core.Event) {
 		lager.Logger.Warn("Event pointer is nil", nil)
 		return
 	}
-
-	v := egressRuleMgr.GetConfigurationsByKey(e.Key)
-	if v == nil {
-		controlarchaius.SaveToEgressCache(nil)
-		lager.Logger.Infof("[%s] Egress rule is removed", e.Key)
+	if !strings.Contains(e.Key, EgressYaml) {
 		return
 	}
+	v := archaius.Get(e.Key)
+	if v == nil {
+		lager.Logger.Infof("[%s] Error getting egress key", e.Key)
+		return
+	}
+
 	var egressconfig model.EgressConfig
 
 	if err := yaml.Unmarshal([]byte(v.([]byte)), &egressconfig); err != nil {
@@ -70,34 +69,15 @@ func (r *egressRuleEventListener) Event(e *core.Event) {
 		egressRules = append(egressRules, value...)
 	}
 
-	controlarchaius.SaveToEgressCache(&egressconfig)
+	SetEgressRule(map[string][]*model.EgressRule{e.Key: egressRules})
 	lager.Logger.Infof("Update [%s] egress rule SUCCESS", e.Key)
 }
 
 // initialize the config mgr and add several sources
 func initEgressManager() error {
-	d := eventsystem.NewDispatcher()
-	l := &egressRuleEventListener{}
-	d.RegisterListener(l, ".*")
-	egressRuleMgr = configmanager.NewConfigurationManager(d)
+	egressListener := &egressRuleEventListener{}
+	archaius.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), archaius.WithFileHandler(filesource.Convert2configMap))
+	archaius.RegisterListener(egressListener, ".*")
 
-	if err := AddEgressRuleSource(); err != nil {
-		return err
-	}
-	return nil
-}
-
-// AddEgressRuleSource adds a config source to egress rule manager
-// Do not call this method until egress init success
-func AddEgressRuleSource() error {
-	if egressRuleMgr == nil {
-		return errors.New("egressRuleMgr is nil, please init it firstly")
-	}
-	fsource := filesource.NewFileSource()
-	fsource.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), filesource.DefaultFilePriority, filesource.Convert2configMap)
-	if err := egressRuleMgr.AddSource(fsource, filesource.DefaultFilePriority); err != nil {
-		return err
-	}
-	lager.Logger.Infof("Add [%s] source success", fsource.GetSourceName())
 	return nil
 }

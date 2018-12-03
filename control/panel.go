@@ -25,7 +25,7 @@ type Options struct {
 func Init() error {
 	infra := config.GlobalDefinition.Panel.Infra
 	if infra == "" || infra == "archaius" {
-		infra = "egressarchaius"
+		return nil
 	} else if infra == "pilot" {
 		infra = "egresspilot"
 	}

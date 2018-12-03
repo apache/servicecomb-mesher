@@ -19,6 +19,11 @@ func (r *PilotEgress) FetchEgressRule() map[string][]*egressmodel.EgressRule {
 	return GetEgressRule()
 }
 
+//SetEgressRule set rules
+func (r *PilotEgress) SetEgressRule(rr map[string][]*egressmodel.EgressRule) {
+	SetEgressRule(rr)
+}
+
 //Init init egress config
 func (r *PilotEgress) Init(o egress.Options) error {
 	// the manager use dests to init, so must init after dests
@@ -56,4 +61,11 @@ func GetEgressRule() map[string][]*egressmodel.EgressRule {
 	lock.RLock()
 	defer lock.RUnlock()
 	return dests
+}
+
+// SetEgressRule set egress rule
+func SetEgressRule(rule map[string][]*egressmodel.EgressRule) {
+	lock.RLock()
+	defer lock.RUnlock()
+	dests = rule
 }

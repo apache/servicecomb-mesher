@@ -20,7 +20,6 @@ import (
 	_ "github.com/go-mesh/mesher/pkg/egress/archaius"
 	_ "github.com/go-mesh/mesher/pkg/egress/pilot"
 
-	_ "github.com/go-mesh/mesher/control/archiaus"
 	_ "github.com/go-mesh/mesher/control/istio"
 )
 

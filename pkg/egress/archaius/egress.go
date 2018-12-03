@@ -18,6 +18,8 @@
 package archaius
 
 import (
+	"fmt"
+	"github.com/go-mesh/mesher/config"
 	"github.com/go-mesh/mesher/config/model"
 	"github.com/go-mesh/mesher/pkg/egress"
 	"sync"
@@ -32,12 +34,30 @@ func (r *Egress) FetchEgressRule() map[string][]*model.EgressRule {
 	return GetEgressRule()
 }
 
+//SetEgressRule set rules
+func (r *Egress) SetEgressRule(rr map[string][]*model.EgressRule) {
+	SetEgressRule(rr)
+}
+
 //Init init egress config
 func (r *Egress) Init(op egress.Options) error {
 	// the manager use dests to init, so must init after dests
 	if err := initEgressManager(); err != nil {
 		return err
 	}
+	return refresh()
+}
+
+// refresh all the egress config
+func refresh() error {
+	configs := config.GetEgressConfig()
+	ok, _ := egress.ValidateEgressRule(configs.Destinations)
+	if !ok {
+		err := fmt.Errorf("Egress rule type assertion fail, key: %s", configs.Destinations)
+		return err
+	}
+
+	dests = configs.Destinations
 	return nil
 }
 
@@ -53,6 +73,13 @@ func GetEgressRule() map[string][]*model.EgressRule {
 	lock.RLock()
 	defer lock.RUnlock()
 	return dests
+}
+
+// SetEgressRule set egress rule
+func SetEgressRule(rule map[string][]*model.EgressRule) {
+	lock.RLock()
+	defer lock.RUnlock()
+	dests = rule
 }
 
 func init() {
