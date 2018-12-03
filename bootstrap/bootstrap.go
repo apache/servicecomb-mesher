@@ -56,7 +56,9 @@ func Start() error {
 	if err := adminapi.Init(); err != nil {
 		log.Println("Error occurred in starting admin server", err)
 	}
-	register.AdaptEndpoints()
+	if err := register.AdaptEndpoints(); err != nil {
+		return err
+	}
 	if cmd.Configs.LocalServicePorts == "" {
 		lager.Logger.Warnf("local service ports is missing, service can not be called by mesher")
 	} else {
