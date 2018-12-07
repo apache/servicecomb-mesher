@@ -11,10 +11,9 @@ import (
 	mesherconfig "github.com/go-mesh/mesher/config"
 	egressmodel "github.com/go-mesh/mesher/config/model"
 	"github.com/go-mesh/mesher/control"
-	"github.com/go-mesh/mesher/control/archiaus"
-	_ "github.com/go-mesh/mesher/control/archiaus"
 	_ "github.com/go-mesh/mesher/control/istio"
 	"github.com/go-mesh/mesher/pkg/egress"
+	"github.com/go-mesh/mesher/pkg/egress/archaius"
 	"gopkg.in/yaml.v2"
 )
 
@@ -27,6 +26,7 @@ func BenchmarkMatch(b *testing.B) {
 	cmd.Init()
 	config.Init()
 	mesherconfig.Init()
+	egress.Init()
 	control.Init()
 	var yamlContent = `---
 egress:
@@ -52,8 +52,7 @@ egressRule:
 	if err != nil {
 		fmt.Println("unmarshal failed")
 	}
-	archiaus.SaveToEgressCache(&ss)
-	fmt.Println(archiaus.EgressConfigCache.Get(""))
+	archaius.SetEgressRule(ss.Destinations)
 
 	myString := "www.google.com"
 	for i := 0; i < b.N; i++ {

@@ -35,7 +35,7 @@ import (
 const (
 	dns1123LabelMaxLength int    = 63
 	dns1123LabelFmt       string = "[a-zA-Z0-9]([-a-z-A-Z0-9]*[a-zA-Z0-9])?"
-	wildcardPrefix        string = "(\\*)?" + dns1123LabelFmt
+	wildcardPrefix        string = "\\*|(\\*)?" + dns1123LabelFmt
 	DefaultEgressType            = "cse"
 	// EgressTLS defines tls prefix
 	EgressTLS = "egress"
