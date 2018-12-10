@@ -26,7 +26,6 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
 	"github.com/go-mesh/mesher/cmd"
 	"github.com/go-mesh/mesher/common"
-	egressmodel "github.com/go-mesh/mesher/config/model"
 	"github.com/go-mesh/openlogging"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
@@ -41,7 +40,7 @@ const (
 )
 
 var mesherConfig *MesherConfig
-var egressConfig *egressmodel.EgressConfig
+var egressConfig *EgressConfig
 
 //GetConfig returns mesher config
 func GetConfig() *MesherConfig {
@@ -57,7 +56,7 @@ func SetConfig(nc *MesherConfig) {
 }
 
 //GetEgressConfig returns Egress config
-func GetEgressConfig() *egressmodel.EgressConfig {
+func GetEgressConfig() *EgressConfig {
 	return egressConfig
 }
 
@@ -97,7 +96,7 @@ func Init() error {
 		return err
 	}
 
-	egressConfig = &egressmodel.EgressConfig{}
+	egressConfig = &EgressConfig{}
 	egressContents, err := GetConfigContents(EgressConfFile)
 	if err != nil {
 		return err

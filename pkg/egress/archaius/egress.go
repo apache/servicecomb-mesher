@@ -20,7 +20,6 @@ package archaius
 import (
 	"fmt"
 	"github.com/go-mesh/mesher/config"
-	"github.com/go-mesh/mesher/config/model"
 	"github.com/go-mesh/mesher/pkg/egress"
 	"sync"
 )
@@ -30,12 +29,12 @@ type Egress struct {
 }
 
 //FetchEgressRule return all rules
-func (r *Egress) FetchEgressRule() map[string][]*model.EgressRule {
+func (r *Egress) FetchEgressRule() map[string][]*config.EgressRule {
 	return GetEgressRule()
 }
 
 //SetEgressRule set rules
-func (r *Egress) SetEgressRule(rr map[string][]*model.EgressRule) {
+func (r *Egress) SetEgressRule(rr map[string][]*config.EgressRule) {
 	SetEgressRule(rr)
 }
 
@@ -65,18 +64,18 @@ func newEgress() (egress.Egress, error) {
 	return &Egress{}, nil
 }
 
-var dests = make(map[string][]*model.EgressRule)
+var dests = make(map[string][]*config.EgressRule)
 var lock sync.RWMutex
 
 // GetEgressRule get egress rule
-func GetEgressRule() map[string][]*model.EgressRule {
+func GetEgressRule() map[string][]*config.EgressRule {
 	lock.RLock()
 	defer lock.RUnlock()
 	return dests
 }
 
 // SetEgressRule set egress rule
-func SetEgressRule(rule map[string][]*model.EgressRule) {
+func SetEgressRule(rule map[string][]*config.EgressRule) {
 	lock.RLock()
 	defer lock.RUnlock()
 	dests = rule

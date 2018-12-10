@@ -9,7 +9,6 @@ import (
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-mesh/mesher/cmd"
 	mesherconfig "github.com/go-mesh/mesher/config"
-	egressmodel "github.com/go-mesh/mesher/config/model"
 	"github.com/go-mesh/mesher/control"
 	_ "github.com/go-mesh/mesher/control/istio"
 	"github.com/go-mesh/mesher/pkg/egress"
@@ -47,7 +46,7 @@ egressRule:
         - port: 80
           protocol: HTTP`
 
-	ss := egressmodel.EgressConfig{}
+	ss := mesherconfig.EgressConfig{}
 	err := yaml.Unmarshal([]byte(yamlContent), &ss)
 	if err != nil {
 		fmt.Println("unmarshal failed")

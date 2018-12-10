@@ -14,7 +14,7 @@ import (
 	cm "github.com/go-chassis/go-archaius/core/config-manager"
 	"github.com/go-chassis/go-archaius/core/event-system"
 	"github.com/go-chassis/go-chassis/core/lager"
-	egressmodel "github.com/go-mesh/mesher/config/model"
+	"github.com/go-mesh/mesher/config"
 	"github.com/go-mesh/mesher/control/istio"
 	"github.com/go-mesh/mesher/pkg/egress"
 	istioinfra "github.com/go-mesh/mesher/pkg/infras/istio"
@@ -145,9 +145,9 @@ func (r *pilotSource) GetConfigurationByKey(k string) (interface{}, error) {
 }
 
 // get egress config from pilot
-func (r *pilotSource) getEgressConfigFromPilot() ([]*egressmodel.EgressRule, error) {
+func (r *pilotSource) getEgressConfigFromPilot() ([]*config.EgressRule, error) {
 	clusters, _ := r.fetcher.CDS()
-	var egressRules []*egressmodel.EgressRule
+	var egressRules []*config.EgressRule
 	for _, cluster := range clusters {
 
 		if cluster.Type == clusteroriginaldst {
@@ -157,9 +157,9 @@ func (r *pilotSource) getEgressConfigFromPilot() ([]*egressmodel.EgressRule, err
 				if err != nil {
 					return nil, nil
 				}
-				var rule egressmodel.EgressRule
+				var rule config.EgressRule
 				rule.Hosts = []string{data[len(data)-1]}
-				rule.Ports = []*egressmodel.EgressPort{
+				rule.Ports = []*config.EgressPort{
 					{Port: int32(intport),
 						Protocol: "http"}}
 
@@ -191,7 +191,7 @@ func (r *pilotSource) DynamicConfigHandler(callback core.DynamicConfigCallback) 
 				continue
 			}
 			for k, d := range data {
-				istio.SaveToEgressCache(map[string][]*egressmodel.EgressRule{k: d.([]*egressmodel.EgressRule)})
+				istio.SaveToEgressCache(map[string][]*config.EgressRule{k: d.([]*config.EgressRule)})
 			}
 
 		case <-ticker.C:
@@ -285,15 +285,15 @@ func (r *pilotEventListener) Event(e *core.Event) {
 		istio.SaveToEgressCache(nil)
 		return
 	}
-	egressRules, ok := v.([]*egressmodel.EgressRule)
+	egressRules, ok := v.([]*config.EgressRule)
 	if !ok {
 		lager.Logger.Error("value of pilot is not type []*EgressRule", nil)
 		return
 	}
 
-	ok, _ = egress.ValidateEgressRule(map[string][]*egressmodel.EgressRule{e.Key: egressRules})
+	ok, _ = egress.ValidateEgressRule(map[string][]*config.EgressRule{e.Key: egressRules})
 	if ok {
-		istio.SaveToEgressCache(map[string][]*egressmodel.EgressRule{e.Key: egressRules})
+		istio.SaveToEgressCache(map[string][]*config.EgressRule{e.Key: egressRules})
 		lager.Logger.Infof("Update [%s] egress rule of pilot success", e.Key)
 	}
 }

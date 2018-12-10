@@ -2,11 +2,11 @@ package istio
 
 import (
 	"github.com/go-chassis/go-chassis/control"
-	egressmodel "github.com/go-mesh/mesher/config/model"
+	"github.com/go-mesh/mesher/config"
 )
 
 //SaveToEgressCache save the egress rules in the cache
-func SaveToEgressCache(egressConfigFromPilot map[string][]*egressmodel.EgressRule) {
+func SaveToEgressCache(egressConfigFromPilot map[string][]*config.EgressRule) {
 	{
 		var egressconfig []control.EgressConfig
 		for _, v := range egressConfigFromPilot {

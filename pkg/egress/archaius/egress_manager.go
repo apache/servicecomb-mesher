@@ -27,7 +27,7 @@ import (
 	"github.com/go-chassis/go-archaius/sources/file-source"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
-	"github.com/go-mesh/mesher/config/model"
+	"github.com/go-mesh/mesher/config"
 	"github.com/go-mesh/mesher/pkg/egress"
 )
 
@@ -51,16 +51,16 @@ func (r *egressRuleEventListener) Event(e *core.Event) {
 		return
 	}
 
-	var egressconfig model.EgressConfig
+	var egressconfig config.EgressConfig
 
 	if err := yaml.Unmarshal([]byte(v.([]byte)), &egressconfig); err != nil {
 		lager.Logger.Error("yaml unmarshal failed", nil)
 		return
 	}
-	var egressRules []*model.EgressRule
+	var egressRules []*config.EgressRule
 
 	for key, value := range egressconfig.Destinations {
-		ok, _ := egress.ValidateEgressRule(map[string][]*model.EgressRule{key: value})
+		ok, _ := egress.ValidateEgressRule(map[string][]*config.EgressRule{key: value})
 		if !ok {
 			lager.Logger.Warn("Validating Egress Rule Failed")
 			return
@@ -69,7 +69,7 @@ func (r *egressRuleEventListener) Event(e *core.Event) {
 		egressRules = append(egressRules, value...)
 	}
 
-	SetEgressRule(map[string][]*model.EgressRule{e.Key: egressRules})
+	SetEgressRule(map[string][]*config.EgressRule{e.Key: egressRules})
 	lager.Logger.Infof("Update [%s] egress rule SUCCESS", e.Key)
 }
 

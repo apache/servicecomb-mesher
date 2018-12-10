@@ -2,7 +2,7 @@ package pilot
 
 import (
 	"fmt"
-	egressmodel "github.com/go-mesh/mesher/config/model"
+	"github.com/go-mesh/mesher/config"
 	"github.com/go-mesh/mesher/pkg/egress"
 	"sync"
 )
@@ -15,12 +15,12 @@ func newPilotEgress() (egress.Egress, error) { return &PilotEgress{}, nil }
 type PilotEgress struct{}
 
 //FetchEgressRule return all rules
-func (r *PilotEgress) FetchEgressRule() map[string][]*egressmodel.EgressRule {
+func (r *PilotEgress) FetchEgressRule() map[string][]*config.EgressRule {
 	return GetEgressRule()
 }
 
 //SetEgressRule set rules
-func (r *PilotEgress) SetEgressRule(rr map[string][]*egressmodel.EgressRule) {
+func (r *PilotEgress) SetEgressRule(rr map[string][]*config.EgressRule) {
 	SetEgressRule(rr)
 }
 
@@ -37,9 +37,9 @@ func (r *PilotEgress) Init(o egress.Options) error {
 func refresh() error {
 	configs := pilotfetcher.GetConfigurations()
 
-	d := make(map[string][]*egressmodel.EgressRule)
+	d := make(map[string][]*config.EgressRule)
 	for k, v := range configs {
-		rules, ok := v.([]*egressmodel.EgressRule)
+		rules, ok := v.([]*config.EgressRule)
 		if !ok {
 			err := fmt.Errorf("Egress rule type assertion fail, key: %s", k)
 			return err
@@ -53,18 +53,18 @@ func refresh() error {
 	return nil
 }
 
-var dests = make(map[string][]*egressmodel.EgressRule)
+var dests = make(map[string][]*config.EgressRule)
 var lock sync.RWMutex
 
 // GetEgressRule get egress rule
-func GetEgressRule() map[string][]*egressmodel.EgressRule {
+func GetEgressRule() map[string][]*config.EgressRule {
 	lock.RLock()
 	defer lock.RUnlock()
 	return dests
 }
 
 // SetEgressRule set egress rule
-func SetEgressRule(rule map[string][]*egressmodel.EgressRule) {
+func SetEgressRule(rule map[string][]*config.EgressRule) {
 	lock.RLock()
 	defer lock.RUnlock()
 	dests = rule

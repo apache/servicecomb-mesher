@@ -135,7 +135,6 @@ func SetHandlers() {
 //InitEgressChain init the egress handler chain
 func InitEgressChain() error {
 	egresschain := strings.Join([]string{
-		handler.Router,
 		handler.RatelimiterConsumer,
 		handler.BizkeeperConsumer,
 		handler.Transport,

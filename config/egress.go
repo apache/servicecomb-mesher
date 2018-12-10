@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package model
+package config
 
 //EgressConfig is the struct having info about egress rule destinations
 type EgressConfig struct {

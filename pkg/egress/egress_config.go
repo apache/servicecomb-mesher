@@ -29,7 +29,6 @@ import (
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
 	"github.com/go-mesh/mesher/config"
-	"github.com/go-mesh/mesher/config/model"
 )
 
 const (
@@ -63,7 +62,7 @@ func Init() error {
 }
 
 //ValidateEgressRule validate the Egress rules of each service
-func ValidateEgressRule(rules map[string][]*model.EgressRule) (bool, error) {
+func ValidateEgressRule(rules map[string][]*config.EgressRule) (bool, error) {
 	for _, rule := range rules {
 		for _, egressrule := range rule {
 			if len(egressrule.Hosts) == 0 {
@@ -159,7 +158,7 @@ func getSpecifiedOptions() (opts Options, err error) {
 }
 
 // GetEgressType returns the type of egress
-func GetEgressType(egress model.Egress) string {
+func GetEgressType(egress config.Egress) string {
 	if egress.Infra != "" {
 		return egress.Infra
 	}

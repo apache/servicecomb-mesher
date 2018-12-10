@@ -20,7 +20,7 @@ package egress
 import (
 	"errors"
 	"github.com/go-chassis/go-chassis/control"
-	"github.com/go-mesh/mesher/config/model"
+	"github.com/go-mesh/mesher/config"
 	meshercontrol "github.com/go-mesh/mesher/control"
 	"regexp"
 	"sync"
@@ -28,14 +28,14 @@ import (
 
 var lock sync.RWMutex
 
-var plainHosts = make(map[string]*model.EgressRule)
-var regexHosts = make(map[string]*model.EgressRule)
+var plainHosts = make(map[string]*config.EgressRule)
+var regexHosts = make(map[string]*config.EgressRule)
 
 //Egress return egress rule, you can also set custom egress rule
 type Egress interface {
 	Init(Options) error
-	SetEgressRule(map[string][]*model.EgressRule)
-	FetchEgressRule() map[string][]*model.EgressRule
+	SetEgressRule(map[string][]*config.EgressRule)
+	FetchEgressRule() map[string][]*config.EgressRule
 }
 
 // ErrNoExist means if there is no egress implementation
