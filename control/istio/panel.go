@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	meshercontrol.InstallPlugin("egresspilot", newPilotPanel)
+	meshercontrol.InstallPlugin("pilot", newPilotPanel)
 }
 
 //PilotPanel pull configs from istio pilot

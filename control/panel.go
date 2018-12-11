@@ -26,9 +26,8 @@ func Init() error {
 	infra := config.GlobalDefinition.Panel.Infra
 	if infra == "" || infra == "archaius" {
 		return nil
-	} else if infra == "pilot" {
-		infra = "egresspilot"
 	}
+
 	f, ok := panelPlugin[infra]
 	if !ok {
 		return fmt.Errorf("do not support [%s] panel", infra)
