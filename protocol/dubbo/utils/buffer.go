@@ -113,7 +113,7 @@ func (b *WriteBuffer) WriteIndex(index int) error {
 	if index <= b.capacity {
 		b.wrInd = index
 	} else {
-		return &BaseError{fmt.Sprintf("Index(%d) over the capacity(%s)", index, b.capacity)}
+		return &BaseError{fmt.Sprintf("Index(%d) over the capacity(%d)", index, b.capacity)}
 	}
 	return nil
 }
