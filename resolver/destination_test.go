@@ -75,6 +75,9 @@ func TestResolve(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "80", p)
 
+	p, err = d.Resolve("abc", map[string]string{}, "Server:80/test", destinationString)
+	assert.Error(t, err)
+
 	p, err = d.Resolve("abc", map[string]string{}, "127.0.0.1:80", destinationString)
 	assert.Error(t, err)
 	assert.Equal(t, "", p)

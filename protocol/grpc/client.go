@@ -2,80 +2,107 @@ package grpc
 
 import (
 	"context"
+	"crypto/tls"
+	"errors"
 	"github.com/go-chassis/go-chassis/core/client"
+	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/invocation"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
-	"google.golang.org/grpc/metadata"
+	"github.com/go-chassis/go-chassis/pkg/util/httputil"
+	"golang.org/x/net/http2"
+	"net"
+	"net/http"
+)
+
+const (
+	//SchemaHTTP represents the http schema
+	SchemaHTTP = "http"
+	//SchemaHTTPS represents the https schema
+	SchemaHTTPS = "https"
+)
+
+//ErrInvalidResp invalid input
+var (
+	ErrInvalidResp = errors.New("rest consumer response arg is not *http.Response type")
+	//ErrCanceled means Request is canceled by context management
+	ErrCanceled = errors.New("request cancelled")
 )
 
 //Client is a grpc client
 type Client struct {
-	conn *grpc.ClientConn
+	c    *http.Client
+	opts client.Options
 }
+
+var protocolName = "grpc"
 
 func init() {
 	client.InstallPlugin(protocolName, NewClient)
 }
 
-var sd = &grpc.StreamDesc{
-	ClientStreams: true,
-	ServerStreams: true,
-}
-
 //NewClient return a new client of grpc
 func NewClient(opts client.Options) (client.ProtocolClient, error) {
-	var cc *grpc.ClientConn
-	var err error
-	if opts.TLSConfig == nil {
-		cc, err = grpc.Dial(opts.Endpoint, grpc.WithInsecure())
-		if err != nil {
-			return nil, err
+	client := &http.Client{}
+	if opts.TLSConfig != nil {
+		client.Transport = &http2.Transport{
+			TLSClientConfig: opts.TLSConfig,
 		}
 	} else {
-		cred := credentials.NewTLS(opts.TLSConfig)
-		cc, err = grpc.Dial(opts.Endpoint, grpc.WithTransportCredentials(cred))
+		client.Transport = &http2.Transport{
+			AllowHTTP: true,
+			DialTLS: func(network, addr string, cfg *tls.Config) (net.Conn, error) {
+				return net.Dial(network, addr)
+			}}
 	}
-
 	return &Client{
-		conn: cc,
+		c:    client,
+		opts: opts,
 	}, nil
+}
+func (c *Client) contextToHeader(ctx context.Context, req *http.Request) {
+	for k, v := range common.FromContext(ctx) {
+		req.Header.Set(k, v)
+	}
 }
 
 //Call is a method which uses grpc protocol to transfer invocation
 func (c *Client) Call(ctx context.Context, addr string, inv *invocation.Invocation, rsp interface{}) error {
-	serverStream, _ := inv.Args.(grpc.ServerStream)
-	//send headers to provider, including incoming md
-	md := metadata.MD{}
-	for k, v := range inv.Headers() {
-		md.Set(k, v)
-	}
-	ctx = metadata.NewOutgoingContext(serverStream.Context(), md)
-
-	clientStream, err := grpc.NewClientStream(ctx, sd, c.conn, inv.OperationID, grpc.CallCustomCodec(&codec{}))
+	var err error
+	reqSend, err := httputil.HTTPRequest(inv)
 	if err != nil {
 		return err
 	}
-	f := rsp.(*frame)
-	//get frame
-	err = serverStream.RecvMsg(f)
-	if err != nil {
-		return err
-	}
-	//set frame to provider
-	err = clientStream.SendMsg(f)
-	if err != nil {
-		return err
-	}
-	//receive frame from provider
-	err = clientStream.RecvMsg(f)
-	if err != nil {
-		return err
+	resp, ok := rsp.(*http.Response)
+	if !ok {
+		return ErrInvalidResp
 	}
 
-	rsp = f
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	if c.opts.TLSConfig != nil {
+		reqSend.URL.Scheme = SchemaHTTPS
+	} else {
+		reqSend.URL.Scheme = SchemaHTTP
+	}
+	if addr != "" {
+		reqSend.URL.Host = addr
+	}
 
-	return nil
+	var temp *http.Response
+	errChan := make(chan error, 1)
+	go func() {
+		temp, err = c.c.Do(reqSend)
+		errChan <- err
+	}()
+
+	select {
+	case <-ctx.Done():
+		err = ErrCanceled
+	case err = <-errChan:
+		if err == nil {
+			*resp = *temp
+		}
+	}
+	return err
 }
 
 //String return name
@@ -85,5 +112,5 @@ func (c *Client) String() string {
 
 //Close close the conn
 func (c *Client) Close() error {
-	return c.conn.Close()
+	return nil
 }

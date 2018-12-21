@@ -33,6 +33,11 @@ GO111MODULE=on go mod download
 GO111MODULE=on go mod vendor
 go build -o mesher -a
 
+if [ $VERSION != "latest" ]; then
+    cd $PROJECT_DIR/mesher
+    git tag -a $TAG_VERSION -m "$TAG_MESSAGE"
+    git push origin $TAG_VERSION
+fi
 
 export WORK_DIR=$BUILD_DIR/src/$repo/$project/mesher
 
@@ -67,6 +72,13 @@ pkg_name="mesher-$VERSION-linux-amd64.tar.gz"
 tar zcvf $pkg_name licenses conf mesher VERSION
 if [ $JOB_NAME != "" ]; then
     cp $release_dir/$pkg_name /var/lib/jenkins/mesher-release
+fi
+
+if [ $VERSION != "latest" ]; then
+    date=$(date +%Y-%m-%d)
+    DIR_NAME="mesher-release-$date"
+    mkdir -p /var/lib/jenkins/userContent/mesher-release/$DIR_NAME
+    cp $release_dir/$pkg_name /var/lib/jenkins/userContent/mesher-release/$DIR_NAME
 fi
 tar zcvf $WORK_DIR/mesher.tar.gz licenses conf start.sh mesher VERSION
 exit 0

@@ -42,6 +42,7 @@ import (
 	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/mesher/protocol"
 	"github.com/go-mesh/mesher/resolver"
+	"github.com/go-mesh/openlogging"
 )
 
 var dr = resolver.GetDestinationResolver("http")
@@ -64,7 +65,7 @@ var (
 
 func preHandler(req *http.Request) *invocation.Invocation {
 	inv := &invocation.Invocation{}
-	inv.Args = &rest.Request{Req: req}
+	inv.Args = req
 	inv.Reply = rest.NewResponse()
 	inv.Protocol = "rest"
 	inv.URLPathFormat = req.URL.Path
@@ -74,8 +75,7 @@ func preHandler(req *http.Request) *invocation.Invocation {
 func consumerPreHandler(req *http.Request) *invocation.Invocation {
 	inv := preHandler(req)
 	inv.SourceServiceID = runtime.ServiceID
-	inv.SourceMicroService = chassisconfig.SelfServiceName
-	req.Header.Set(chassisCommon.HeaderSourceName, inv.SourceMicroService)
+	req.Header.Set(chassisCommon.HeaderSourceName, runtime.ServiceName)
 	inv.Ctx = context.TODO()
 	return inv
 }
@@ -138,7 +138,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		lager.Logger.Error("Handle request failed: " + err.Error())
 		return
 	}
-	RecordStatus(inv, resp.GetStatusCode())
+	RecordStatus(inv, resp.StatusCode)
 }
 
 //RemoteRequestHandler is for request from remote
@@ -203,18 +203,18 @@ func SetLocalServiceAddress(inv *invocation.Invocation, port string) error {
 	}
 	return nil
 }
-func copyChassisResp2HttpResp(w http.ResponseWriter, resp *rest.Response) {
-	postProcessResponse(resp.Resp)
-	copyHeader(w.Header(), resp.Resp.Header)
-	w.WriteHeader(resp.Resp.StatusCode)
+func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
+	postProcessResponse(resp)
+	copyHeader(w.Header(), resp.Header)
+	w.WriteHeader(resp.StatusCode)
 	if resp == nil {
-		lager.Logger.Warn("response is nil because of unknown reason, plz report issue")
+		openlogging.GetLogger().Warn("response is nil because of unknown reason")
 		return
 	}
-	io.Copy(w, resp.Resp.Body)
-	resp.Resp.Body.Close()
+	io.Copy(w, resp.Body)
+	resp.Body.Close()
 }
-func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invocation.Response) (*rest.Response, error) {
+func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invocation.Response) (*http.Response, error) {
 	if ir != nil {
 		if ir.Err != nil {
 			//handler only mesher errors, ignore http response err
@@ -227,17 +227,17 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 				handleErrorResponse(inv, w, http.StatusServiceUnavailable, ir.Err)
 			case fault.FaultError:
 				handleErrorResponse(inv, w, ir.Status, ir.Err)
-			default:
-				resp, ok := inv.Reply.(*rest.Response)
+			default: //for other error, check response and response body, if there is body, just transparent response
+				resp, ok := inv.Reply.(*http.Response)
 				if ok { // return raw transport error
-					if resp.Resp != nil {
-						if resp.Resp == nil {
+					if resp != nil {
+						if resp.Body == nil {
 							//resp.Resp can be nil, for example network error, must handle it
 							handleErrorResponse(inv, w, http.StatusBadGateway, ir.Err)
 							return nil, ir.Err
 						}
 						copyChassisResp2HttpResp(w, resp)
-						RecordStatus(inv, resp.Resp.StatusCode)
+						RecordStatus(inv, resp.StatusCode)
 					} else {
 						// unknown error, resp is nil, e.g. connection refused
 						handleErrorResponse(inv, w, http.StatusBadGateway, ir.Err)
@@ -260,7 +260,7 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 			handleErrorResponse(inv, w, http.StatusBadGateway, ErrNilResponse)
 			return nil, protocol.ErrUnknown
 		}
-		resp, ok := ir.Result.(*rest.Response)
+		resp, ok := ir.Result.(*http.Response)
 		if !ok {
 			err := errors.New("invocationResponse result is not type *rest.Response")
 			handleErrorResponse(inv, w, http.StatusBadGateway, err)

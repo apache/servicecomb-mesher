@@ -18,7 +18,7 @@
 package config
 
 import (
-	"github.com/go-chassis/go-chassis/core/archaius"
+	"github.com/go-chassis/go-archaius"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/lager"
@@ -26,6 +26,7 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
 	"github.com/go-mesh/mesher/cmd"
 	"github.com/go-mesh/mesher/common"
+	"github.com/go-mesh/openlogging"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
@@ -37,8 +38,6 @@ const (
 	ConfFile = "mesher.yaml"
 )
 
-//Mode is of type string which gives mode of mesher deployment
-var Mode string
 var mesherConfig *MesherConfig
 
 //GetConfig returns mesher config
@@ -109,7 +108,7 @@ func GetConfigContents(key string) (string, error) {
 func SetKeyValueByFile(key, f string) string {
 	var contents string
 	if _, err := os.Stat(f); err != nil {
-		lager.Logger.Warn(err.Error(), nil)
+		openlogging.GetLogger().Warn(err.Error())
 		return ""
 	}
 	b, err := ioutil.ReadFile(f)

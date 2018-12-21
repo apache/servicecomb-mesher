@@ -24,14 +24,6 @@ import (
 	"net/http"
 	"net/url"
 
-	mesherCommon "github.com/go-mesh/mesher/common"
-	"github.com/go-mesh/mesher/config"
-	"github.com/go-mesh/mesher/protocol/dubbo/client"
-	"github.com/go-mesh/mesher/protocol/dubbo/dubbo"
-	"github.com/go-mesh/mesher/protocol/dubbo/schema"
-	"github.com/go-mesh/mesher/protocol/dubbo/utils"
-	"github.com/go-mesh/mesher/resolver"
-
 	"github.com/go-chassis/go-chassis/client/rest"
 	"github.com/go-chassis/go-chassis/core/common"
 	chassisconfig "github.com/go-chassis/go-chassis/core/config"
@@ -41,10 +33,18 @@ import (
 	"github.com/go-chassis/go-chassis/core/loadbalancer"
 	"github.com/go-chassis/go-chassis/core/util/string"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
+	"github.com/go-chassis/go-chassis/pkg/util/httputil"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
+	mesherCommon "github.com/go-mesh/mesher/common"
+	mesherRuntime "github.com/go-mesh/mesher/pkg/runtime"
 	"github.com/go-mesh/mesher/protocol"
 	"github.com/go-mesh/mesher/cmd"
+	"github.com/go-mesh/mesher/protocol/dubbo/client"
+	"github.com/go-mesh/mesher/protocol/dubbo/dubbo"
+	"github.com/go-mesh/mesher/protocol/dubbo/schema"
+	"github.com/go-mesh/mesher/protocol/dubbo/utils"
+	"github.com/go-mesh/mesher/resolver"
 )
 
 var dr = resolver.GetDestinationResolver("http")
@@ -68,11 +68,11 @@ func (e ProxyError) Error() string {
 }
 
 //ConvertDubboReqToHTTPReq is a method which converts dubbo requesto to http request
-func ConvertDubboReqToHTTPReq(ctx *dubbo.InvokeContext, dubboReq *dubbo.Request) *rest.Request {
-	restReq := &rest.Request{Req: &http.Request{
+func ConvertDubboReqToHTTPReq(ctx *dubbo.InvokeContext, dubboReq *dubbo.Request) *http.Request {
+	restReq := &http.Request{
 		URL:    &url.URL{},
 		Header: make(http.Header),
-	}}
+	}
 	args := dubboReq.GetArguments()
 	operateID := dubboReq.GetMethodName()
 	iName := dubboReq.GetAttachment(dubbo.PathKey, "")
@@ -83,7 +83,7 @@ func ConvertDubboReqToHTTPReq(ctx *dubbo.InvokeContext, dubboReq *dubbo.Request)
 		return nil
 	}
 	ctx.Method = methd
-	restReq.SetMethod(methd.Verb)
+	restReq.Method = methd.Verb
 
 	var (
 		i         = 0
@@ -117,28 +117,28 @@ func ConvertDubboReqToHTTPReq(ctx *dubbo.InvokeContext, dubboReq *dubbo.Request)
 			paramsStr += fmtStr
 		}
 	}
-	restReq.SetBody(body)
+	httputil.SetBody(restReq, body)
 
 	uri := methd.Path
 	if paramsStr != "?" {
 		uri += paramsStr
 	}
-	restReq.SetURI(uri)
+	httputil.SetURI(restReq, uri)
 	tmpName := schema.GetSvcNameByInterface(iName)
 	if tmpName == "" {
 		lager.Logger.Error("GetSvcNameByInterface failed: Cannot find the svc")
 		return nil
 	}
-	restReq.Req.URL.Host = tmpName // must after setURI
+	restReq.URL.Host = tmpName // must after setURI
 	return restReq
 }
 
 //ConvertRestRspToDubboRsp is a function which converts rest response to dubbo response
-func ConvertRestRspToDubboRsp(ctx *dubbo.InvokeContext, resp *rest.Response, dubboRsp *dubbo.DubboRsp) {
+func ConvertRestRspToDubboRsp(ctx *dubbo.InvokeContext, resp *http.Response, dubboRsp *dubbo.DubboRsp) {
 	var v interface{}
 	var err error
-	status := resp.GetStatusCode()
-	body := resp.ReadBody()
+	status := resp.StatusCode
+	body := httputil.ReadBody(resp)
 	if status >= http.StatusBadRequest {
 		dubboRsp.SetStatus(dubbo.ServerError)
 		if dubboRsp.GetErrorMsg() == "" && body != nil {
@@ -217,7 +217,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 			ctx.Req.SetAttachment(common.HeaderSourceName, chassisconfig.SelfServiceName)
 			ctx.Req.SetAttachment(ProxyTag, "true")
 
-			if config.Mode == mesherCommon.ModeSidecar {
+			if mesherRuntime.Mode == mesherCommon.ModeSidecar {
 				c, err = handler.GetChain(common.Consumer, mesherCommon.ChainConsumerOutgoing)
 				if err != nil {
 					lager.Logger.Error("Get Consumer chain failed: " + err.Error())
@@ -282,7 +282,7 @@ func handleDubboRequest(inv *invocation.Invocation, ctx *dubbo.InvokeContext, ir
 	return nil
 }
 
-func preHandleToRest(ctx *dubbo.InvokeContext) (*rest.Request, *invocation.Invocation, string) {
+func preHandleToRest(ctx *dubbo.InvokeContext) (*http.Request, *invocation.Invocation, string) {
 	restReq := ConvertDubboReqToHTTPReq(ctx, ctx.Req)
 	if restReq == nil {
 		return nil, nil, ""
@@ -292,7 +292,7 @@ func preHandleToRest(ctx *dubbo.InvokeContext) (*rest.Request, *invocation.Invoc
 	inv.Args = restReq
 	inv.Protocol = "rest"
 	inv.Reply = rest.NewResponse()
-	inv.URLPathFormat = restReq.GetURI()
+	inv.URLPathFormat = restReq.URL.String()
 	inv.SchemaID = ""
 	inv.OperationID = ""
 	inv.Ctx = context.Background()
@@ -315,8 +315,8 @@ func ProxyRestHandler(ctx *dubbo.InvokeContext) error {
 	//Resolve Source
 	si := sr.Resolve(source)
 	h := make(map[string]string)
-	for k := range req.Req.Header {
-		h[k] = req.GetHeader(k)
+	for k := range req.Header {
+		h[k] = req.Header.Get(k)
 	}
 	//Resolve Destination
 	_, err = dr.Resolve(source, h, inv.URLPathFormat, &inv.MicroServiceName)
@@ -324,7 +324,7 @@ func ProxyRestHandler(ctx *dubbo.InvokeContext) error {
 		return err
 	}
 
-	if config.Mode == mesherCommon.ModeSidecar {
+	if mesherRuntime.Mode == mesherCommon.ModeSidecar {
 		c, err = handler.GetChain(common.Consumer, mesherCommon.ChainConsumerOutgoing)
 		if err != nil {
 			lager.Logger.Error("Get chain failed: " + err.Error())
@@ -337,38 +337,38 @@ func ProxyRestHandler(ctx *dubbo.InvokeContext) error {
 
 	c.Next(inv, func(ir *invocation.Response) error {
 		//Send the request to the destination
-		return handleRequest(ctx, req, inv.Reply.(*rest.Response), ctx.Rsp, inv, ir)
+		return handleRequest(ctx, req, inv.Reply.(*http.Response), ctx.Rsp, inv, ir)
 	})
-	ConvertRestRspToDubboRsp(ctx, inv.Reply.(*rest.Response), ctx.Rsp)
+	ConvertRestRspToDubboRsp(ctx, inv.Reply.(*http.Response), ctx.Rsp)
 	return nil
 }
 
-func handleRequest(ctx *dubbo.InvokeContext, req *rest.Request, resp *rest.Response,
+func handleRequest(ctx *dubbo.InvokeContext, req *http.Request, resp *http.Response,
 	dubboRsp *dubbo.DubboRsp, inv *invocation.Invocation, ir *invocation.Response) error {
 	if ir != nil {
 		if ir.Err != nil {
 			switch ir.Err.(type) {
 			case hystrix.FallbackNullError:
-				resp.SetStatusCode(http.StatusOK)
+				resp.StatusCode = http.StatusOK
 				dubboRsp.SetErrorMsg(ir.Err.Error())
 			case hystrix.CircuitError:
 				ir.Status = http.StatusServiceUnavailable
-				resp.SetStatusCode(http.StatusServiceUnavailable)
+				resp.StatusCode = http.StatusServiceUnavailable
 				dubboRsp.SetErrorMsg(ir.Err.Error())
 			case loadbalancer.LBError:
 				ir.Status = http.StatusBadGateway
-				resp.SetStatusCode(http.StatusBadGateway)
+				resp.StatusCode = http.StatusBadGateway
 				dubboRsp.SetErrorMsg(ir.Err.Error())
 			default:
 				ir.Status = http.StatusInternalServerError
-				resp.SetStatusCode(http.StatusInternalServerError)
+				resp.StatusCode = http.StatusInternalServerError
 				dubboRsp.SetErrorMsg(ir.Err.Error())
 			}
 			return ir.Err
 		}
 		if inv.Endpoint == "" {
 			ir.Status = http.StatusInternalServerError
-			resp.SetStatusCode(http.StatusInternalServerError)
+			resp.StatusCode = http.StatusInternalServerError
 			dubboRsp.SetErrorMsg(ir.Err.Error())
 			return protocol.ErrUnknown
 		}
@@ -377,6 +377,6 @@ func handleRequest(ctx *dubbo.InvokeContext, req *rest.Request, resp *rest.Respo
 		return protocol.ErrUnExpectedHandlerChainResponse
 	}
 
-	ir.Status = resp.GetStatusCode()
+	ir.Status = resp.StatusCode
 	return nil
 }

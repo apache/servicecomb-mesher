@@ -34,6 +34,8 @@ import (
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/metadata"
 	"github.com/go-mesh/mesher/pkg/metrics"
+	"github.com/go-mesh/mesher/pkg/runtime"
+	"github.com/go-mesh/openlogging"
 )
 
 // Start initialize configs and components
@@ -54,7 +56,9 @@ func Start() error {
 	if err := adminapi.Init(); err != nil {
 		log.Println("Error occurred in starting admin server", err)
 	}
-	register.AdaptEndpoints()
+	if err := register.AdaptEndpoints(); err != nil {
+		return err
+	}
 	if cmd.Configs.LocalServicePorts == "" {
 		lager.Logger.Warnf("local service ports is missing, service can not be called by mesher")
 	} else {
@@ -67,8 +71,8 @@ func Start() error {
 
 //DecideMode get config mode
 func DecideMode() error {
-	config.Mode = cmd.Configs.Mode
-	lager.Logger.Info("Running as "+config.Mode, nil)
+	runtime.Mode = cmd.Configs.Mode
+	openlogging.GetLogger().Info("Running as " + runtime.Mode)
 	return nil
 }
 

@@ -12,22 +12,15 @@ cse:
 ```
 
 ### How to use mesher as sidecar proxy
-you must add custom dialer for you grpc client
 Assume you original client is 
 ```go
 	conn, err := grpc.Dial("10.0.1.1:50051",
 		grpc.WithInsecure(),
 		)
 ```
-after modify 
-```go
-        //target address is consist of the provider name(in that case "Server") and provider port
-	conn, err := grpc.Dial("Server:50051",
-		grpc.WithInsecure(),
-		grpc.WithDialer(func(addr string, time time.Duration) (net.Conn, error) {
-			//127.0.0.1:40101 is local grpc proxy address
-			return net.DialTimeout("tcp", "127.0.0.1:40101", time)
-		}))
+set http_proxy
+```bash
+export http_proxy=http://127.0.0.1:40100
 ```
 
 
