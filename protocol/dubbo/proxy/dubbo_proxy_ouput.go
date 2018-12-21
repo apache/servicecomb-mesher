@@ -36,6 +36,7 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/util/httputil"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
+	"github.com/go-mesh/mesher/cmd"
 	mesherCommon "github.com/go-mesh/mesher/common"
 	mesherRuntime "github.com/go-mesh/mesher/pkg/runtime"
 	"github.com/go-mesh/mesher/protocol"
@@ -164,6 +165,24 @@ func ConvertRestRspToDubboRsp(ctx *dubbo.InvokeContext, resp *http.Response, dub
 
 }
 
+//SetLocalServiceAddress assign invocation endpoint a local service address
+// it uses config in cmd or env fi
+// if it is empty, then try to use original port from client as local port
+func SetLocalServiceAddress(inv *invocation.Invocation) error {
+	inv.Endpoint = cmd.Configs.PortsMap[inv.Protocol]
+	if inv.Endpoint == "" {
+		if inv.Port != "" {
+			inv.Endpoint = "127.0.0.1:" + inv.Port
+			cmd.Configs.PortsMap[inv.Protocol] = inv.Endpoint
+			return nil
+		} else {
+			return fmt.Errorf("[%s] is not supported, [%s] didn't set env [%s] or cmd parameter --service-ports before mesher start",
+				inv.Protocol, inv.MicroServiceName, mesherCommon.EnvServicePorts)
+		}
+	}
+	return nil
+}
+
 //Handle is a function
 func Handle(ctx *dubbo.InvokeContext) error {
 	interfaceName := ctx.Req.GetAttachment(dubbo.PathKey, "")
@@ -187,6 +206,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	}
 	inv.URLPathFormat = ""
 	inv.Reply = &dubboclient.WrapResponse{nil} //&rest.Response{Resp: &ctx.Response}
+	SetLocalServiceAddress(inv)                //select local service
 	var err error
 	var c *handler.Chain
 
@@ -276,6 +296,7 @@ func preHandleToRest(ctx *dubbo.InvokeContext) (*http.Request, *invocation.Invoc
 	inv.SchemaID = ""
 	inv.OperationID = ""
 	inv.Ctx = context.Background()
+	SetLocalServiceAddress(inv) //select local service
 	source := stringutil.SplitFirstSep(ctx.RemoteAddr, ":")
 	return restReq, inv, source
 }
