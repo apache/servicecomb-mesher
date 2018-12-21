@@ -36,6 +36,7 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/util/httputil"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
+	"github.com/go-mesh/mesher/cmd"
 	mesherCommon "github.com/go-mesh/mesher/common"
 	mesherRuntime "github.com/go-mesh/mesher/pkg/runtime"
 	"github.com/go-mesh/mesher/protocol"
@@ -44,7 +45,6 @@ import (
 	"github.com/go-mesh/mesher/protocol/dubbo/schema"
 	"github.com/go-mesh/mesher/protocol/dubbo/utils"
 	"github.com/go-mesh/mesher/resolver"
-	"github.com/go-mesh/mesher/cmd"
 )
 
 var dr = resolver.GetDestinationResolver("http")
@@ -206,7 +206,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	}
 	inv.URLPathFormat = ""
 	inv.Reply = &dubboclient.WrapResponse{nil} //&rest.Response{Resp: &ctx.Response}
-	SetLocalServiceAddress(inv) //select local service
+	SetLocalServiceAddress(inv)                //select local service
 	var err error
 	var c *handler.Chain
 
