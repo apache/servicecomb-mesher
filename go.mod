@@ -8,7 +8,7 @@ require (
 	github.com/go-chassis/go-archaius v0.0.0-20181108111652-ab19b4eae276
 
 	github.com/go-chassis/go-cc-client v0.0.0-20181102101915-dea430061a34
-	github.com/go-chassis/go-chassis v1.1.2-0.20181210100135-5e647f1a038b
+	github.com/go-chassis/go-chassis v1.1.3
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v0.0.0-20181122085847-3daf3ad8ed35
 	github.com/gogo/googleapis v1.1.0 // indirect
