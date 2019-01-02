@@ -35,10 +35,12 @@ import (
 
 //Constant for mesher conf file
 const (
-	ConfFile = "mesher.yaml"
+	ConfFile       = "mesher.yaml"
+	EgressConfFile = "egress.yaml"
 )
 
 var mesherConfig *MesherConfig
+var egressConfig *EgressConfig
 
 //GetConfig returns mesher config
 func GetConfig() *MesherConfig {
@@ -53,14 +55,19 @@ func SetConfig(nc *MesherConfig) {
 	*mesherConfig = *nc
 }
 
+//GetEgressConfig returns Egress config
+func GetEgressConfig() *EgressConfig {
+	return egressConfig
+}
+
 //GetConfigFilePath returns config file path
-func GetConfigFilePath() (string, error) {
-	if cmd.Configs.ConfigFile == "" {
+func GetConfigFilePath(key string) (string, error) {
+	if cmd.Configs.ConfigFile == "" || key == EgressConfFile {
 		wd, err := fileutil.GetWorkDir()
 		if err != nil {
 			return "", err
 		}
-		return filepath.Join(wd, "conf", ConfFile), nil
+		return filepath.Join(wd, "conf", key), nil
 	}
 	return cmd.Configs.ConfigFile, nil
 }
@@ -85,12 +92,24 @@ func Init() error {
 	if err != nil {
 		return err
 	}
-	return yaml.Unmarshal([]byte(contents), mesherConfig)
+	if err := yaml.Unmarshal([]byte(contents), mesherConfig); err != nil {
+		return err
+	}
+
+	egressConfig = &EgressConfig{}
+	egressContents, err := GetConfigContents(EgressConfFile)
+	if err != nil {
+		return err
+	}
+	if err := yaml.Unmarshal([]byte(egressContents), egressConfig); err != nil {
+		return err
+	}
+	return nil
 }
 
 //GetConfigContents returns config contents
 func GetConfigContents(key string) (string, error) {
-	f, err := GetConfigFilePath()
+	f, err := GetConfigFilePath(key)
 	if err != nil {
 		return "", err
 	}
@@ -113,10 +132,15 @@ func SetKeyValueByFile(key, f string) string {
 	}
 	b, err := ioutil.ReadFile(f)
 	if err != nil {
-		lager.Logger.Error("Can not read mesher.yaml: " + err.Error())
+		lager.Logger.Error("Can not read yaml file" + err.Error())
 		return ""
 	}
 	contents = string(b)
 	archaius.AddKeyValue(key, contents)
 	return contents
+}
+
+// GetEgressEndpoints returns the pilot address
+func GetEgressEndpoints() string {
+	return egressConfig.Egress.Address
 }

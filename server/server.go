@@ -28,6 +28,11 @@ func Run() {
 		lager.Logger.Error("Go chassis init failed, Mesher is not available: " + err.Error())
 		panic(err)
 	}
+	if err := bootstrap.InitEgressChain(); err != nil {
+		lager.Logger.Errorf("Egress chain int failed: %s", err)
+		panic(err)
+	}
+
 	if err := bootstrap.Start(); err != nil {
 		lager.Logger.Error("Bootstrap failed: " + err.Error())
 		panic(err)

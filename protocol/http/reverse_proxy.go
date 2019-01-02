@@ -39,10 +39,13 @@ import (
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
 	"github.com/go-mesh/mesher/cmd"
 	"github.com/go-mesh/mesher/common"
+	"github.com/go-mesh/mesher/pkg/egress"
 	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/mesher/protocol"
 	"github.com/go-mesh/mesher/resolver"
 	"github.com/go-mesh/openlogging"
+	"strconv"
+	"strings"
 )
 
 var dr = resolver.GetDestinationResolver("http")
@@ -113,11 +116,33 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 
 	//transfer header into ctx
 	inv.Ctx = context.WithValue(inv.Ctx, chassisCommon.ContextHeaderKey{}, h)
-	c, err := handler.GetChain(chassisCommon.Consumer, common.ChainConsumerOutgoing)
-	if err != nil {
-		handleErrorResponse(inv, w, http.StatusBadGateway, err)
-		lager.Logger.Error("Get chain failed: " + err.Error())
-		return
+
+	var c *handler.Chain
+	ok, egressRule := egress.Match(inv.MicroServiceName)
+	if ok {
+		var intport int32 = 80
+		for _, port := range egressRule.Ports {
+			if strings.EqualFold(port.Protocol, common.HTTPProtocol) {
+				intport = port.Port
+				break
+			}
+		}
+		inv.Endpoint = inv.MicroServiceName + ":" + strconv.Itoa(int(intport))
+		c, err = handler.GetChain(common.ConsumerEgress, common.ChainConsumerEgress)
+
+		if err != nil {
+			handleErrorResponse(inv, w, http.StatusBadGateway, err)
+			lager.Logger.Error("Get chain failed" + err.Error())
+			return
+		}
+
+	} else {
+		c, err = handler.GetChain(chassisCommon.Consumer, common.ChainConsumerOutgoing)
+		if err != nil {
+			handleErrorResponse(inv, w, http.StatusBadGateway, err)
+			lager.Logger.Error("Get chain failed: " + err.Error())
+			return
+		}
 	}
 	defer func(begin time.Time) {
 		timeTaken := time.Since(begin).Seconds()
@@ -229,6 +254,7 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 				handleErrorResponse(inv, w, ir.Status, ir.Err)
 			default: //for other error, check response and response body, if there is body, just transparent response
 				resp, ok := inv.Reply.(*http.Response)
+
 				if ok { // return raw transport error
 					if resp != nil {
 						if resp.Body == nil {

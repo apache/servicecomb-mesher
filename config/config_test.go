@@ -15,9 +15,10 @@ import (
 )
 
 func TestGetConfigFilePath(t *testing.T) {
+	var key = "mesher.yaml"
 	cmd.Init()
-	f, _ := config.GetConfigFilePath()
-	assert.Contains(t, f, "mesher.yaml")
+	f, _ := config.GetConfigFilePath(key)
+	assert.Contains(t, f, key)
 }
 
 var file = []byte(`

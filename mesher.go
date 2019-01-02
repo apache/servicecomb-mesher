@@ -16,6 +16,11 @@ import (
 	_ "github.com/go-mesh/mesher/protocol/http"
 
 	"github.com/go-mesh/mesher/server"
+
+	_ "github.com/go-mesh/mesher/pkg/egress/archaius"
+	_ "github.com/go-mesh/mesher/pkg/egress/pilot"
+
+	_ "github.com/go-mesh/mesher/control/istio"
 )
 
 func main() {

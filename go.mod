@@ -5,7 +5,7 @@ require (
 	github.com/emicklei/go-restful-swagger12 v0.0.0-20170926063155-7524189396c6 // indirect
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/go-chassis/go-archaius v0.0.0-20181108111652-ab19b4eae276
+	github.com/go-chassis/go-archaius v0.0.0-20181119064113-720d998498f3
 
 	github.com/go-chassis/go-cc-client v0.0.0-20181102101915-dea430061a34
 	github.com/go-chassis/go-chassis v1.1.3
