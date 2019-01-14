@@ -8,4 +8,5 @@ Use Istio as control plane
    istio/getstarted
    istio/discovery
    istio/router
+   istio/egress
 
