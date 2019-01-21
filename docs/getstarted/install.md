@@ -36,6 +36,7 @@ curl http://RESTServer:8083/sayhello/peter
 because by default registry address is 127.0.0.1:30100, 
 just same service center default listen address.
 
+>>curl command read lower case http_proxy environment variable.
 
 ### Run on different infrastructure
 
