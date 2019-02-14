@@ -21,11 +21,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/go-mesh/mesher/cmd"
 	"net/http"
 	"net/url"
 
 	"github.com/go-chassis/go-chassis/client/rest"
 	"github.com/go-chassis/go-chassis/core/common"
+	chassisCommon "github.com/go-chassis/go-chassis/core/common"
 	chassisconfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
@@ -36,7 +38,6 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/util/httputil"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
-	"github.com/go-mesh/mesher/cmd"
 	mesherCommon "github.com/go-mesh/mesher/common"
 	mesherRuntime "github.com/go-mesh/mesher/pkg/runtime"
 	"github.com/go-mesh/mesher/protocol"
@@ -53,6 +54,8 @@ var sr = resolver.GetSourceResolver()
 const (
 	ProxyTag = "mesherproxy"
 )
+
+var Provider bool
 
 // DubboListenAddr is a variable of type string used for storing listen address
 var DubboListenAddr string
@@ -195,7 +198,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	inv.SourceServiceID = runtime.ServiceID
 	inv.SourceMicroService = ctx.Req.GetAttachment(common.HeaderSourceName, "")
 	inv.Args = ctx.Req
-
+	inv.Ctx = context.WithValue(context.Background(), chassisCommon.ContextHeaderKey{}, ctx.Req.GetAttachments())
 	inv.MicroServiceName = svc.ServiceName
 	inv.RouteTags = utiltags.NewDefaultTag(svc.Version, svc.AppID)
 	value := ctx.Req.GetAttachment(ProxyTag, "")
@@ -209,11 +212,10 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	SetLocalServiceAddress(inv)                //select local service
 	var err error
 	var c *handler.Chain
-
 	if inv.Protocol == "dubbo" {
 		//发送请求
-		value := ctx.Req.GetAttachment(ProxyTag, "")
-		if value == "" { //come from proxyedDubboSvc
+		//value := ctx.Req.GetAttachment(ProxyTag, "")
+		if !Provider { //come from proxyedDubboSvc
 			ctx.Req.SetAttachment(common.HeaderSourceName, chassisconfig.SelfServiceName)
 			ctx.Req.SetAttachment(ProxyTag, "true")
 
@@ -224,7 +226,6 @@ func Handle(ctx *dubbo.InvokeContext) error {
 					return err
 				}
 			}
-
 			c.Next(inv, func(ir *invocation.Response) error {
 				return handleDubboRequest(inv, ctx, ir)
 			})

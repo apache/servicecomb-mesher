@@ -70,8 +70,7 @@ func (p *DubboCodec) GetContentTypeID() byte {
 
 //EncodeDubboRsp is a method which encodes dubbo response
 func (p *DubboCodec) EncodeDubboRsp(rsp *DubboRsp, buffer *util.WriteBuffer) int {
-	// set Magic number.
-	header := make([]byte, HeaderLength)
+	// set Magic number.	header := make([]byte, HeaderLength)
 	// set Magic number.
 	util.Short2bytes(Magic, header, 0)
 	// set request and serialization flag.
@@ -98,8 +97,13 @@ func (p *DubboCodec) EncodeDubboRsp(rsp *DubboRsp, buffer *util.WriteBuffer) int
 				if ret == nil {
 					buffer.WriteByte(ResponseNullValue)
 				} else {
-					buffer.WriteByte(ResponseValue)
-					buffer.WriteObject(ret)
+					//buffer.WriteByte(ResponseValue)
+					if v, ok := ret.([]byte); ok {
+						buffer.WriteBytes(v)
+					} else {
+						buffer.WriteObject(ret)
+					}
+
 				}
 			} else {
 				buffer.WriteByte(ResponseWithException)
@@ -127,7 +131,6 @@ func (p *DubboCodec) EncodeDubboRsp(rsp *DubboRsp, buffer *util.WriteBuffer) int
 
 //DecodeDubboRsqHead is a method which decodes dubbo response header
 func (p *DubboCodec) DecodeDubboRsqHead(rsp *DubboRsp, header []byte, bodyLen *int) int {
-
 	if header[0] != MagicHigh || header[1] != MagicLow {
 		return InvalidFragement
 	}
@@ -155,7 +158,6 @@ func (p *DubboCodec) DecodeDubboRsqHead(rsp *DubboRsp, header []byte, bodyLen *i
 func (p *DubboCodec) DecodeDubboRspBody(buffer *util.ReadBuffer, rsp *DubboRsp) int {
 	var obj interface{}
 	var err error
-
 	if rsp.IsHeartbeat() {
 		rsp.SetValue(HeartBeatEvent)
 	}
@@ -203,7 +205,8 @@ func (p *DubboCodec) DecodeDubboRspBody(buffer *util.ReadBuffer, rsp *DubboRsp) 
 				}
 			}
 		}
-		rsp.SetValue(obj)
+		rsp.SetValue(buffer.GetBuf())
+		//rsp.SetValue(obj)
 	} else {
 		obj, err = buffer.ReadObject()
 		if err != nil {
@@ -245,30 +248,9 @@ func (p *DubboCodec) EncodeDubboReq(req *Request, buffer *util.WriteBuffer) int 
 		return -1
 	}
 
-	//写入dubbo version
-	buffer.WriteObject(req.GetAttachment(DubboVersionKey, DubboVersion))
-	//写入path key
-	buffer.WriteObject(req.GetAttachment(PathKey, ""))
-	//写入接口version key
-	buffer.WriteObject(req.GetAttachment(VersionKey, "0.0.0"))
-	//写入方法名称
-	buffer.WriteObject(req.GetMethodName())
-	//写入参数类型列表
-	buffer.WriteObject(util.GetJavaDesc(req.GetArguments()))
-	//写入参数列表
-	var argObjs []util.Argument
-	argObjs = req.GetArguments()
-	var err error
-	if argObjs != nil {
-		size := len(argObjs)
-		for i := 0; i < size; i++ {
-			err = buffer.WriteObject(argObjs[i].GetValue())
-			if err != nil {
-				return -1
-			}
-		}
+	if v, ok := req.GetData().([]byte); ok {
+		buffer.WriteBytes(v)
 	}
-	//写入attatchmanets
 	buffer.WriteObject(req.GetAttachments())
 
 	len := buffer.WrittenBytes() - HeaderLength
@@ -370,33 +352,8 @@ func (p *DubboCodec) DecodeDubboReqBody(req *Request, bodyBuf *util.ReadBuffer) 
 		req.SetAttachment(VersionKey, bodyBuf.ReadString())
 		req.SetVersion(req.GetAttachment(VersionKey, ""))
 		req.SetMethodName(bodyBuf.ReadString())
-		//解析参数
-		typeDesc := string(bodyBuf.ReadString())
-		agrsArry := util.TypeDesToArgsObjArry(typeDesc)
-		if typeDesc == "" {
-			agrsArry = nil
-		} else {
-			size := len(agrsArry)
-			for i := 0; i < size; i++ {
-				val, err := bodyBuf.ReadObject()
-				if err != nil {
-					req.SetBroken(true)
-					req.SetData(err.Error())
-					return -1
-				} else {
-					agrsArry[i].SetValue(val)
-				}
-			}
-			req.SetArguments(agrsArry)
-		}
-		attatchments, err := bodyBuf.ReadMap()
-		if err == nil {
-			req.SetAttachments(attatchments)
-		} else {
-			req.SetBroken(true)
-			req.SetData(err.Error())
-			return -1
-		}
+
+		obj = bodyBuf.GetBuf()
 		req.SetBroken(false)
 		req.SetData(obj)
 	}
