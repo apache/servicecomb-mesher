@@ -70,7 +70,8 @@ func (p *DubboCodec) GetContentTypeID() byte {
 
 //EncodeDubboRsp is a method which encodes dubbo response
 func (p *DubboCodec) EncodeDubboRsp(rsp *DubboRsp, buffer *util.WriteBuffer) int {
-	// set Magic number.	header := make([]byte, HeaderLength)
+	// set Magic number.
+	header := make([]byte, HeaderLength)
 	// set Magic number.
 	util.Short2bytes(Magic, header, 0)
 	// set request and serialization flag.
