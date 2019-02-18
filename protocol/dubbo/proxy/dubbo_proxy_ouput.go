@@ -55,7 +55,8 @@ const (
 	ProxyTag = "mesherproxy"
 )
 
-var Provider bool
+//serve as a mark, proxyed dubbo service as provider(true) or consumer(false)
+var IsProvider bool
 
 // DubboListenAddr is a variable of type string used for storing listen address
 var DubboListenAddr string
@@ -215,7 +216,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	if inv.Protocol == "dubbo" {
 		//发送请求
 		//value := ctx.Req.GetAttachment(ProxyTag, "")
-		if !Provider { //come from proxyedDubboSvc
+		if !IsProvider { //come from proxyedDubboSvc
 			ctx.Req.SetAttachment(common.HeaderSourceName, chassisconfig.SelfServiceName)
 			ctx.Req.SetAttachment(ProxyTag, "true")
 

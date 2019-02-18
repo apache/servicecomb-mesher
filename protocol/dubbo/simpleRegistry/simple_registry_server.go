@@ -135,7 +135,7 @@ func handleConn(conn net.Conn) {
 
 //SendVoidRespond is a method to send void respose
 func SendVoidRespond(conn net.Conn, req *dubbo.Request) {
-	dubboproxy.Provider = true
+	dubboproxy.IsProvider = true
 	var rsp dubbo.DubboRsp
 	var wBuf util.WriteBuffer
 	wBuf = util.WriteBuffer{}
