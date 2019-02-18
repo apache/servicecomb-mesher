@@ -55,7 +55,7 @@ const (
 	ProxyTag = "mesherproxy"
 )
 
-//serve as a mark, proxyed dubbo service as provider(true) or consumer(false)
+//IsProvider is variable of type boolean used for tag proxyed dubbo service as provider(true) or consumer(false)
 var IsProvider bool
 
 // DubboListenAddr is a variable of type string used for storing listen address
