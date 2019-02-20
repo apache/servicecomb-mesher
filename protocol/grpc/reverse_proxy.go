@@ -31,14 +31,14 @@ import (
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/util/string"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
+	"github.com/go-chassis/go-chassis/pkg/string"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
-	"github.com/go-mesh/mesher/cmd"
 	"github.com/go-mesh/mesher/common"
 	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/mesher/protocol"
 	"github.com/go-mesh/mesher/resolver"
+	"github.com/go-mesh/mesher/util"
 	"github.com/go-mesh/openlogging"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -171,7 +171,7 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 		lager.Logger.Error("Get chain failed: " + err.Error())
 		return
 	}
-	if err = SetLocalServiceAddress(inv, r.Header.Get("X-Forwarded-Port")); err != nil {
+	if err = util.SetLocalServiceAddress(inv, r.Header.Get("X-Forwarded-Port")); err != nil {
 		WriteErrorResponse(inv, w, r, http.StatusBadGateway,
 			err)
 	}
@@ -192,22 +192,6 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//SetLocalServiceAddress assign invocation endpoint a local service address
-// it uses config in cmd or env fi
-// if it is empty, then try to use original port from client as local port
-func SetLocalServiceAddress(inv *invocation.Invocation, port string) error {
-	inv.Endpoint = cmd.Configs.PortsMap[inv.Protocol]
-	if inv.Endpoint == "" {
-		if port != "" {
-			inv.Endpoint = "127.0.0.1:" + port
-			return nil
-		} else {
-			return fmt.Errorf("[%s] is not supported, [%s] didn't set env [%s] or cmd parameter --service-ports before mesher start",
-				inv.Protocol, inv.MicroServiceName, common.EnvServicePorts)
-		}
-	}
-	return nil
-}
 func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	if resp == nil || resp.StatusCode == 0 {
 		lager.Logger.Warn("response is nil or empty because of unknown reason, plz report issue")

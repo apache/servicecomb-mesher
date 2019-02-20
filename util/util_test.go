@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package http_test
+package util_test
 
 import (
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-mesh/mesher/cmd"
-	"github.com/go-mesh/mesher/protocol/http"
+	"github.com/go-mesh/mesher/util"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -33,18 +33,36 @@ func TestSetLocalServiceAddress(t *testing.T) {
 
 	inv := invocation.New(nil)
 	inv.Protocol = "rest"
-	err = http.SetLocalServiceAddress(inv, "8080")
+	err = util.SetLocalServiceAddress(inv, "8080")
 	assert.NoError(t, err)
 	assert.Equal(t, "127.0.0.1:8080", inv.Endpoint)
 
-	err = http.SetLocalServiceAddress(inv, "")
+	err = util.SetLocalServiceAddress(inv, "")
 	assert.Error(t, err)
 
+	t.Log("header has highest priority")
 	cmd.Configs.LocalServicePorts = "rest:80"
 	err = cmd.Configs.GeneratePortsMap()
 	t.Log(cmd.Configs.PortsMap)
 	assert.NoError(t, err)
-	err = http.SetLocalServiceAddress(inv, "")
+	err = util.SetLocalServiceAddress(inv, "8080")
+	assert.NoError(t, err)
+	assert.Equal(t, "127.0.0.1:8080", inv.Endpoint)
+
+	t.Log("env and param has lower priority")
+	err = util.SetLocalServiceAddress(inv, "")
 	assert.NoError(t, err)
 	assert.Equal(t, "127.0.0.1:80", inv.Endpoint)
+
+	t.Log("missing env or param")
+	inv.Protocol = "grpc"
+	err = util.SetLocalServiceAddress(inv, "")
+	assert.Error(t, err)
+
+	t.Log("specify port env or param")
+	inv.Protocol = "grpc"
+	err = util.SetLocalServiceAddress(inv, "9090")
+	assert.NoError(t, err)
+	assert.Equal(t, "127.0.0.1:9090", inv.Endpoint)
+
 }

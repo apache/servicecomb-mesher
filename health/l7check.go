@@ -2,8 +2,8 @@ package health
 
 import (
 	"errors"
+	"github.com/go-chassis/foundation/httpclient"
 	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/pkg/httpclient"
 	"github.com/go-mesh/mesher/config"
 	"io/ioutil"
 	"net/http"

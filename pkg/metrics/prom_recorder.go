@@ -4,7 +4,6 @@ import (
 	"errors"
 	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
-	"os"
 	"sync"
 	"time"
 )
@@ -21,7 +20,7 @@ func NewPromRecorder(opts *Options) (Recorder, error) {
 	if opts != nil {
 		if opts.EnableGoRuntimeMetrics {
 			onceEnable.Do(func() {
-				promConfig.PromRegistry.MustRegister(prometheus.NewProcessCollector(os.Getpid(), ""))
+				promConfig.PromRegistry.MustRegister(prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}))
 				promConfig.PromRegistry.MustRegister(prometheus.NewGoCollector())
 			})
 		}
