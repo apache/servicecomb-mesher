@@ -5,31 +5,30 @@ require (
 	github.com/emicklei/go-restful-swagger12 v0.0.0-20170926063155-7524189396c6 // indirect
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/go-chassis/go-archaius v0.0.0-20181119064113-720d998498f3
-
-	github.com/go-chassis/go-cc-client v0.0.0-20181102101915-dea430061a34
-	github.com/go-chassis/go-chassis v1.1.3
+	github.com/go-chassis/foundation v0.0.0-20190203091418-304855ea28bf
+	github.com/go-chassis/go-archaius v0.7.0
+	github.com/go-chassis/go-chassis v1.2.3-0.20190219012152-d772c486613a
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v0.0.0-20181122085847-3daf3ad8ed35
 	github.com/gogo/googleapis v1.1.0 // indirect
-	github.com/gogo/protobuf v1.1.1
-	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b // indirect
+	github.com/gogo/protobuf v1.2.0
+	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/gofuzz v0.0.0-20170612174753-24818f796faf // indirect
 	github.com/imdario/mergo v0.3.6 // indirect
 	github.com/lyft/protoc-gen-validate v0.0.11 // indirect
 	github.com/onsi/gomega v1.4.2 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/prometheus/client_golang v0.8.0
-	github.com/prometheus/client_model v0.0.0-20180712105110-5c3871d89910
+	github.com/prometheus/client_golang v0.9.1
+	github.com/prometheus/client_model v0.0.0-20190115171406-56726106282f
+	github.com/spf13/pflag v1.0.3 // indirect
 	github.com/stretchr/testify v1.2.2
 	github.com/uber-go/atomic v1.3.2 // indirect
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
 	go.uber.org/atomic v1.3.2 // indirect
 	golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16 // indirect
-	golang.org/x/net v0.0.0-20180906233101-161cd47e91fd
+	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a
 	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
-	google.golang.org/genproto v0.0.0-20181101192439-c830210a61df // indirect
-	google.golang.org/grpc v1.14.0
+	google.golang.org/grpc v1.16.0
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.2.1
 	k8s.io/apimachinery v0.0.0-20181022183627-f71dbbc36e12

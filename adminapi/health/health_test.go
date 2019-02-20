@@ -19,7 +19,7 @@ package health
 
 import (
 	"errors"
-	"github.com/go-chassis/go-cc-client/configcenter-client"
+	"github.com/go-chassis/go-cc-client/configcenter"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/lager"
@@ -112,7 +112,7 @@ func testConfigCenterConnectSuccess(t *testing.T) {
 	t.Log("config center connected")
 
 	testMemberDiscoverObj := new(MockMemberDiscovery)
-	configcenterclient.MemberDiscoveryService = testMemberDiscoverObj
+	configcenter.MemberDiscoveryService = testMemberDiscoverObj
 	testMemberDiscoverObj.On("RefreshMembers").Return(nil)
 	testMemberDiscoverObj.On("GetConfigServer").Return([]string{"localhost:8080"}, nil)
 	assert.True(t, isConfigCenterConnected())
@@ -123,7 +123,7 @@ func testConfigCenterConnectFailed(t *testing.T) {
 	t.Log("config center not connected")
 
 	testMemberDiscoverObj := new(MockMemberDiscovery)
-	configcenterclient.MemberDiscoveryService = testMemberDiscoverObj
+	configcenter.MemberDiscoveryService = testMemberDiscoverObj
 	testMemberDiscoverObj.On("GetConfigServer").Return([]string{"2.2.2.2:2222"}, mockError)
 	assert.False(t, isConfigCenterConnected())
 }
