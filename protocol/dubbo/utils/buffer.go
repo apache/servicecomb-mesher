@@ -163,6 +163,11 @@ func (b *ReadBuffer) Init(capacity int) {
 	b.capacity = capacity
 }
 
+//GetBuf is a method to get buffer
+func (b *ReadBuffer) GetBuf() []byte {
+	return b.buffer
+}
+
 //ReadByte is a method to read particular byte from buffer
 func (b *ReadBuffer) ReadByte() byte {
 	var tmp interface{}

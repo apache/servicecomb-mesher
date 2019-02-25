@@ -177,9 +177,8 @@ func (this *DubboConnection) HandleMsg(req *dubbo.Request) {
 		//这里重新分配MSGID
 		srcMsgID := ctx.Req.GetMsgID()
 		dstMsgID := dubbo.GenerateMsgID()
-		lager.Logger.Info(fmt.Sprintf("dubbo2dubbo srcMsgID=%d, newMsgID=%d", srcMsgID, dstMsgID))
+		//lager.Logger.Info(fmt.Sprintf("dubbo2dubbo srcMsgID=%d, newMsgID=%d", srcMsgID, dstMsgID))
 		ctx.Req.SetMsgID(dstMsgID)
-
 		err := dubboproxy.Handle(ctx)
 		if err != nil {
 			ctx.Rsp.SetErrorMsg(err.Error())
@@ -191,6 +190,7 @@ func (this *DubboConnection) HandleMsg(req *dubbo.Request) {
 	}
 	if req.IsTwoWay() {
 		this.msgque.Enqueue(ctx.Rsp)
+
 	}
 }
 
@@ -205,7 +205,8 @@ func (this *DubboConnection) MsgSndLoop() {
 		var buffer util.WriteBuffer
 		buffer.Init(0)
 		this.codec.EncodeDubboRsp(msg.(*dubbo.DubboRsp), &buffer)
-		_, err = this.conn.Write(buffer.GetValidData())
+		bs := buffer.GetValidData()
+		_, err = this.conn.Write(bs /*buffer.GetValidData()*/)
 		if err != nil {
 			lager.Logger.Error("Send exception: " + err.Error())
 			break

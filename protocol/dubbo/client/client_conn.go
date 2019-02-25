@@ -112,7 +112,6 @@ func (this *DubboClientConnection) MsgRecvLoop() {
 	//通知处理应答消息
 	for {
 		//先处理消息头
-
 		buf := make([]byte, dubbo.HeaderLength)
 		size, err := this.conn.Read(buf)
 		if err != nil {

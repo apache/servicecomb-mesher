@@ -18,7 +18,6 @@
 package util
 
 import (
-	"github.com/go-chassis/go-chassis/core/lager"
 	"sync"
 )
 
@@ -85,7 +84,6 @@ func (this *RoutineManager) Wait() {
 
 //Spawn is a method which spawns new routine
 func (this *RoutineManager) Spawn(task RoutineTask, agrs interface{}, routineName string) {
-	lager.Logger.Info("Routine spawn:" + routineName)
 	this.wg.Add(1)
 	go this.spawn(task, agrs, routineName)
 }
@@ -93,7 +91,6 @@ func (this *RoutineManager) Spawn(task RoutineTask, agrs interface{}, routineNam
 func (this *RoutineManager) spawn(task RoutineTask, agrs interface{}, routineName string) {
 	task.Svc(agrs)
 	this.wg.Done()
-	lager.Logger.Info("Routine exit:" + routineName)
 }
 
 //Done is a method which tells waitgroup that it's done waiting

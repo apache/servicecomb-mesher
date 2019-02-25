@@ -48,7 +48,6 @@ type dubboChassisClient struct {
 
 //NewDubboChassisClient create new client
 func NewDubboChassisClient(options client.Options) (client.ProtocolClient, error) {
-
 	rc := &dubboChassisClient{
 		once: sync.Once{},
 		opts: options,
@@ -73,7 +72,7 @@ func (c *dubboChassisClient) Call(ctx context.Context, addr string, inv *invocat
 	if endPoint == "" {
 		return &util.BaseError{" The endpoint is empty"}
 	}
-	lager.Logger.Info("Dubbo invoke endPont: " + endPoint)
+
 	dubboCli, err := dubboClient.CachedClients.GetClient(endPoint)
 	if err != nil {
 		lager.Logger.Errorf("Invalid Request addr %s %s", endPoint, err)
