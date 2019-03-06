@@ -4,13 +4,14 @@ import (
 	"context"
 	"crypto/tls"
 	"errors"
+	"net"
+	"net/http"
+
 	"github.com/go-chassis/go-chassis/core/client"
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-chassis/go-chassis/pkg/util/httputil"
 	"golang.org/x/net/http2"
-	"net"
-	"net/http"
 )
 
 const (
@@ -58,6 +59,7 @@ func NewClient(opts client.Options) (client.ProtocolClient, error) {
 		opts: opts,
 	}, nil
 }
+
 func (c *Client) contextToHeader(ctx context.Context, req *http.Request) {
 	for k, v := range common.FromContext(ctx) {
 		req.Header.Set(k, v)
@@ -113,4 +115,15 @@ func (c *Client) String() string {
 //Close close the conn
 func (c *Client) Close() error {
 	return nil
+}
+
+// ReloadConfigs reload config
+func (c *Client) ReloadConfigs(opts client.Options) {
+	c.opts = client.EqualOpts(c.opts, opts)
+	c.c.Timeout = opts.Timeout
+}
+
+// GetOptions return opts
+func (c *Client) GetOptions() client.Options {
+	return c.opts
 }
