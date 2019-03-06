@@ -18,14 +18,15 @@
 package register
 
 import (
-	"github.com/go-mesh/mesher/common"
+	"testing"
+
 	chassisCommon "github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
+	"github.com/go-mesh/mesher/common"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestAdaptEndpoints(t *testing.T) {
@@ -38,13 +39,13 @@ func TestAdaptEndpoints(t *testing.T) {
 	}
 
 	AdaptEndpoints()
-	assert.Nil(t, registry.InstanceEndpoints)
+	assert.NotNil(t, registry.InstanceEndpoints)
 
 	protoMap[chassisCommon.ProtocolRest] = model.Protocol{
 		Advertise: "1.1.1.1:8080",
 	}
 	AdaptEndpoints()
-	assert.Nil(t, registry.InstanceEndpoints)
+	assert.NotNil(t, registry.InstanceEndpoints)
 
 	protoMap[common.HTTPProtocol] = model.Protocol{
 		Advertise: "1.1.1.1:8081",

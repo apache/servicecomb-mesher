@@ -62,7 +62,6 @@ func (c *dubboChassisClient) String() string {
 func (c *dubboChassisClient) Close() error {
 	return nil
 }
-
 func (c *dubboChassisClient) Call(ctx context.Context, addr string, inv *invocation.Invocation, rsp interface{}) error {
 	dubboReq := inv.Args.(*dubbo.Request)
 
@@ -88,4 +87,12 @@ func (c *dubboChassisClient) Call(ctx context.Context, addr string, inv *invocat
 	resp := rsp.(*dubboClient.WrapResponse)
 	resp.Resp = dubboRsp
 	return nil
+}
+
+func (c *dubboChassisClient) ReloadConfigs(opts client.Options) {
+	c.opts = client.EqualOpts(c.opts, opts)
+}
+
+func (c *dubboChassisClient) GetOptions() client.Options {
+	return c.opts
 }
