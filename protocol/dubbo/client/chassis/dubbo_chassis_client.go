@@ -55,7 +55,14 @@ func NewDubboChassisClient(options client.Options) (client.ProtocolClient, error
 	}
 	return client.ProtocolClient(rc), nil
 }
-
+// ReloadConfigs
+func (c *dubboChassisClient)ReloadConfigs(opts client.Options){
+	c.opts = client.EqualOpts(c.opts, opts)
+}
+// GetOptions
+func (c *dubboChassisClient)GetOptions() client.Options{
+	return c.opts
+}
 func (c *dubboChassisClient) String() string {
 	return "highway_client"
 }

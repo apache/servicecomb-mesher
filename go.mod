@@ -7,7 +7,7 @@ require (
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-chassis/foundation v0.0.0-20190203091418-304855ea28bf
 	github.com/go-chassis/go-archaius v0.7.0
-	github.com/go-chassis/go-chassis v1.2.3-0.20190219012152-d772c486613a
+	github.com/go-chassis/go-chassis v1.2.3-0.20190305021215-3e7fe2d6b2af
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v0.0.0-20181122085847-3daf3ad8ed35
 	github.com/gogo/googleapis v1.1.0 // indirect

@@ -58,6 +58,7 @@ func NewClient(opts client.Options) (client.ProtocolClient, error) {
 		opts: opts,
 	}, nil
 }
+
 func (c *Client) contextToHeader(ctx context.Context, req *http.Request) {
 	for k, v := range common.FromContext(ctx) {
 		req.Header.Set(k, v)
@@ -104,7 +105,15 @@ func (c *Client) Call(ctx context.Context, addr string, inv *invocation.Invocati
 	}
 	return err
 }
-
+// ReloadConfigs reload config
+func (c *Client)ReloadConfigs(opts client.Options){
+	c.opts = client.EqualOpts(c.opts, opts)
+	c.c.Timeout = opts.Timeout
+}
+// GetOptions return opts
+func (c *Client)GetOptions() client.Options{
+	return c.opts
+}
 //String return name
 func (c *Client) String() string {
 	return protocolName
