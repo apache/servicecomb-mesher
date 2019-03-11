@@ -21,6 +21,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/server"
 	"github.com/go-mesh/mesher/protocol/dubbo/dubbo"
+	"github.com/go-mesh/mesher/protocol/dubbo/proxy"
 	"github.com/go-mesh/mesher/protocol/dubbo/utils"
 	"net"
 	"sync"
@@ -134,6 +135,7 @@ func handleConn(conn net.Conn) {
 
 //SendVoidRespond is a method to send void respose
 func SendVoidRespond(conn net.Conn, req *dubbo.Request) {
+	dubboproxy.IsProvider = true
 	var rsp dubbo.DubboRsp
 	var wBuf util.WriteBuffer
 	wBuf = util.WriteBuffer{}
