@@ -22,6 +22,8 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/go-chassis/go-chassis/client/rest"
@@ -41,10 +43,8 @@ import (
 	"github.com/go-mesh/mesher/pkg/metrics"
 	"github.com/go-mesh/mesher/protocol"
 	"github.com/go-mesh/mesher/resolver"
-	util "github.com/go-mesh/mesher/util"
+	"github.com/go-mesh/mesher/util"
 	"github.com/go-mesh/openlogging"
-	"strconv"
-	"strings"
 )
 
 var dr = resolver.GetDestinationResolver("http")
@@ -219,7 +219,10 @@ func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 		openlogging.GetLogger().Warn("response is nil because of unknown reason")
 		return
 	}
-	io.Copy(w, resp.Body)
+	_, err := io.Copy(w, resp.Body)
+	if err != nil {
+		openlogging.Error("can not copy: " + err.Error())
+	}
 	resp.Body.Close()
 }
 func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invocation.Response) (*http.Response, error) {
@@ -290,7 +293,10 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 func handleErrorResponse(inv *invocation.Invocation, w http.ResponseWriter, statusCode int, err error) {
 	w.WriteHeader(statusCode)
 	if err != nil {
-		w.Write([]byte(err.Error()))
+		_, err := w.Write([]byte(err.Error()))
+		if err != nil {
+			openlogging.Error("can not write err to client: " + err.Error())
+		}
 	}
 	RecordStatus(inv, statusCode)
 }

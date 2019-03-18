@@ -199,7 +199,10 @@ func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	}
 	copyHeader(w.Header(), resp.Header)
 	w.WriteHeader(resp.StatusCode)
-	io.Copy(w, resp.Body)
+	_, err := io.Copy(w, resp.Body)
+	if err != nil {
+		openlogging.Error("can not copy resp: " + err.Error())
+	}
 	resp.Body.Close()
 }
 func handleRequest(w http.ResponseWriter, r *http.Request, inv *invocation.Invocation, ir *invocation.Response) (*http.Response, error) {

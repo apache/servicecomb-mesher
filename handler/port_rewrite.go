@@ -19,10 +19,12 @@ package handler
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-mesh/mesher/pkg/ports"
-	"strings"
+	"github.com/go-mesh/openlogging"
 )
 
 //PortMapForPilot is a constant
@@ -36,7 +38,9 @@ type PortSelectionHandler struct {
 func (ps *PortSelectionHandler) Handle(chain *handler.Chain, inv *invocation.Invocation, cb invocation.ResponseCallBack) {
 	var err error
 	inv.Endpoint, err = replacePort(inv.Protocol, inv.Endpoint)
-
+	if err != nil {
+		openlogging.Error("can not replace port: " + err.Error())
+	}
 	if inv.Endpoint == "" {
 		r := &invocation.Response{
 			Err: err,
