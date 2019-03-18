@@ -21,29 +21,35 @@ import (
 	"errors"
 	"fmt"
 
-	ver "github.com/go-mesh/mesher/adminapi/version"
-
 	"github.com/go-chassis/go-cc-client/configcenter"
 	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
+	ver "github.com/go-mesh/mesher/adminapi/version"
+	"github.com/go-mesh/openlogging"
 )
 
 //GetMesherHealth returns health
 func GetMesherHealth() *Health {
 	serviceName, version, err := getServiceStatus()
+	if err != nil {
+		openlogging.Error("health check failed: " + err.Error())
+		resp := &Health{
+			ServiceName:                 serviceName,
+			Version:                     version,
+			Status:                      Green,
+			ConnectedConfigCenterClient: isConfigCenterConnected(),
+			Error:                       "",
+		}
+		resp.Status = Red
+		resp.Error = err.Error()
+		return resp
+	}
 	resp := &Health{
 		ServiceName:                 serviceName,
 		Version:                     version,
 		Status:                      Green,
 		ConnectedConfigCenterClient: isConfigCenterConnected(),
-		//		ConnectedMonitoring:         isMornitorServerConnected(),
-		Error: "",
-	}
-	if err != nil {
-		lager.Logger.Error("health check failed: " + err.Error())
-		resp.Status = Red
-		resp.Error = err.Error()
+		Error:                       "",
 	}
 	return resp
 }
