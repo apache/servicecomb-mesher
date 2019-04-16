@@ -74,11 +74,11 @@ func addEgressPilotSource(o egress.Options) error {
 type pilotSource struct {
 	refreshInverval time.Duration
 	fetcher         istioinfra.XdsClient
-
-	mu             sync.RWMutex
-	pmu            sync.RWMutex
-	Configurations map[string]interface{}
-	PortToService  map[string]string
+	priority        int
+	mu              sync.RWMutex
+	pmu             sync.RWMutex
+	Configurations  map[string]interface{}
+	PortToService   map[string]string
 }
 
 func newPilotSource(o egress.Options) (*pilotSource, error) {
@@ -95,6 +95,7 @@ func newPilotSource(o egress.Options) (*pilotSource, error) {
 		Configurations:  map[string]interface{}{},
 		PortToService:   map[string]string{},
 		fetcher:         *xdsClient,
+		priority:        egressPilotSourcePriority,
 	}, nil
 }
 
@@ -112,7 +113,7 @@ func getNodeInfo() *istioinfra.NodeInfo {
 }
 
 func (r *pilotSource) GetSourceName() string { return egressPilotSourceName }
-func (r *pilotSource) GetPriority() int      { return egressPilotSourcePriority }
+func (r *pilotSource) GetPriority() int      { return r.priority }
 func (r *pilotSource) Cleanup() error        { return nil }
 
 func (r *pilotSource) AddDimensionInfo(d string) (map[string]string, error)           { return nil, nil }
@@ -179,6 +180,10 @@ func (r *pilotSource) setPortForDestination(service, port string) {
 	r.pmu.RUnlock()
 }
 
+//SetPriority custom priority
+func (r *pilotSource) SetPriority(priority int) {
+	r.priority = priority
+}
 func (r *pilotSource) DynamicConfigHandler(callback core.DynamicConfigCallback) error {
 	// Periodically refresh configurations
 	ticker := time.NewTicker(r.refreshInverval)

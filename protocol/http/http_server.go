@@ -29,12 +29,14 @@ import (
 	"net/http"
 	"strings"
 
+	"context"
 	chassisCom "github.com/go-chassis/go-chassis/core/common"
 	chassisConfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/server"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
 	"github.com/go-mesh/mesher/pkg/runtime"
+	"github.com/go-mesh/openlogging"
 )
 
 const (
@@ -181,13 +183,13 @@ func (hs *httpServer) listenAndServe(addr string, t *tls.Config, h http.Handler)
 func (hs *httpServer) Stop() error {
 	//go 1.8+ drain connections before stop server
 	if hs.server == nil {
-		lager.Logger.Info("http server don't need to be stopped")
+		openlogging.Info("http server don't need to be stopped")
 		return nil
 	}
-	if err := hs.server.Shutdown(nil); err != nil {
+	if err := hs.server.Shutdown(context.TODO()); err != nil {
 		panic(err)
 	}
-	lager.Logger.Info("Mesher gracefully stopped")
+	openlogging.Info("Mesher gracefully stopped")
 	return nil
 }
 

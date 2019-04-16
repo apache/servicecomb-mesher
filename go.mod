@@ -6,13 +6,13 @@ require (
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-chassis/foundation v0.0.0-20190203091418-304855ea28bf
-	github.com/go-chassis/go-archaius v0.7.0
-	github.com/go-chassis/go-chassis v1.2.3-0.20190305021215-3e7fe2d6b2af
+	github.com/go-chassis/go-archaius v0.14.0
+	github.com/go-chassis/go-cc-client v0.6.0
+	github.com/go-chassis/go-chassis v1.4.0
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
-	github.com/go-mesh/openlogging v0.0.0-20181122085847-3daf3ad8ed35
+	github.com/go-mesh/openlogging v0.0.0-20181205082104-3d418c478b2d
 	github.com/gogo/googleapis v1.1.0 // indirect
 	github.com/gogo/protobuf v1.2.0
-	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/gofuzz v0.0.0-20170612174753-24818f796faf // indirect
 	github.com/imdario/mergo v0.3.6 // indirect
 	github.com/lyft/protoc-gen-validate v0.0.11 // indirect

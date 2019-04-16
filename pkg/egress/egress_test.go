@@ -26,7 +26,11 @@ func BenchmarkMatch(b *testing.B) {
 	config.Init()
 	mesherconfig.Init()
 	egress.Init()
-	control.Init()
+	opts := control.Options{
+		Infra:   config.GlobalDefinition.Panel.Infra,
+		Address: config.GlobalDefinition.Panel.Settings["address"],
+	}
+	control.Init(opts)
 	var yamlContent = `---
 egress:
   infra: cse # pilot or cse
