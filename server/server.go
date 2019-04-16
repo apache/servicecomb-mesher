@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-chassis/go-chassis"
 	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-mesh/openlogging"
 )
 
 // Run run mesher proxy server
@@ -25,7 +26,7 @@ func Run() {
 	bootstrap.RegisterFramework()
 	bootstrap.SetHandlers()
 	if err := chassis.Init(); err != nil {
-		lager.Logger.Error("Go chassis init failed, Mesher is not available: " + err.Error())
+		openlogging.Error("Go chassis init failed, Mesher is not available: " + err.Error())
 		panic(err)
 	}
 	if err := bootstrap.InitEgressChain(); err != nil {
@@ -34,12 +35,12 @@ func Run() {
 	}
 
 	if err := bootstrap.Start(); err != nil {
-		lager.Logger.Error("Bootstrap failed: " + err.Error())
+		openlogging.Error("Bootstrap failed: " + err.Error())
 		panic(err)
 	}
 	lager.Logger.Infof("Version is %s", version.Ver().Version)
 	if err := health.Run(); err != nil {
-		lager.Logger.Error("Health manager start failed: " + err.Error())
+		openlogging.Error("Health manager start failed: " + err.Error())
 		panic(err)
 	}
 	profile()
@@ -53,9 +54,9 @@ func profile() {
 				if config.GetConfig().PProf.Listen == "" {
 					config.GetConfig().PProf.Listen = "127.0.0.1:6060"
 				}
-				lager.Logger.Warn("Enable pprof on " + config.GetConfig().PProf.Listen)
+				openlogging.Warn("Enable pprof on " + config.GetConfig().PProf.Listen)
 				if err := http.ListenAndServe(config.GetConfig().PProf.Listen, nil); err != nil {
-					lager.Logger.Error("Can not enable pprof: " + err.Error())
+					openlogging.Error("Can not enable pprof: " + err.Error())
 				}
 			}()
 		}
