@@ -5,10 +5,10 @@ require (
 	github.com/emicklei/go-restful-swagger12 v0.0.0-20170926063155-7524189396c6 // indirect
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/go-chassis/foundation v0.0.0-20190203091418-304855ea28bf
-	github.com/go-chassis/go-archaius v0.14.0
-	github.com/go-chassis/go-cc-client v0.6.0
-	github.com/go-chassis/go-chassis v1.4.0
+	github.com/go-chassis/foundation v0.0.0-20190516083152-b8b2476b6db7
+	github.com/go-chassis/go-archaius v0.16.0
+	github.com/go-chassis/go-cc-client v0.7.0
+	github.com/go-chassis/go-chassis v1.4.1
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v0.0.0-20181205082104-3d418c478b2d
 	github.com/gogo/googleapis v1.1.0 // indirect
@@ -25,8 +25,7 @@ require (
 	github.com/uber-go/atomic v1.3.2 // indirect
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
 	go.uber.org/atomic v1.3.2 // indirect
-	golang.org/x/crypto v0.0.0-20181030102418-4d3f4d9ffa16 // indirect
-	golang.org/x/net v0.0.0-20181114220301-adae6a3d119a
+	golang.org/x/net v0.0.0-20190311183353-d8887717615a
 	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
 	google.golang.org/grpc v1.16.0
 	gopkg.in/inf.v0 v0.9.1 // indirect

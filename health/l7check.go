@@ -3,8 +3,8 @@ package health
 import (
 	"errors"
 	"github.com/go-chassis/foundation/httpclient"
-	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-mesh/mesher/config"
+	"github.com/go-mesh/openlogging"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -13,9 +13,9 @@ import (
 
 //HTTPCheck checks http service
 func HTTPCheck(check *config.HealthCheck, address string) error {
-	c, err := httpclient.GetURLClient(httpclient.DefaultURLClientOption)
+	c, err := httpclient.GetURLClient(&httpclient.DefaultURLClientOption)
 	if err != nil {
-		lager.Logger.Error("can not get http client: " + err.Error())
+		openlogging.Error("can not get http client: " + err.Error())
 		//must not return error, because it is mesher error
 		return nil
 	}
@@ -25,13 +25,13 @@ func HTTPCheck(check *config.HealthCheck, address string) error {
 	}
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		lager.Logger.Error("can not get http req: " + err.Error())
+		openlogging.Error("can not get http req: " + err.Error())
 		//must not return error, because it is mesher error
 		return nil
 	}
 	resp, err := c.Do(req)
 	if err != nil {
-		lager.Logger.Error("server can not be connected: " + err.Error())
+		openlogging.Error("server can not be connected: " + err.Error())
 		return err
 	}
 	body, err := ioutil.ReadAll(resp.Body)
