@@ -29,22 +29,21 @@ type Rules struct {
 
 var routeRules *Rules
 
-//GetRouteRules gets all route rules
-func GetRouteRules() *Rules {
-	if routeRules != nil {
-		return routeRules
-	}
-	routeRules = new(Rules)
-	routeRules.Destinations = router.DefaultRouter.FetchRouteRule()
-	return routeRules
-}
-
 //GetServiceRouteRule gets route rule for that service
 func GetServiceRouteRule(serviceName string) []*model.RouteRule {
-	routeRules := GetRouteRules()
-	routeRule, ok := routeRules.Destinations[serviceName]
-	if !ok {
-		return nil
+	if routeRules != nil {
+		if v, ok := routeRules.Destinations[serviceName]; ok {
+			return v
+		}
 	}
-	return routeRule
+
+	rules := router.DefaultRouter.FetchRouteRuleByServiceName(serviceName)
+	if routeRules == nil {
+		routeRules = new(Rules)
+	}
+	if routeRules.Destinations == nil {
+		routeRules.Destinations = make(map[string][]*model.RouteRule)
+	}
+	routeRules.Destinations[serviceName] = rules
+	return rules
 }
