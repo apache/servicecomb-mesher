@@ -24,7 +24,7 @@ import (
 
 	"github.com/go-chassis/go-archaius"
 	"github.com/go-chassis/go-archaius/core"
-	"github.com/go-chassis/go-archaius/sources/file-source"
+	"github.com/go-chassis/go-archaius/sources/utils"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
 	"github.com/go-mesh/mesher/config"
@@ -76,7 +76,7 @@ func (r *egressRuleEventListener) Event(e *core.Event) {
 // initialize the config mgr and add several sources
 func initEgressManager() error {
 	egressListener := &egressRuleEventListener{}
-	archaius.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), archaius.WithFileHandler(filesource.Convert2configMap))
+	archaius.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), archaius.WithFileHandler(utils.Convert2configMap))
 	archaius.RegisterListener(egressListener, ".*")
 
 	return nil
