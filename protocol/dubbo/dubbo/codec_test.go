@@ -34,7 +34,6 @@ func TestDubboCodec_DecodeDubboReqBody(t *testing.T) {
 	resp.SetStatus(ServerError)
 
 	rbf := &util.ReadBuffer{}
-	rbf.Init(0)
 	rbf.SetBuffer([]byte{hessian.BC_NULL})
 	c := make([]byte, 10)
 	_, err := rbf.Read(c)

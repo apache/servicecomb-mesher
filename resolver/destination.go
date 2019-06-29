@@ -23,8 +23,8 @@ import (
 	"net/url"
 
 	"fmt"
-	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-mesh/mesher/config"
+	"github.com/go-mesh/openlogging"
 )
 
 var drMap = make(map[string]DestinationResolver)
@@ -35,7 +35,7 @@ var DestinationResolverPlugins map[string]func() DestinationResolver
 //SelfEndpoint is a string
 var SelfEndpoint = "#To be init#"
 
-//DefaultPlugin is a contant which stores default plugin name
+//DefaultPlugin is a constant which stores default plugin name
 const DefaultPlugin = "host"
 
 //ErrUnknownResolver is of type error
@@ -55,7 +55,7 @@ type DefaultDestinationResolver struct {
 func (dr *DefaultDestinationResolver) Resolve(sourceAddr string, header map[string]string, rawURI string, destinationName *string) (string, error) {
 	u, err := url.Parse(rawURI)
 	if err != nil {
-		lager.Logger.Error("Can not parse url: " + err.Error())
+		openlogging.Error("Can not parse url: " + err.Error())
 		return "", err
 	}
 

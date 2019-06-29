@@ -22,6 +22,7 @@ import (
 	"reflect"
 
 	"fmt"
+	"github.com/go-mesh/openlogging"
 )
 
 //BaseError is a struct
@@ -155,14 +156,6 @@ func (b *ReadBuffer) SetBuffer(src []byte) {
 	b.length = len(src)
 }
 
-//Init is a method to initialize read buffer
-func (b *ReadBuffer) Init(capacity int) {
-	b.buffer = make([]byte, capacity)
-	b.length = 0
-	b.rdInd = 0
-	b.capacity = capacity
-}
-
 //GetBuf is a method to get buffer
 func (b *ReadBuffer) GetBuf() []byte {
 	return b.buffer
@@ -171,7 +164,10 @@ func (b *ReadBuffer) GetBuf() []byte {
 //ReadByte is a method to read particular byte from buffer
 func (b *ReadBuffer) ReadByte() byte {
 	var tmp interface{}
-	tmp, _ = b.ReadObject()
+	tmp, err := b.ReadObject()
+	if err != nil {
+		openlogging.Error(err.Error())
+	}
 	return byte(tmp.(int32))
 }
 

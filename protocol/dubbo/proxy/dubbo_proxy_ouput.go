@@ -46,6 +46,7 @@ import (
 	"github.com/go-mesh/mesher/protocol/dubbo/schema"
 	"github.com/go-mesh/mesher/protocol/dubbo/utils"
 	"github.com/go-mesh/mesher/resolver"
+	"github.com/go-mesh/openlogging"
 )
 
 var dr = resolver.GetDestinationResolver("http")
@@ -210,8 +211,13 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	}
 	inv.URLPathFormat = ""
 	inv.Reply = &dubboclient.WrapResponse{nil} //&rest.Response{Resp: &ctx.Response}
-	SetLocalServiceAddress(inv)                //select local service
 	var err error
+	err = SetLocalServiceAddress(inv) //select local service
+	if err != nil {
+		openlogging.Error(err.Error())
+		return err
+	}
+
 	var c *handler.Chain
 	if inv.Protocol == "dubbo" {
 		//发送请求
@@ -223,7 +229,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 			if mesherRuntime.Mode == mesherCommon.ModeSidecar {
 				c, err = handler.GetChain(common.Consumer, mesherCommon.ChainConsumerOutgoing)
 				if err != nil {
-					lager.Logger.Error("Get Consumer chain failed: " + err.Error())
+					openlogging.Error("Get Consumer chain failed: " + err.Error())
 					return err
 				}
 			}
@@ -234,7 +240,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 			ctx.Req.SetAttachment(ProxyTag, "")
 			c, err = handler.GetChain(common.Provider, mesherCommon.ChainProviderIncoming)
 			if err != nil {
-				lager.Logger.Error("Get Provider Chain failed: " + err.Error())
+				openlogging.Error("Get Provider Chain failed: " + err.Error())
 				return err
 			}
 			c.Next(inv, func(ir *invocation.Response) error {
@@ -298,7 +304,10 @@ func preHandleToRest(ctx *dubbo.InvokeContext) (*http.Request, *invocation.Invoc
 	inv.SchemaID = ""
 	inv.OperationID = ""
 	inv.Ctx = context.Background()
-	SetLocalServiceAddress(inv) //select local service
+	err := SetLocalServiceAddress(inv) //select local service
+	if err != nil {
+		openlogging.Error(err.Error())
+	}
 	source := stringutil.SplitFirstSep(ctx.RemoteAddr, ":")
 	return restReq, inv, source
 }

@@ -25,10 +25,10 @@ import (
 	"strings"
 
 	gochassisconfig "github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/lager"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
 	"github.com/go-mesh/mesher/config"
+	"github.com/go-mesh/openlogging"
 )
 
 const (
@@ -47,17 +47,21 @@ var (
 
 // Init initialize Egress config
 func Init() error {
-
 	// init dests
 	egressConfigFromFile := config.GetEgressConfig()
-	BuildEgress(GetEgressType(egressConfigFromFile.Egress))
-
+	err := BuildEgress(GetEgressType(egressConfigFromFile.Egress))
+	if err != nil {
+		return err
+	}
 	op, err := getSpecifiedOptions()
 	if err != nil {
-		return fmt.Errorf("Egress options error: %v", err)
+		return fmt.Errorf("egress options error: %v", err)
 	}
-	DefaultEgress.Init(op)
-	lager.Logger.Info("Egress init success")
+	err = DefaultEgress.Init(op)
+	if err != nil {
+		return err
+	}
+	openlogging.Info("Egress init success")
 	return nil
 }
 

@@ -34,12 +34,12 @@ import (
 	chassisconfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/loadbalancer"
 	"github.com/go-chassis/go-chassis/pkg/string"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
 	"github.com/go-mesh/mesher/protocol"
+	"github.com/go-mesh/openlogging"
 )
 
 //ConvertDubboRspToRestRsp is a function which converts dubbo response to rest response
@@ -176,7 +176,7 @@ func TransparentForwardHandler(w http.ResponseWriter, r *http.Request) {
 	dubboCtx := &dubbo.InvokeContext{dubbo.NewDubboRequest(), &dubbo.DubboRsp{}, nil, "", ""}
 	err := ConvertHTTPReqToDubboReq(r, dubboCtx, inv)
 	if err != nil {
-		lager.Logger.Error("Invalid Request: " + err.Error())
+		openlogging.Error("Invalid Request: " + err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -184,7 +184,7 @@ func TransparentForwardHandler(w http.ResponseWriter, r *http.Request) {
 
 	c, err := handler.GetChain(common.Provider, mesherCommon.ChainProviderIncoming)
 	if err != nil {
-		lager.Logger.Error("Get Chain failed: " + err.Error())
+		openlogging.Error("Get Chain failed: " + err.Error())
 		return
 	}
 	c.Next(inv, func(ir *invocation.Response) error {
@@ -192,7 +192,11 @@ func TransparentForwardHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	dubboRsp := inv.Reply.(*dubboclient.WrapResponse).Resp
 	if dubboRsp != nil {
-		ConvertDubboRspToRestRsp(dubboRsp, w, dubboCtx)
+		err := ConvertDubboRspToRestRsp(dubboRsp, w, dubboCtx)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write(stringutil.Str2bytes(err.Error()))
+		}
 	}
 }
 
