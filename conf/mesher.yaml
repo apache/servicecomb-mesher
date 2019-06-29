@@ -11,6 +11,9 @@ admin: #admin API
 #pprof:
 #  enable: false
 
+
+# this health check will ping local service port to check if service is still alive, if service can not reachable, mesher
+# will update status to OUT_OF_SERVICE in service center
 #localHealthCheck:
 #  - port: 8080
 #    uri: /health

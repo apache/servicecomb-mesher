@@ -23,7 +23,7 @@ a go micro service framework
 Refer to [mesher-examples](https://github.com/go-mesh/mesher-examples)
 
 ### How to build and run
-
+#### Build from scratch
 1. Install ServiceComb [service-center](https://github.com/ServiceComb/service-center/releases)
 
 2. build and run, use go mod(go 1.11+, experimental but a recommended way)
@@ -35,6 +35,15 @@ GO111MODULE=on go mod vendor
 go build mesher.go
 ./mesher
 ```
+####Build script
+```bash
+cd build
+./build_proxy.sh
+
+```
+it will build binary and docker image
+- tar file: release/mesher-latest-linux-amd64.tar
+- docker: servicecomb/mesher:latest
 
 # Documentations
 
