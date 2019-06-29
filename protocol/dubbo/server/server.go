@@ -110,7 +110,10 @@ func (d *DubboServer) Stop() error {
 
 //Start is a method to start server
 func (d *DubboServer) Start() error {
-	d.Init()
+	err := d.Init()
+	if err != nil {
+		return err
+	}
 	dubboproxy.DubboListenAddr = d.opts.Address
 	host, _, err := net.SplitHostPort(d.opts.Address)
 	if err != nil {

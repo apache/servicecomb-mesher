@@ -72,7 +72,10 @@ func (d *SimDubboRegistryServer) Stop() error {
 
 //Start is a method to start the server
 func (d *SimDubboRegistryServer) Start() error {
-	d.Init()
+	err := d.Init()
+	if err != nil {
+		return err
+	}
 	host, _, err := net.SplitHostPort(d.opts.Address)
 	if err != nil {
 		return err

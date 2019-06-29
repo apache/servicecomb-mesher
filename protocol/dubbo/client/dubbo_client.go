@@ -202,7 +202,9 @@ func (this *DubboClient) Svc(agr interface{}) interface{} {
 func (this *DubboClient) Send(dubboReq *dubbo.Request) (*dubbo.DubboRsp, error) {
 	this.mapMutex.Lock()
 	if this.closed {
-		this.open()
+		if err := this.open(); err != nil {
+			return nil, err
+		}
 	}
 	this.mapMutex.Unlock()
 	wait := make(chan int)
