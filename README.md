@@ -1,6 +1,6 @@
 # Mesher
 
-[![Build Status](https://travis-ci.org/go-mesh/mesher.svg?branch=master)](https://travis-ci.org/go-mesh/mesher) [![Coverage Status](https://coveralls.io/repos/github/go-mesh/mesher/badge.svg?branch=master)](https://coveralls.io/github/go-mesh/mesher?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/go-mesh/mesher)](https://goreportcard.com/report/github.com/go-mesh/mesher) [![GoDoc](https://godoc.org/github.com/go-mesh/mesher?status.svg)](https://godoc.org/github.com/go-mesh/mesher) [![HitCount](http://hits.dwyl.io/go-mesh/mesher.svg)](http://hits.dwyl.io/go-mesh/mesher) [![Join Slack](https://img.shields.io/badge/Join-Slack-orange.svg)](https://join.slack.com/t/go-chassis/shared_invite/enQtMzk0MzAyMjEzNzEyLTRjOWE3NzNmN2IzOGZhMzZkZDFjODM1MDc5ZWI0YjcxYjM1ODNkY2RkNmIxZDdlOWI3NmQ0MTg3NzBkNGExZGU)
+[![Build Status](https://travis-ci.org/apache/servicecomb-mesher.svg?branch=master)](https://travis-ci.org/apache/servicecomb-mesher) [![Coverage Status](https://coveralls.io/repos/github/apache/servicecomb-mesher/badge.svg?branch=master)](https://coveralls.io/github/apache/servicecomb-mesher?branch=master) [![Go Report Card](https://goreportcard.com/badge/github.com/apache/servicecomb-mesher)](https://goreportcard.com/report/github.com/apache/servicecomb-mesher) [![GoDoc](https://godoc.org/github.com/apache/servicecomb-mesher?status.svg)](https://godoc.org/github.com/apache/servicecomb-mesher) 
 
 A service mesh implementation based on [go chassis](https://github.com/go-chassis/go-chassis).
 
