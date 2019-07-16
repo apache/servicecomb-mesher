@@ -2,8 +2,8 @@ package egress_test
 
 import (
 	"fmt"
-	mesherconfig "github.com/go-mesh/mesher/proxy/config"
-	"github.com/go-mesh/mesher/proxy/pkg/egress"
+	mesherconfig "github.com/apache/servicecomb-mesher/proxy/config"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"gopkg.in/yaml.v2"
 	"testing"
 )

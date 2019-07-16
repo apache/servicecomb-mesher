@@ -19,10 +19,10 @@ package server
 
 import (
 	"fmt"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/proxy"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
 	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/dubbo"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/proxy"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/utils"
 	"net"
 	"sync"
 )

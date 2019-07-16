@@ -2,8 +2,8 @@ package health
 
 import (
 	"errors"
+	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/foundation/httpclient"
-	"github.com/go-mesh/mesher/proxy/config"
 	"github.com/go-mesh/openlogging"
 	"io/ioutil"
 	"net/http"

@@ -24,8 +24,7 @@ mkdir -p $release_dir
 cd $PROJECT_DIR
 GO111MODULE=on go mod download
 GO111MODULE=on go mod vendor
-go build -o mesher -a
-
+go build -a github.com/apache/servicecomb-mesher/cmd/mesher
 cp -r $PROJECT_DIR/licenses $release_dir
 cp -r $PROJECT_DIR/conf $release_dir
 cp $PROJECT_DIR/start.sh  $release_dir
@@ -61,4 +60,4 @@ tar zcvf mesher.tar.gz licenses conf mesher VERSION start.sh
 echo "building docker..."
 cd ${release_dir}
 cp ${PROJECT_DIR}/build/docker/proxy/Dockerfile ./
-sudo docker build -t servicecomb/mesher:${VERSION} .
+sudo docker build -t servicecomb/mesher-sidecar:${VERSION} .

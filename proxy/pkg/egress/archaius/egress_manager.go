@@ -22,13 +22,13 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/apache/servicecomb-mesher/proxy/config"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"github.com/go-chassis/go-archaius"
 	"github.com/go-chassis/go-archaius/core"
 	"github.com/go-chassis/go-archaius/sources/utils"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
-	"github.com/go-mesh/mesher/proxy/config"
-	"github.com/go-mesh/mesher/proxy/pkg/egress"
 )
 
 //EgressYaml egress yaml file name

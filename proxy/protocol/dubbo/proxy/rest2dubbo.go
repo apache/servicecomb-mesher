@@ -24,12 +24,13 @@ import (
 	"net/url"
 	"strings"
 
-	mesherCommon "github.com/go-mesh/mesher/proxy/common"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/client"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/dubbo"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/schema"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/utils"
+	mesherCommon "github.com/apache/servicecomb-mesher/proxy/common"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/client"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/schema"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
 
+	"github.com/apache/servicecomb-mesher/proxy/protocol"
 	"github.com/go-chassis/go-chassis/core/common"
 	chassisconfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/handler"
@@ -38,7 +39,6 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/string"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
-	"github.com/go-mesh/mesher/proxy/protocol"
 	"github.com/go-mesh/openlogging"
 )
 

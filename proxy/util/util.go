@@ -2,9 +2,9 @@ package util
 
 import (
 	"fmt"
+	"github.com/apache/servicecomb-mesher/proxy/cmd"
+	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-mesh/mesher/proxy/cmd"
-	"github.com/go-mesh/mesher/proxy/common"
 )
 
 //SetLocalServiceAddress assign invocation endpoint a local service address

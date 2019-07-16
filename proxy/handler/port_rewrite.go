@@ -21,9 +21,9 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/apache/servicecomb-mesher/proxy/pkg/ports"
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-mesh/mesher/proxy/pkg/ports"
 	"github.com/go-mesh/openlogging"
 )
 

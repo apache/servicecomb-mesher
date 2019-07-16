@@ -7,7 +7,7 @@ rm -rf /var/lib/jenkins/workspace/Mesher/src
 export BUILD_DIR=/var/lib/jenkins/workspace/Mesher
 export PROJECT_DIR=$(dirname $BUILD_DIR)
 
-mkdir -p /var/lib/jenkins/workspace/Mesher/src/github.com/go-mesh/mesher
+mkdir -p /var/lib/jenkins/workspace/Mesher/src/github.com/apache/servicecomb-mesher
 
 #To checkout to particular commit or tag
 if [ $CHECKOUT_VERSION == "latest" ]; then
@@ -16,7 +16,7 @@ else
     git checkout $CHECKOUT_VERSION
 fi
 
-cp -r /var/lib/jenkins/workspace/mesher/* /var/lib/jenkins/workspace/Mesher/src/github.com/go-mesh/mesher/
+cp -r /var/lib/jenkins/workspace/mesher/* /var/lib/jenkins/workspace/Mesher/src/github.com/apache/servicecomb-mesher/
 
 release_dir=$PROJECT_DIR/release
 repo="github.com"

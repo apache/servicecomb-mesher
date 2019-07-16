@@ -18,7 +18,7 @@
 package dubbo
 
 import (
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/schema"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/schema"
 	//	"github.com/servicecomb/go-chassis/core/invocation"
 )
 

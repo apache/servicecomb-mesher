@@ -19,9 +19,9 @@ package egress
 
 import (
 	"errors"
+	"github.com/apache/servicecomb-mesher/proxy/config"
+	meshercontrol "github.com/apache/servicecomb-mesher/proxy/control"
 	"github.com/go-chassis/go-chassis/control"
-	"github.com/go-mesh/mesher/proxy/config"
-	meshercontrol "github.com/go-mesh/mesher/proxy/control"
 	"regexp"
 	"sync"
 )

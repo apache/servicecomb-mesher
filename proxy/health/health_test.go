@@ -2,9 +2,9 @@ package health_test
 
 import (
 	"context"
+	"github.com/apache/servicecomb-mesher/proxy/config"
+	"github.com/apache/servicecomb-mesher/proxy/health"
 	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-mesh/mesher/proxy/config"
-	"github.com/go-mesh/mesher/proxy/health"
 	"github.com/stretchr/testify/assert"
 	"net"
 	"net/http"

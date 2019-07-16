@@ -21,18 +21,18 @@ import (
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/go-mesh/mesher/proxy/common"
-	"github.com/go-mesh/mesher/proxy/resolver"
+	"github.com/apache/servicecomb-mesher/proxy/common"
+	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	"net"
 	"net/http"
 	"strings"
 
+	"github.com/apache/servicecomb-mesher/proxy/pkg/runtime"
 	chassisCom "github.com/go-chassis/go-chassis/core/common"
 	chassisConfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/server"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
-	"github.com/go-mesh/mesher/proxy/pkg/runtime"
 	"golang.org/x/net/http2"
 )
 

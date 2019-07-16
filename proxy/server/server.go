@@ -3,13 +3,13 @@ package server
 import (
 	"net/http"
 
-	"github.com/go-mesh/mesher/proxy/bootstrap"
-	"github.com/go-mesh/mesher/proxy/cmd"
-	"github.com/go-mesh/mesher/proxy/config"
-	"github.com/go-mesh/mesher/proxy/health"
+	"github.com/apache/servicecomb-mesher/proxy/bootstrap"
+	"github.com/apache/servicecomb-mesher/proxy/cmd"
+	"github.com/apache/servicecomb-mesher/proxy/config"
+	"github.com/apache/servicecomb-mesher/proxy/health"
 
+	"github.com/apache/servicecomb-mesher/proxy/resource/v1/version"
 	"github.com/go-chassis/go-chassis"
-	"github.com/go-mesh/mesher/proxy/resource/v1/version"
 	"github.com/go-mesh/openlogging"
 )
 

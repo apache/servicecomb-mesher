@@ -5,10 +5,10 @@ import (
 	"os/user"
 	"testing"
 
+	istioinfra "github.com/apache/servicecomb-mesher/proxy/pkg/infras/istio"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
-	istioinfra "github.com/go-mesh/mesher/proxy/pkg/infras/istio"
 )
 
 const (

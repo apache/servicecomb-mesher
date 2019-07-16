@@ -24,10 +24,10 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/apache/servicecomb-mesher/proxy/config"
 	gochassisconfig "github.com/go-chassis/go-chassis/core/config"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
-	"github.com/go-mesh/mesher/proxy/config"
 	"github.com/go-mesh/openlogging"
 )
 

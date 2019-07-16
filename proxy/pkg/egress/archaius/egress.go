@@ -19,8 +19,8 @@ package archaius
 
 import (
 	"fmt"
-	"github.com/go-mesh/mesher/proxy/config"
-	"github.com/go-mesh/mesher/proxy/pkg/egress"
+	"github.com/apache/servicecomb-mesher/proxy/config"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"sync"
 )
 

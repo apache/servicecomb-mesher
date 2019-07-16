@@ -18,8 +18,8 @@
 package simpleregistry
 
 import (
-//	"github.com/go-mesh/mesher/plugin/dubbo/dubbo"
-//"github.com/go-mesh/mesher/plugin/dubbo/utils"
+//	"github.com/apache/servicecomb-mesher/plugin/dubbo/dubbo"
+//"github.com/apache/servicecomb-mesher/plugin/dubbo/utils"
 )
 
 //RegistryURL is a struct which has attributes of a URL

@@ -3,7 +3,7 @@
 Istio Pilot can be configured as the service discovery component for mesher. By default the Pilot plugin is not compiled into mesher binary. To make mesher work with Pilot, import the plugin in mesher's entrypoint source code:
 
 ```go
-import _ "github.com/go-mesh/mesher/plugins/registry/istiov2"
+import _ "github.com/apache/servicecomb-mesher/plugins/registry/istiov2"
 ```
 
 Then the Pilot plugin will be installed when mesher starts. Next step, configure Pilot as service discovery in `chassis.yaml`:

@@ -21,7 +21,6 @@
 out
 gen
 .log
-mesher
 
 vendor
 *.log

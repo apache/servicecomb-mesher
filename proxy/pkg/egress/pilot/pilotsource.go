@@ -10,14 +10,14 @@ import (
 	"sync"
 	"time"
 
+	"github.com/apache/servicecomb-mesher/proxy/config"
+	"github.com/apache/servicecomb-mesher/proxy/control/istio"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
+	istioinfra "github.com/apache/servicecomb-mesher/proxy/pkg/infras/istio"
 	"github.com/go-chassis/go-archaius/core"
 	cm "github.com/go-chassis/go-archaius/core/config-manager"
 	"github.com/go-chassis/go-archaius/core/event-system"
 	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-mesh/mesher/proxy/config"
-	"github.com/go-mesh/mesher/proxy/control/istio"
-	"github.com/go-mesh/mesher/proxy/pkg/egress"
-	istioinfra "github.com/go-mesh/mesher/proxy/pkg/infras/istio"
 )
 
 const egressPilotSourceName = "EgressPilotSource"

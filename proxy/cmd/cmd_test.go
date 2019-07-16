@@ -18,9 +18,9 @@
 package cmd_test
 
 import (
+	"github.com/apache/servicecomb-mesher/proxy/cmd"
+	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-mesh/mesher/proxy/cmd"
-	"github.com/go-mesh/mesher/proxy/common"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"

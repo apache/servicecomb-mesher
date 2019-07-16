@@ -20,9 +20,9 @@ package authority_test
 import (
 	"testing"
 
+	"github.com/apache/servicecomb-mesher/proxy/resolver"
+	"github.com/apache/servicecomb-mesher/proxy/resolver/authority"
 	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-mesh/mesher/proxy/resolver"
-	"github.com/go-mesh/mesher/proxy/resolver/authority"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 )

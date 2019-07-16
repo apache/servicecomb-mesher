@@ -19,7 +19,7 @@ package authority
 
 import (
 	"fmt"
-	"github.com/go-mesh/mesher/proxy/resolver"
+	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	"github.com/go-mesh/openlogging"
 	"strings"
 )

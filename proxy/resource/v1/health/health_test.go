@@ -19,17 +19,16 @@ package health
 
 import (
 	"errors"
-	"github.com/go-chassis/go-cc-client/configcenter"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/core/registry/mock"
+	"github.com/go-chassis/go-chassis/pkg/runtime"
 	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"testing"
-	"github.com/go-chassis/go-chassis/pkg/runtime"
 )
 
 var (
@@ -40,13 +39,9 @@ func TestGetMesherHealth(t *testing.T) {
 	testGetServiceStatusSuccess(t)
 	testGetServiceStatusFailed(t)
 
-	testConfigCenterConnectSuccess(t)
-	testConfigCenterConnectFailed(t)
-
 	t.Log("mesher not connected to sc, not connected to configcenter")
 	testGetServiceStatusFailed(t)
 	resp := GetMesherHealth()
-	assert.Equal(t, resp.ConnectedConfigCenterClient, false)
 	assert.Equal(t, resp.ConnectedMonitoring, false)
 	assert.Equal(t, resp.Status, Red)
 	assert.NotEmpty(t, resp.Error)
@@ -106,25 +101,4 @@ func testGetServiceStatusFailed(t *testing.T) {
 	assert.Equal(t, respServiceName, microserviceName)
 	assert.Equal(t, respVersion, version)
 	assert.Equal(t, err, mockError)
-}
-
-func testConfigCenterConnectSuccess(t *testing.T) {
-	testInit()
-	t.Log("config center connected")
-
-	testMemberDiscoverObj := new(MockMemberDiscovery)
-	configcenter.MemberDiscoveryService = testMemberDiscoverObj
-	testMemberDiscoverObj.On("RefreshMembers").Return(nil)
-	testMemberDiscoverObj.On("GetConfigServer").Return([]string{"localhost:8080"}, nil)
-	assert.True(t, isConfigCenterConnected())
-}
-
-func testConfigCenterConnectFailed(t *testing.T) {
-	testInit()
-	t.Log("config center not connected")
-
-	testMemberDiscoverObj := new(MockMemberDiscovery)
-	configcenter.MemberDiscoveryService = testMemberDiscoverObj
-	testMemberDiscoverObj.On("GetConfigServer").Return([]string{"2.2.2.2:2222"}, mockError)
-	assert.False(t, isConfigCenterConnected())
 }

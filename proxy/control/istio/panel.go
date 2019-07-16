@@ -1,12 +1,12 @@
 package istio
 
 import (
+	meshercontrol "github.com/apache/servicecomb-mesher/proxy/control"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"github.com/go-chassis/go-chassis/control"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
-	meshercontrol "github.com/go-mesh/mesher/proxy/control"
-	"github.com/go-mesh/mesher/proxy/pkg/egress"
 )
 
 func init() {
