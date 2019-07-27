@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
+	istioinfra "github.com/apache/servicecomb-mesher/proxy/pkg/infras/istio"
 	apiv2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
-	istioinfra "github.com/go-mesh/mesher/proxy/pkg/infras/istio"
 
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/metadata"

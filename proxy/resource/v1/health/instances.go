@@ -21,11 +21,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/go-chassis/go-cc-client/configcenter"
+	"github.com/apache/servicecomb-mesher/proxy/resource/v1/version"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
-	"github.com/go-mesh/mesher/proxy/resource/v1/version"
 	"github.com/go-mesh/openlogging"
 )
 
@@ -35,22 +34,20 @@ func GetMesherHealth() *Health {
 	if err != nil {
 		openlogging.Error("health check failed: " + err.Error())
 		resp := &Health{
-			ServiceName:                 serviceName,
-			Version:                     version,
-			Status:                      Green,
-			ConnectedConfigCenterClient: isConfigCenterConnected(),
-			Error:                       "",
+			ServiceName: serviceName,
+			Version:     version,
+			Status:      Green,
+			Error:       "",
 		}
 		resp.Status = Red
 		resp.Error = err.Error()
 		return resp
 	}
 	resp := &Health{
-		ServiceName:                 serviceName,
-		Version:                     version,
-		Status:                      Green,
-		ConnectedConfigCenterClient: isConfigCenterConnected(),
-		Error:                       "",
+		ServiceName: serviceName,
+		Version:     version,
+		Status:      Green,
+		Error:       "",
 	}
 	return resp
 }
@@ -88,17 +85,4 @@ func getServiceStatus() (serviceName, v string, err error) {
 		}
 	}
 	return microServiceName, v, nil
-}
-
-func isConfigCenterConnected() bool {
-	if configcenter.MemberDiscoveryService == nil {
-		return false
-	}
-
-	// Getting config center ip's using refresh members handled in GetConfigServer function based on Autodiscovery
-	configServerHosts, err := configcenter.MemberDiscoveryService.GetConfigServer()
-	if err != nil || len(configServerHosts) == 0 {
-		return false
-	}
-	return true
 }

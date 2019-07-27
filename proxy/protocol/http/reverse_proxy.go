@@ -26,6 +26,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/apache/servicecomb-mesher/proxy/common"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/metrics"
+	"github.com/apache/servicecomb-mesher/proxy/protocol"
+	"github.com/apache/servicecomb-mesher/proxy/resolver"
+	"github.com/apache/servicecomb-mesher/proxy/util"
 	"github.com/go-chassis/go-chassis/client/rest"
 	chassisCommon "github.com/go-chassis/go-chassis/core/common"
 	chassisconfig "github.com/go-chassis/go-chassis/core/config"
@@ -38,12 +44,6 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/string"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
-	"github.com/go-mesh/mesher/proxy/common"
-	"github.com/go-mesh/mesher/proxy/pkg/egress"
-	"github.com/go-mesh/mesher/proxy/pkg/metrics"
-	"github.com/go-mesh/mesher/proxy/protocol"
-	"github.com/go-mesh/mesher/proxy/resolver"
-	"github.com/go-mesh/mesher/proxy/util"
 	"github.com/go-mesh/openlogging"
 )
 
@@ -236,7 +236,7 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 				handleErrorResponse(inv, w, http.StatusBadGateway, ir.Err)
 			case hystrix.CircuitError:
 				handleErrorResponse(inv, w, http.StatusServiceUnavailable, ir.Err)
-			case fault.FaultError:
+			case fault.Fault:
 				handleErrorResponse(inv, w, ir.Status, ir.Err)
 			default: //for other error, check response and response body, if there is body, just transparent response
 				resp, ok := inv.Reply.(*http.Response)

@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"strings"
 
+	k8sinfra "github.com/apache/servicecomb-mesher/proxy/pkg/infras/k8s"
 	apiv2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
 	apiv2core "github.com/envoyproxy/go-control-plane/envoy/api/v2/core"
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
 	apiv2route "github.com/envoyproxy/go-control-plane/envoy/api/v2/route"
-	k8sinfra "github.com/go-mesh/mesher/proxy/pkg/infras/k8s"
 
 	"github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	"github.com/go-mesh/openlogging"

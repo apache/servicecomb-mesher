@@ -12,11 +12,11 @@ before_install:
   - docker run -d -p 15010:15010 gomesh/mock-pilot:latest
 
 before_script:
-  - mkdir -p $HOME/gopath/src/github.com/go-mesh/mesher
-  - rsync -az ${TRAVIS_BUILD_DIR}/ $HOME/gopath/src/github.com/go-mesh/mesher
-  - export TRAVIS_BUILD_DIR=$HOME/gopath/src/github.com/go-mesh/mesher
-  - export KUBE_CONFIG=$HOME/gopath/src/github.com/go-mesh/mesher/tests/util/sample_kubeconfig
-  - cd $HOME/gopath/src/github.com/go-mesh/mesher
+  - mkdir -p $HOME/gopath/src/github.com/apache/servicecomb-mesher
+  - rsync -az ${TRAVIS_BUILD_DIR}/ $HOME/gopath/src/github.com/apache/servicecomb-mesher
+  - export TRAVIS_BUILD_DIR=$HOME/gopath/src/github.com/apache/servicecomb-mesher
+  - export KUBE_CONFIG=$HOME/gopath/src/github.com/apache/servicecomb-mesher/tests/util/sample_kubeconfig
+  - cd $HOME/gopath/src/github.com/apache/servicecomb-mesher
 jobs:
   include:
     - stage: Format Checker
@@ -45,7 +45,7 @@ jobs:
       script: 
         - GO111MODULE=on go mod download
         - GO111MODULE=on go mod vendor
-        - go build
+        - go build github.com/apache/servicecomb-mesher/cmd/mesher
     - stage: Unit Test
       script:
         - go get github.com/mattn/goveralls

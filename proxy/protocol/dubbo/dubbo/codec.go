@@ -18,7 +18,7 @@
 package dubbo
 
 import (
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/utils"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
 )
 
 //Constants for request and response attributes

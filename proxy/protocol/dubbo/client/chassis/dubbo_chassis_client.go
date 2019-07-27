@@ -22,11 +22,11 @@ import (
 	"os"
 	"sync"
 
-	mesherCommon "github.com/go-mesh/mesher/proxy/common"
-	dubboClient "github.com/go-mesh/mesher/proxy/protocol/dubbo/client"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/dubbo"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/proxy"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/utils"
+	mesherCommon "github.com/apache/servicecomb-mesher/proxy/common"
+	dubboClient "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/client"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/proxy"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
 
 	"github.com/go-chassis/go-chassis/core/client"
 	"github.com/go-chassis/go-chassis/core/invocation"

@@ -20,11 +20,11 @@ package v1
 import (
 	"testing"
 
+	mesherconfig "github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/lager"
 	_ "github.com/go-chassis/go-chassis/core/router/cse"
-	mesherconfig "github.com/go-mesh/mesher/proxy/config"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 )

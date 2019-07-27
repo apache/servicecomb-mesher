@@ -19,8 +19,8 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/apache/servicecomb-mesher/proxy/common"
 	chassiscommon "github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-mesh/mesher/proxy/common"
 	"github.com/urfave/cli"
 	"log"
 	"os"

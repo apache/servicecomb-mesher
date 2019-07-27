@@ -18,9 +18,9 @@
 package util
 
 import (
+	"github.com/apache/servicecomb-mesher/proxy/common"
+	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-mesh/mesher/proxy/common"
-	"github.com/go-mesh/mesher/proxy/config"
 )
 
 //EqualPolicy is a function

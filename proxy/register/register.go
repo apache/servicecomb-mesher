@@ -18,12 +18,12 @@
 package register
 
 import (
+	"github.com/apache/servicecomb-mesher/proxy/common"
 	chassisCommon "github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/config"
 	chassisModel "github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
-	"github.com/go-mesh/mesher/proxy/common"
 	"github.com/go-mesh/openlogging"
 	"strings"
 )

@@ -20,8 +20,8 @@ package dubbo
 import (
 	"testing"
 
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
 	"github.com/go-chassis/gohessian"
-	"github.com/go-mesh/mesher/proxy/protocol/dubbo/utils"
 
 	"github.com/stretchr/testify/assert"
 )

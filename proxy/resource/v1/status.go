@@ -18,11 +18,11 @@
 package v1
 
 import (
+	"github.com/apache/servicecomb-mesher/proxy/resource/v1/health"
+	"github.com/apache/servicecomb-mesher/proxy/resource/v1/version"
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/pkg/metrics"
 	"github.com/go-chassis/go-chassis/server/restful"
-	"github.com/go-mesh/mesher/proxy/resource/v1/health"
-	"github.com/go-mesh/mesher/proxy/resource/v1/version"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 )

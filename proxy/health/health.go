@@ -2,10 +2,10 @@ package health
 
 import (
 	"errors"
+	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
-	"github.com/go-mesh/mesher/proxy/config"
 	"github.com/go-mesh/openlogging"
 	"net"
 	"regexp"

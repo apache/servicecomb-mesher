@@ -25,9 +25,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/stretchr/testify/assert"
 
+	mc "github.com/apache/servicecomb-mesher/proxy/config"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/metrics"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
-	mc "github.com/go-mesh/mesher/proxy/config"
-	"github.com/go-mesh/mesher/proxy/pkg/metrics"
 )
 
 func TestInit(t *testing.T) {

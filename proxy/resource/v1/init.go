@@ -18,8 +18,8 @@
 package v1
 
 import (
+	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/go-chassis"
-	"github.com/go-mesh/mesher/proxy/config"
 	"github.com/go-mesh/openlogging"
 )
 

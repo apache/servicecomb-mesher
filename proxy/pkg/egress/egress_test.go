@@ -5,14 +5,14 @@ import (
 	"os"
 	"testing"
 
+	"github.com/apache/servicecomb-mesher/proxy/cmd"
+	mesherconfig "github.com/apache/servicecomb-mesher/proxy/config"
+	_ "github.com/apache/servicecomb-mesher/proxy/control/istio"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/egress/archaius"
 	"github.com/go-chassis/go-chassis/control"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-mesh/mesher/proxy/cmd"
-	mesherconfig "github.com/go-mesh/mesher/proxy/config"
-	_ "github.com/go-mesh/mesher/proxy/control/istio"
-	"github.com/go-mesh/mesher/proxy/pkg/egress"
-	"github.com/go-mesh/mesher/proxy/pkg/egress/archaius"
 	"gopkg.in/yaml.v2"
 )
 
@@ -21,7 +21,7 @@ func BenchmarkMatch(b *testing.B) {
 		"size", true, 1, 10, 7)
 
 	gopath := os.Getenv("GOPATH")
-	os.Setenv("CHASSIS_HOME", gopath+"/src/github.com/go-mesh/mesher")
+	os.Setenv("CHASSIS_HOME", gopath+"/src/github.com/apache/servicecomb-mesher")
 	cmd.Init()
 	config.Init()
 	mesherconfig.Init()
@@ -68,7 +68,7 @@ func TestMatch(t *testing.T) {
 		"size", true, 1, 10, 7)
 
 	gopath := os.Getenv("GOPATH")
-	os.Setenv("CHASSIS_HOME", gopath+"/src/github.com/go-mesh/mesher")
+	os.Setenv("CHASSIS_HOME", gopath+"/src/github.com/apache/servicecomb-mesher")
 	cmd.Init()
 	config.Init()
 	mesherconfig.Init()

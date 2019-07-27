@@ -1,7 +1,7 @@
 package ports_test
 
 import (
-	"github.com/go-mesh/mesher/proxy/pkg/ports"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/ports"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

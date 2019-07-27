@@ -29,10 +29,9 @@ const (
 
 //Health has details about health of a service
 type Health struct {
-	ServiceName                 string     `json:"serviceName,omitempty"`
-	Version                     string     `json:"version,omitempty"`
-	Status                      StatusCode `json:"status,omitempty"`
-	ConnectedConfigCenterClient bool       `json:"connectedConfigCenterClient"`
-	ConnectedMonitoring         bool       `json:"connectedMonitoring"`
-	Error                       string     `json:"error,omitempty"`
+	ServiceName         string     `json:"serviceName,omitempty"`
+	Version             string     `json:"version,omitempty"`
+	Status              StatusCode `json:"status,omitempty"`
+	ConnectedMonitoring bool       `json:"connectedMonitoring"`
+	Error               string     `json:"error,omitempty"`
 }

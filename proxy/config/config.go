@@ -18,14 +18,14 @@
 package config
 
 import (
+	"github.com/apache/servicecomb-mesher/proxy/cmd"
+	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/go-chassis/go-archaius"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/server"
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
-	"github.com/go-mesh/mesher/proxy/cmd"
-	"github.com/go-mesh/mesher/proxy/common"
 	"github.com/go-mesh/openlogging"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"

@@ -23,8 +23,8 @@
 package metrics
 
 import (
+	mesherConf "github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
-	mesherConf "github.com/go-mesh/mesher/proxy/config"
 	"sync"
 	"time"
 )
