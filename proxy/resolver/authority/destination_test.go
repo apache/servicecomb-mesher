@@ -30,7 +30,7 @@ import (
 func TestResolve(t *testing.T) {
 	lager.Initialize("", "DEBUG", "",
 		"size", true, 1, 10, 7)
-	d := &authority.GPRCDefaultDestinationResolver{}
+	d := &authority.GRPCDefaultDestinationResolver{}
 	header := http.Header{}
 	header.Add("cookie", "user=jason")
 	header.Add("X-Age", "18")
@@ -59,7 +59,7 @@ func TestResolve(t *testing.T) {
 func BenchmarkDefaultDestinationResolver_Resolve(b *testing.B) {
 	lager.Initialize("", "DEBUG", "",
 		"size", true, 1, 10, 7)
-	d := &authority.GPRCDefaultDestinationResolver{}
+	d := &authority.GRPCDefaultDestinationResolver{}
 	mystring := "Server"
 	var destinationString = &mystring
 	for i := 0; i < b.N; i++ {
