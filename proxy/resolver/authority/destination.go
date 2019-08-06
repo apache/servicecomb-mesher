@@ -24,12 +24,12 @@ import (
 	"strings"
 )
 
-//GPRCDefaultDestinationResolver is a struct
-type GPRCDefaultDestinationResolver struct {
+//GRPCDefaultDestinationResolver is a struct
+type GRPCDefaultDestinationResolver struct {
 }
 
 //Resolve resolves service name
-func (dr *GPRCDefaultDestinationResolver) Resolve(sourceAddr string, header map[string]string, rawURI string, destinationName *string) (string, error) {
+func (dr *GRPCDefaultDestinationResolver) Resolve(sourceAddr string, header map[string]string, rawURI string, destinationName *string) (string, error) {
 	s := strings.Split(rawURI, ":")
 	if len(s) != 2 {
 		err := fmt.Errorf("can not parse [%s]", rawURI)
@@ -43,10 +43,10 @@ func (dr *GPRCDefaultDestinationResolver) Resolve(sourceAddr string, header map[
 
 //New return return dr
 func New() resolver.DestinationResolver {
-	return &GPRCDefaultDestinationResolver{}
+	return &GRPCDefaultDestinationResolver{}
 }
 
 func init() {
 	resolver.InstallDestinationResolverPlugin("authority", New)
-	resolver.SetDefaultDestinationResolver("grpc", &GPRCDefaultDestinationResolver{})
+	resolver.SetDefaultDestinationResolver("grpc", &GRPCDefaultDestinationResolver{})
 }
