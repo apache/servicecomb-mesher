@@ -24,13 +24,7 @@ import (
 	"net/url"
 )
 
-type Result struct {
-	Result     float64 `json:"result"`
-	InstanceId string  `json:"instanceId"`
-	CallTime   string  `json:"callTime"`
-}
-
-func HandlerGateway(w http.ResponseWriter, r *http.Request) {
+func handlerGateway(w http.ResponseWriter, r *http.Request) {
 
 	queryInfo, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
@@ -58,7 +52,7 @@ func HandlerGateway(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func HandlerGateway2(w http.ResponseWriter, r *http.Request) {
+func handlerGateway2(w http.ResponseWriter, r *http.Request) {
 	queryInfo, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
 		fmt.Println("parse queryInfo wrong: ", queryInfo)
@@ -97,6 +91,6 @@ func HandlerGateway2(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/bmi", HandlerGateway2)
+	http.HandleFunc("/bmi", handlerGateway2)
 	http.ListenAndServe("192.168.88.64:4538", nil)
 }

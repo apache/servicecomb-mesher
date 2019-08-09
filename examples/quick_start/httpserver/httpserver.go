@@ -27,13 +27,13 @@ import (
 	"time"
 )
 
-type Result struct {
+type resultInfo struct {
 	Result     float64 `json:"result"`
 	InstanceId string  `json:"instanceId"`
 	CallTime   string  `json:"callTime"`
 }
 
-func HandlerCalculator(w http.ResponseWriter, r *http.Request) {
+func handlerCalculator(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("HandlerCalculator1 begin")
 	queryInfo, err := url.ParseQuery(r.URL.RawQuery)
 	if err != nil {
@@ -63,11 +63,11 @@ func HandlerCalculator(w http.ResponseWriter, r *http.Request) {
 	}
 	ddwBmi := ddwWeight / (ddwHeight * ddwHeight)
 	fmt.Println("bmi:", ddwBmi)
-	var result Result
+	var result resultInfo
 	result.Result, _ = strconv.ParseFloat(fmt.Sprintf("%.1f", ddwBmi), 64)
 	strTime := time.Now().Format("2006-01-02 15:04:05")
 	arrTime := strings.Split(strTime, " ")
-	result = Result{result.Result, "goHttpServer", arrTime[1]}
+	result = resultInfo{result.Result, "goHttpServer", arrTime[1]}
 	bResult, err := json.Marshal(result)
 	if err != nil {
 		fmt.Println("result err ", result, string(bResult), err)
@@ -82,6 +82,6 @@ func HandlerCalculator(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/bmi", HandlerCalculator)
+	http.HandleFunc("/bmi", handlerCalculator)
 	http.ListenAndServe("127.0.0.1:4537", nil)
 }
