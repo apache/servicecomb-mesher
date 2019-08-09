@@ -1,0 +1,10 @@
+#routeRule:
+#  mersher-provider:        #service name
+#    - precedence: 2    #precedence of route rule
+#      route:           #route rule list
+#      - tags:
+#          version: 1.1.1
+#        weight: 50     #weight of 20%
+#      - tags:
+#          version: 1.1.2
+#        weight: 50     #weight of 20%
