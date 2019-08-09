@@ -27,10 +27,10 @@ import (
 	"time"
 )
 
-type Result struct{
-	Result float64  `json:"result"`
-	InstanceId string `json:"instanceId"`
-	CallTime string `json:"callTime"`
+type Result struct {
+	Result     float64 `json:"result"`
+	InstanceId string  `json:"instanceId"`
+	CallTime   string  `json:"callTime"`
 }
 
 func HandlerCalculator(w http.ResponseWriter, r *http.Request) {
