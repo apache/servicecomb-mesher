@@ -1,0 +1,17 @@
+#egress:
+#  infra: cse  # pilot or cse
+#  address: http://istio-pilot.istio-system:15010
+#egressRule:
+#  google-ext:
+#    - hosts:
+#        - "google.com"
+#        - "*.yahoo.com"
+#      ports:
+#        - port: 80
+#          protocol: HTTP
+#  facebook-ext:
+#    - hosts:
+#        - "www.facebook.com"
+#      ports:
+#        - port: 80
+#          protocol: HTTP

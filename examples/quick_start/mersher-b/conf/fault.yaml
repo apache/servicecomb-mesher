@@ -1,0 +1,51 @@
+#cse:
+#  governance:
+#    Consumer:
+#      _global: #最低优先级配置
+#        policy: #治理策略 包括fault，loadbalance，circuit breaker等等，目前只是新的fault加入，旧的治理可考虑慢慢增加支持
+#          fault: #
+#            protocols: # 向协议模块注入错误，考虑未来扩展多任意组件注入错误，所以这么设计
+#              rest:
+#                delay:
+#                  fixedDelay: 5
+#                  percent: 10
+#                abort:
+#                  httpStatus: 421
+#                  percent: 100
+#              highway:
+#                delay:
+#                  fixedDelay: 2
+#                  percent: 100
+#                abort:
+#                  percent: 30
+#      ms1:
+#        route: |
+#            - precedence: 2
+#              match:
+#                source: source.service
+#              traffic:
+#                - tags:
+#                    version: 1.0
+#                  weight: 90
+#                - tags:
+#                    version: 1.1
+#                  weight: 10
+#                  policy:
+#                    fault:
+#                    schemas:
+#                      sid1:
+#                        policy:
+#                          fault:
+#                        operations:
+#                          policy:
+#                            fault:
+#        policy: # 微服务名级别治理策略
+#          fault:
+#        schemas: #schema级别治理策略
+#          sid1:
+#            policy:
+#              fault:
+#            operations: #operation级别治理策略
+#              policy:
+#                fault:
+#    Provider: # format same as Consumer

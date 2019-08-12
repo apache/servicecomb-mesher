@@ -1,0 +1,12 @@
+#routeRule:
+#  ShoppingCart:        #service name
+#    - precedence: 2    #precedence of route rule
+#      route:           #route rule list
+#      - tags:
+#          version: 0.2 
+#          app: HelloWorld 
+#        weight: 80     #weight of 80%
+#      - tags:
+#          version: 1.2
+#          app: HelloWorld
+#        weight: 20     #weight of 20%
