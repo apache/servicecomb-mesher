@@ -47,6 +47,10 @@ class CalculatorHandler(BaseHTTPRequestHandler):
             return
         dwHeight = float(arrHeight[1])
         dwWeight = float(arrWeight[1])
+        if dwHeight < 0 or dwWeight < 0 :
+            time.sleep(6)
+            raise RuntimeError('para Error')
+            return 
         ddwBmi = Calculator(dwHeight, dwWeight)
         print "calculator result:" + str(ddwBmi)
         self.send_response(200)
@@ -56,14 +60,14 @@ class CalculatorHandler(BaseHTTPRequestHandler):
         # Send the html message
         date = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         arrDate = str.split(date, " ")
-        result = {"result": ddwBmi, "instanceId": "pythonServer", "callTime": str(arrDate[1])}
+        result = {"result": ddwBmi, "instanceId": "pythonServer2", "callTime": str(arrDate[1])}
         strResult = json.dumps(result)
         print "json result:" + strResult
         self.wfile.write(strResult)
         return
 
 try:
-    server = HTTPServer(('127.0.0.1', 4540), CalculatorHandler)
+    server = HTTPServer(('127.0.0.1', 4537), CalculatorHandler)
     print 'http server begin:\n'
     server.serve_forever()
 
