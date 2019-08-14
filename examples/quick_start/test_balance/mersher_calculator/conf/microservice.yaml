@@ -1,6 +1,6 @@
 ## microservice property
 service_description:
-  name: mersher-provider
+  name: calculator
   version: 1.1.1
   environment:  #microservice environment
   properties:
