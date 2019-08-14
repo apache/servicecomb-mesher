@@ -1,6 +1,6 @@
 ## microservice property
 service_description:
-  name: mersher-consumer
+  name: webapp
   version: 0.0.1
   environment:  #microservice environment
   properties:

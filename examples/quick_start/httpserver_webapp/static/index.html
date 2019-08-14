@@ -65,7 +65,7 @@
           return;
         }
         $.ajax({
-          url: "http://192.168.88.64:4538/bmi?height=" + $("#height").val() + "&weight=" + $("#weight").val(),
+          url: "/calculator/bmi?height=" + $("#height").val() + "&weight=" + $("#weight").val(),
           type: "GET",
           success: function (data) {
             $("#error").hide();

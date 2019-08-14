@@ -2,11 +2,11 @@
 cse:
   protocols:
     grpc:
-      listenAddress: 192.168.88.64:40107
+      listenAddress: 192.168.88.64:40101
     http:
-      listenAddress: 192.168.88.64:30111
+      listenAddress: 192.168.88.64:30101
     rest-admin:
-      listenAddress: 192.168.88.64:30112 # listen addr use to adminAPI
+      listenAddress: 192.168.88.64:30102 # listen addr use to adminAPI
   service:
     registry:
       address: http://127.0.0.1:30100 # uri of service center
@@ -25,14 +25,14 @@ cse:
   handler:
     chain:
       Consumer:
-        outgoing:  #tracing-consumer #consumer handlers
+        outgoing:  #consumer handlers
         #If registry type is pilot then to make sure traffic goes through mesher provider new handler needs to be added to consumer after loadbalance handler
         #ex: router, ratelimiter-consumer, bizkeeper-consumer, loadbalance, port-selector, transport
       Provider:
-        incoming:   #tracing-provider,bizkeeper-provider #provider handlers
+        incoming:   #provider handlers
 #  loadbalance:
 #    strategy:
-#      name: RoundRobin  # Random|RoundRobin|SessionStickiness
+#      name: Random  # Random|RoundRobin|SessionStickiness
 #    retryEnabled: false # if there is error, retry request or not
 #    retryOnNext: 2      # times to switch to another instance based on strategy
 #    retryOnSame: 3      # times to retry on the same instance
@@ -45,13 +45,8 @@ cse:
 #    Consumer:
 #      timeout:
 #        enabled: true
-#      timeoutInMilliseconds: 500
-#      maxConcurrentRequests: 10
-#    Provider:
-#      timeout:
-#        enabled: true
-#      timeoutInMilliseconds: 500
-#      maxConcurrentRequests: 10
+#      timeoutInMilliseconds: 1000
+#      maxConcurrentRequests: 1
 #  circuitBreaker:
 #    Consumer:
 #      enabled: true
@@ -60,24 +55,12 @@ cse:
 #      sleepWindowInMilliseconds: 10000
 #      requestVolumeThreshold: 1
 #      errorThresholdPercentage: 1
-#    Provider:
-#      enabled: true
-#      forceOpen: true
-#      forceClosed: false
-#      sleepWindowInMilliseconds: 10000
-#      requestVolumeThreshold: 1
-#      errorThresholdPercentage: 20
 #  fallback:
 #    Consumer:
 #      enabled: true
 #      maxConcurrentRequests: 1
-#    Provider:
-#      enabled: true
-#      maxConcurrentRequests: 1
 #  fallbackpolicy:
 #    Consumer:
-#      policy: returnnull
-#    Provider:
 #      policy: returnnull
 #  flowcontrol:
 #    Consumer: # for consumer
@@ -131,7 +114,7 @@ cse:
 tracing:
   enabled: true #enable distribution tracing
   collectorType: zipkin       #zipkin: Send tracing info to zipkin server
-                              #namedPipe: Write tracing info to linux named pipe.
+#                              #namedPipe: Write tracing info to linux named pipe.
   collectorTarget: http://127.0.0.1:9411/api/v1/spans #If the collectorType is "zipkin", the target is a zipkin server url, if the collecterType is "file" or "namedPipe", the target is a file path.
   batchSize: 1
   batchInterval: 2s
