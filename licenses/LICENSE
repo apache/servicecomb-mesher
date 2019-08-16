@@ -1,0 +1,782 @@
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+   END OF TERMS AND CONDITIONS
+
+   APPENDIX: How to apply the Apache License to your work.
+
+      To apply the Apache License to your work, attach the following
+      boilerplate notice, with the fields enclosed by brackets "{}"
+      replaced with your own identifying information. (Don't include
+      the brackets!)  The text should be enclosed in the appropriate
+      comment syntax for the file format. We also recommend that a
+      file or class name and description of purpose be included on the
+      same "printed page" as the copyright notice for easier
+      identification within third-party archives.
+
+   Copyright {yyyy} {name of copyright owner}
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+=======================================================================
+Apache servicecomb-mesher Subcomponents:
+
+The Apache servicecomb-mesher project contains subcomponents with
+seperate copyright notices and license terms. Your use of the binary release
+for these subcomponents is subject to the terms and conditions of the
+following licenses.
+
+
+================================================================
+The following components are provided under the Apache License Version 2.0.
+See the respective project link for details.
+================================================================
+github.com/apache/thrift (3d556248a8b97310da49939195330691dfe9d9ad)
+github.com/lyft/protoc-gen-validate (v0.0.11)
+github.com/envoyproxy/go-control-plane (v0.6.0)
+github.com/go-chassis/foundation (v0.0.0-20190621030543-c3b63f787f4c)
+github.com/go-chassis/go-archaius (v0.20.0)
+github.com/go-chassis/go-chassis (v1.6.1)
+github.com/go-chassis/go-chassis-config (v0.9.0)
+github.com/go-chassis/go-chassis-plugins (83783d9c730eadb76570068ceb0939d8e131ea8c)
+github.com/go-chassis/gohessian (v0.0.0-20180702061429-e5130c25af55)
+github.com/go-chassis/huawei-apm (5b80092faa2d027fa4d926dd7be3a83e6dd53428)
+github.com/go-chassis/paas-lager (v1.0.2-0.20190328010332-cf506050ddb2)
+github.com/go-mesh/openlogging (v1.0.0)
+github.com/gogo/googleapis (v1.1.0) 
+github.com/golang/glog (v0.0.0-20160126235308-23def4e6c14b)
+github.com/google/gofuzz (v0.0.0-20170612174753-24818f796faf)
+github.com/matttproud/golang_protobuf_extensions (v1.0.1)
+github.com/modern-go/concurrent (v0.0.0-20180306012644-bacd9c7ef1dd)
+github.com/modern-go/reflect2 (v1.0.1)
+github.com/opentracing-contrib/go-observer (a52f2342449246d5bcc273e65cbdcfa5f7d6c63c)
+github.com/opentracing/opentracing-go (v1.0.2)
+github.com/prometheus/client_model (v0.0.0-20190115171406-56726106282f)
+github.com/prometheus/client_golang (v0.9.1)
+github.com/prometheus/common (v0.2.0)
+github.com/prometheus/procfs (v0.0.0-20190117184657-bf6a532e95b1)
+github.com/golang/mock (v1.1.1)
+github.com/mwitkow/go-conntrack (v0.0.0-20161129095857-cc309e4a2223)
+google.golang.org/genproto (v0.0.0-20180817151627-c66870c02cf8)
+google.golang.org/grpc (1.16.0)
+google.golang.org/appengine (1.1.0)
+k8s.io/client-go (v9.0.0+incompatible)
+k8s.io/apimachinery (v0.0.0-20181022183627-f71dbbc36e12)
+gopkg.in/validator.v2 (135c24b11c19e52befcae2ec3fca5d9b78c4e98e)
+gopkg.in/yaml.v2 (v2.2.1)
+cloud.google.com/go (v0.26.0)
+
+================================================================
+For onsi/gomega (v1.4.2)
+================================================================
+This product bundles onsi/gomega which is licensed under 
+the MIT License.
+For details, see https://github.com/onsi/gomega
+You can find a copy of the License at licenses/LICENSE-onsi-gomega
+
+================================================================
+For onsi/ginkgo (v1.6.0)
+================================================================
+This product bundles onsi/ginkgo which is licensed under 
+the MIT License.
+For details, see https://github.com/onsi/ginkgo
+You can find a copy of the License at licenses/LICENSE-onsi-ginkgo
+
+================================================================
+For honnef.co/go/tools (v0.0.0-20180728063816-88497007e858)
+================================================================
+This product bundles honnef.co/go/tools which is licensed under 
+the MIT License.
+For details, see https://github.com/dominikh/go-tools
+You can find a copy of the License at licenses/LICENSE-honnef.co-go-tools
+
+================================================================
+For Shopify/toxiproxy (v2.1.3+incompatible)
+================================================================
+This product bundles perks which is licensed under 
+the MIT License.
+For details, see https://github.com/Shopify/toxiproxy
+You can find a copy of the License at licenses/LICENSE-Shopify-toxiproxy
+
+================================================================
+For go-stack/stack (v1.8.0)
+================================================================
+This product bundles go-stack/stack which is licensed under 
+the MIT License.
+For details, see https://github.com/go-stack/stack
+You can find a copy of the License at licenses/LICENSE-go-stack-stack
+
+================================================================
+For go-kit/kit (v0.8.0)
+================================================================
+This product bundles go-kit/kit which is licensed under 
+the MIT License.
+For details, see https://github.com/go-kit/kit
+You can find a copy of the License at licenses/LICENSE-go-kit-kit
+
+================================================================
+For beorn7/perks (3a771d992973f24aa725d07868b467d1ddfceafb)
+================================================================
+This product bundles perks which is licensed under 
+the MIT License.
+For details, see https://github.com/beorn7/perks
+You can find a copy of the License at licenses/LICENSE-beorn7-perks
+
+================================================================
+For Shopify/sarama (v1.18.0)
+================================================================
+This product bundles perks which is licensed under 
+the MIT License.
+For details, see https://github.com/Shopify/sarama
+You can find a copy of the License at licenses/LICENSE-Shopify-sarama
+
+================================================================
+For alecthomas/units (v0.0.0-20151022065526-2efee857e7cf)
+================================================================
+This product bundles the alecthomas/units library which is licensed under 
+the MIT License.
+For details, see https://github.com/alecthomas/units
+You can find a copy of the License at licenses/LICENSE-alecthomas-units
+
+================================================================
+For github.com/konsorten/go-windows-terminal-sequences (v1.0.1)
+================================================================
+This product bundles the konsorten/go-windows-terminal-sequences library which is licensed under 
+the MIT License.
+For details, see https://github.com/konsorten/go-windows-terminal-sequences
+You can find a copy of the License at licenses/LICENSE-konsorten-go-windows-terminal-sequences
+
+================================================================
+For eapache/go-resiliency (v1.1.0)
+================================================================
+This product bundles the eapache/go-resiliency library which is licensed under 
+the MIT License.
+For details, see https://github.com/eapache/go-resiliency
+You can find a copy of the License at licenses/LICENSE-eapache-go-resiliency
+
+================================================================
+For kr/logfmt (v0.0.0-20140226030751-b84e30acd515)
+================================================================
+This product bundles the kr/logfmt library which is licensed under 
+the MIT License.
+For details, see https://github.com/kr/logfmt
+You can find a copy of the License at licenses/LICENSE-kr-logfmt
+
+================================================================
+For gopkg.in/alecthomas/kingpin.v2 (v2.2.6)
+================================================================
+This product bundles gopkg.in/alecthomas/kingpin.v2 which is licensed under 
+the MIT License.
+For details, see https://github.com/alecthomas/kingpin
+You can find a copy of the License at licenses/LICENSE-gopkg.in-alecthomas-kingpin.v2
+
+================================================================
+For kisielk/gotool (v1.0.0)
+================================================================
+This product bundles the kisielk/gotool library which is licensed under 
+the MIT License.
+For details, see https://github.com/kisielk/gotool
+You can find a copy of the License at licenses/LICENSE-kisielk-gotool
+
+================================================================
+For eapache/go-xerial-snappy (776d5712da21bc4762676d614db1d8a64f4238b0)
+================================================================
+This product bundles the eapache/go-xerial-snappy library which is licensed under 
+the MIT License.
+For details, see https://github.com/eapache/go-xerial-snappy
+You can find a copy of the License at licenses/LICENSE-eapache-go-xerial-snappy
+
+================================================================
+For emicklei/go-restful-swagger12 (v0.0.0-20170926063155-7524189396c6)
+================================================================
+This product bundles the emicklei/go-restful-swagger12 library which is licensed under 
+the MIT License.
+For details, see https://github.com/emicklei/go-restful-swagger12
+You can find a copy of the License at licenses/LICENSE-emicklei-go-restful-swagger12
+
+================================================================
+For eapache/queue (v1.1.0)
+================================================================
+This product bundles the eapache/queue library which is licensed under 
+the MIT License.
+For details, see https://github.com/eapache/queue
+You can find a copy of the License at licenses/LICENSE-eapache-queue
+
+================================================================
+For emicklei/go-restful (v2.8.0+incompatible)
+================================================================
+This product bundles the emicklei/go-restful library which is licensed under 
+the MIT License.
+For details, see https://github.com/emicklei/go-restful
+You can find a copy of the License at licenses/LICENSE-emicklei-go-restful
+
+================================================================
+For ghodss/yaml (v1.0.0)
+================================================================
+This product bundles ghodss/yaml which is licensed under 
+the MIT License.
+For details, see https://github.com/ghodss/yaml
+You can find a copy of the License at licenses/LICENSE-ghodss-yaml
+
+================================================================
+For sirupsen/logrus (v1.2.0)
+================================================================
+This product bundles sirupsen/logrus which is licensed under 
+the MIT License.
+For details, see https://github.com/sirupsen/logrus
+You can find a copy of the License at licenses/LICENSE-sirupsen-logrus
+
+================================================================
+For go-chassis/go-restful-swagger20 (v1.0.1)
+================================================================
+This product bundles go-chassis/go-restful-swagger20 which is licensed under 
+the MIT License.
+For details, see https://github.com/go-chassis/go-restful-swagger20
+You can find a copy of the License at licenses/LICENSE-go-restful-swagger20
+
+================================================================
+For smartystreets/assertions (v0.0.0-20190116191733-b6c0e53d7304)
+================================================================
+This product bundles smartystreets/assertions which is licensed under 
+the MIT License.
+For details, see https://github.com/smartystreets/assertions
+You can find a copy of the License at licenses/LICENSE-smartystreets-assertions
+
+================================================================
+For smartystreets/goconvey (v0.0.0-20190330032615-68dc04aab96a)
+================================================================
+This product bundles smartystreets/goconvey which is licensed under 
+the MIT License.
+For details, see https://github.com/smartystreets/goconvey
+You can find a copy of the License at licenses/LICENSE-smartystreets-goconvey
+
+================================================================
+For jtolds/gls (v4.20.0+incompatible)
+================================================================
+This product bundles jtolds/gls which is licensed under 
+the MIT License.
+For details, see https://github.com/jtolds/gls
+You can find a copy of the License at licenses/LICENSE-jtolds-gls
+
+================================================================
+For go-logfmt/logfmt (v0.4.0)
+================================================================
+This product bundles the go-logfmt/logfmt library which is licensed under 
+the MIT License.
+For details, see https://github.com/go-logfmt/logfmt
+You can find a copy of the License at licenses/LICENSE-go-logfmt
+
+================================================================
+For json-iterator/go (v1.1.5)
+================================================================
+This product bundles json-iterator/go which is licensed under 
+the MIT License.
+For details, see https://github.com/json-iterator/go
+You can find a copy of the License at licenses/LICENSE-json-iterator-go
+
+================================================================
+For spf13/cast (v1.2.0)
+================================================================
+This product bundles spf13/cast which is licensed under 
+the MIT License.
+For details, see https://github.com/spf13/cast
+You can find a copy of the License at licenses/LICENSE-spf13-cast
+
+================================================================
+For client9/misspell (v0.3.4)
+================================================================
+This product bundles client9/misspell which is licensed under 
+the MIT License.
+For details, see https://github.com/client9/misspell
+You can find a copy of the License at licenses/LICENSE-client9-misspell
+
+================================================================
+For openzipkin-contrib/zipkin-go-opentracing (v0.3.5)
+================================================================
+This product bundles openzipkin-contrib/zipkin-go-opentracing which is licensed 
+under the MIT License.
+For details, see https://github.com/openzipkin-contrib/zipkin-go-opentracing
+You can find a copy of the License at licenses/LICENSE-openzipkin-contrib-zipkin-go-opentracing
+
+================================================================
+For patrickmn/go-cache (v2.1.0+incompatible)
+================================================================
+This product bundles patrickmn/go-cache which is licensed under
+the MIT License.
+For details, see https://github.com/patrickmn/go-cache
+You can find a copy of the License at licenses/LICENSE-patrickmn-go-cache
+
+================================================================
+For cenkalti/backoff (v2.0.0+incompatible)
+================================================================
+This product bundles cenkalti/backoff which is licensed under
+the MIT License.
+For details, see https://github.com/cenkalti/backoff
+You can find a copy of the License at licenses/LICENSE-cenkalti-backoff
+
+================================================================
+For stretchr/testify (v1.3.0)
+================================================================
+This product bundles stretchr/testify which is licensed under
+the MIT License.
+For details, see https://github.com/stretchr/testify
+You can find a copy of the License at licenses/LICENSE-stretchr-testify
+
+================================================================
+For urfave/cli (v1.20.1-0.20181029213200-b67dcf995b6a)
+================================================================
+This product bundles urfave/cli which is licensed under 
+the MIT License.
+For details, see https://github.com/urfave/cli
+You can find a copy of the License at licenses/LICENSE-urfave-cli
+
+================================================================
+For stretchr/objx (v0.1.1)
+================================================================
+This product bundles stretchr/objx which is licensed under
+the MIT License.
+For details, see https://github.com/stretchr/objx
+You can find a copy of the License at licenses/LICENSE-stretchr/objx
+
+================================================================
+For hpcloud/tail (v1.0.0)
+================================================================
+This product bundles hpcloud/tail which is licensed under
+the MIT License.
+For details, see https://github.com/hpcloud/tail
+You can find a copy of the License at licenses/LICENSE-hpcloud-tail
+
+================================================================
+For go.uber.org/ratelimit (v0.0.0-20180316092928-c15da0234277)
+================================================================
+This product bundles go.uber.org/ratelimit which is licensed under
+the MIT License.
+For details, see https://github.com/go.uber.org/ratelimit
+You can find a copy of the License at licenses/LICENSE-go.uber.org-ratelimit
+
+================================================================
+For uber-go/atomic (v1.3.2)
+================================================================
+This product bundles uber-go/atomic which is licensed under
+the MIT License.
+For details, see https://github.com/uber-go/atomic
+You can find a copy of the License at licenses/LICENSE-uber-go-atomic
+
+================================================================
+For rcrowley/go-metrics (v0.0.0-20181016184325-3113b8401b8a)
+================================================================
+This product bundles rcrowley/go-metrics which is licensed under
+the 2-Clause BSD License.
+For details, see https://github.com/rcrowley/go-metrics
+You can find a copy of the License at licenses/LICENSE-rcrowley-go-metrics
+
+================================================================
+For gopherjs/gopherjs (v0.0.0-20181103185306-d547d1d9531e)
+================================================================
+This product bundles gopherjs/gopherjs which is licensed under
+the 2-Clause BSD License.
+For details, see https://github.com/gopherjs/gopherjs
+You can find a copy of the License at licenses/LICENSE-gopherjs-gopherjs
+
+================================================================
+For gopkg.in/check.v1 (v0.0.0-20161208181325-20d25e280405)
+================================================================
+This product bundles gopkg.in/check.v1 which is licensed under
+the 2-Clause BSD License.
+For details, see https://github.com/go-check/check
+You can find a copy of the License at licenses/LICENSE-gopherjs-gopherjs
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405
+
+================================================================
+For pkg/errors (v0.8.1)
+================================================================
+This product bundles pkg/errors which is licensed under 
+the 2-Clause BSD License.
+For details, see https://github.com/pkg/errors 
+You can find a copy of the License at licenses/LICENSE-pkg-errors
+
+================================================================
+For gorilla/websocket (v1.4.0)
+================================================================
+This product bundles gorilla/websocket which is licensed under 
+the 2-Clause BSD License.
+For details, see https://github.com/gorilla/websocket
+You can find a copy of the License at licenses/LICENSE-gorilla-websocket
+
+================================================================
+For fsnotify/fsnotify (v1.4.7)
+================================================================
+This product bundles the fsnotify/fsnotify library which is licensed under 
+the 3-Clause BSD License.
+For details, see https://github.com/fsnotify/fsnotify
+You can find a copy of the License at licenses/LICENSE-fsnotify
+
+================================================================
+For julienschmidt/httprouter (v1.2.0)
+================================================================
+This product bundles the julienschmidt/httprouter library which is licensed under 
+the 3-Clause BSD License.
+For details, see https://github.com/julienschmidt/httprouter
+You can find a copy of the License at licenses/LICENSE-julienschmidt-httprouter
+
+================================================================
+For DataDog/zstd (v1.3.5)
+================================================================
+This product bundles DataDog/zstd which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/DataDog/zstd
+You can find a copy of the License at licenses/LICENSE-DataDog-zstd
+
+================================================================
+For pierrec/lz4 (v2.0.5+incompatible)
+================================================================
+This product bundles pierrec/lz4 which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/pierrec/lz4
+You can find a copy of the License at licenses/LICENSE-pierrec-lz4
+
+================================================================
+For spf13/pflag (v1.0.3)
+================================================================
+This product bundles spf13/pflag which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/spf13/pflag
+You can find a copy of the License at licenses/LICENSE-spf13-pflag
+
+================================================================
+For gopkg.in/tomb.v1 (v1.0.0-20141024135613-dd632973f1e7)
+================================================================
+This product bundles gopkg.in/tomb.v1 which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/go-tomb/tomb/tree/v1
+You can find a copy of the License at licenses/LICENSE-gopkg.in-tomb.v1
+
+================================================================
+For golang.org/x/text (v0.3.0)
+================================================================
+This product bundles golang.org/x/text which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/golang/text
+You can find a copy of the License at licenses/LICENSE-golang-text
+
+================================================================
+For gopkg.in/inf.v0 (v0.9.1)
+================================================================
+This product bundles gopkg.in/inf.v0 which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/go-inf/inf/tree/v0.9.1
+You can find a copy of the License at licenses/LICENSE-go-inf-inf
+
+================================================================
+For golang.org/x/time (v0.0.0-20180412165947-fbb02b2291d2)
+================================================================
+This product bundles golang.org/x/time which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/golang/time
+You can find a copy of the License at licenses/LICENSE-golang-time
+
+================================================================
+For golang.org/x/tools (v0.0.0-20190328211700-ab21143f2384)
+================================================================
+This product bundles golang.org/x/tools which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/golang/tools
+You can find a copy of the License at licenses/LICENSE-golang-tools
+
+================================================================
+For golang.org/x/sync (v0.0.0-20181108010431-42b317875d0f)
+================================================================
+This product bundles golang.org/x/sync which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/golang/sync
+You can find a copy of the License at licenses/LICENSE-golang-sync
+
+================================================================
+For golang.org/x/net (v0.0.0-20190311183353-d8887717615a)
+================================================================
+This product bundles golang.org/x/net which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/golang/net
+You can find a copy of the License at licenses/LICENSE-golang-net
+
+================================================================
+For golang.org/x/crypto (v0.0.0-20190308221718-c2843e01d9a2)
+================================================================
+This product bundles golang.org/x/crypto which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/golang/crypto
+You can find a copy of the License at licenses/LICENSE-golang-crypto
+
+================================================================
+For golang.org/x/oauth2 (v0.0.0-20180821212333-d2e6202438be)
+================================================================
+This product bundles golang.org/x/oauth2 which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/golang/oauth2
+You can find a copy of the License at licenses/LICENSE-golang-oauth2
+
+================================================================
+For golang.org/x/sys (v0.0.0-20190215142949-d0b11bdaac8a)
+================================================================
+This product bundles golang.org/x/sys which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/golang/sys
+You can find a copy of the License at licenses/LICENSE-golang-sys
+
+================================================================
+For gogo/protobuf (v1.2.0)
+================================================================
+This product bundles gogo/protobuf which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/gogo/protobuf
+You can find a copy of the License at licenses/LICENSE-gogo-protobuf
+
+================================================================
+For imdario/mergo v0.3.6 (v0.3.6)
+================================================================
+This product bundles imdario/mergo which is licensed under
+the 3-Clause BSD License.
+For details, see https://github.com/imdario/mergo
+You can find a copy of the License at licenses/LICENSE-imdario-mergo
+
+================================================================
+For golang/protobuf (v1.2.0)
+================================================================
+This product bundles protobuf which is licensed under 
+the 3-Clause BSD License.
+For details, see https://github.com/golang/protobuf
+You can find a copy of the License at licenses/LICENSE-golang-protobuf
+
+================================================================
+For golang/snappy (v0.0.1)
+================================================================
+This product bundles the snappy library which is licensed under 
+the 3-Clause BSD License.
+For details, see https://github.com/golang/snappy
+You can find a copy of the License at licenses/LICENSE-snappy
+
+================================================================
+For alecthomas/template (v0.0.0-20160405071501-a0175ee3bccc)
+================================================================
+This product bundles the alecthomas/template library which is licensed under 
+the 3-Clause BSD License.
+For details, see https://github.com/alecthomas/template
+You can find a copy of the License at licenses/LICENSE-alecthomas-template
+
+================================================================
+For pmezard/go-difflib (v1.0.0)
+================================================================
+This product bundles the pmezard/go-difflib library which is licensed under 
+the 3-Clause BSD License.
+For details, see https://github.com/pmezard/go-difflib
+You can find a copy of the License at licenses/LICENSE-pmezard-go-difflib
+
+================================================================
+For golang/lint (v0.0.0-20180702182130-06c8688daad7)
+================================================================
+This product bundles the golang/lint library which is licensed under 
+the 3-Clause BSD License.
+For details, see https://github.com/golang/lint
+You can find a copy of the License at licenses/LICENSE-golang-lint
+
+================================================================
+For hashicorp/go-version (v1.0.0)
+================================================================
+This product bundles hashicorp/go-version which is licensed under
+the Mozilla Public License 2.0 License.
+For details, see https://github.com/hashicorp/go-version
+You can find a copy of the License at licenses/LICENSE-hashicorp-go-version
+
+================================================================
+For davecgh/go-spew (v1.1.1)
+================================================================
+This product bundles perks which is licensed under the ISC License.
+For details, see https://github.com/davecgh/go-spew
+You can find a copy of the License at licenses/LICENSE-davecgh-go-spew
+
+
+
+
+
