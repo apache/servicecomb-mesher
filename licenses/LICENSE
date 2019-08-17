@@ -216,14 +216,6 @@ See the respective project link for details.
 github.com/apache/thrift (3d556248a8b97310da49939195330691dfe9d9ad)
 github.com/lyft/protoc-gen-validate (v0.0.11)
 github.com/envoyproxy/go-control-plane (v0.6.0)
-github.com/go-chassis/foundation (v0.0.0-20190621030543-c3b63f787f4c)
-github.com/go-chassis/go-archaius (v0.20.0)
-github.com/go-chassis/go-chassis (v1.6.1)
-github.com/go-chassis/go-chassis-config (v0.9.0)
-github.com/go-chassis/go-chassis-plugins (83783d9c730eadb76570068ceb0939d8e131ea8c)
-github.com/go-chassis/gohessian (v0.0.0-20180702061429-e5130c25af55)
-github.com/go-chassis/huawei-apm (5b80092faa2d027fa4d926dd7be3a83e6dd53428)
-github.com/go-chassis/paas-lager (v1.0.2-0.20190328010332-cf506050ddb2)
 github.com/go-mesh/openlogging (v1.0.0)
 github.com/gogo/googleapis (v1.1.0) 
 github.com/golang/glog (v0.0.0-20160126235308-23def4e6c14b)
@@ -247,6 +239,19 @@ k8s.io/apimachinery (v0.0.0-20181022183627-f71dbbc36e12)
 gopkg.in/validator.v2 (135c24b11c19e52befcae2ec3fca5d9b78c4e98e)
 gopkg.in/yaml.v2 (v2.2.1)
 cloud.google.com/go (v0.26.0)
+
+================================================================
+The following components are provided under the License same as go-chassis.
+You can find a copy of the License at licenses/LICENSE-go-chassis.
+================================================================
+github.com/go-chassis/go-chassis (v1.6.1)
+github.com/go-chassis/foundation (v0.0.0-20190621030543-c3b63f787f4c)
+github.com/go-chassis/go-archaius (v0.20.0)
+github.com/go-chassis/go-chassis-config (v0.9.0)
+github.com/go-chassis/go-chassis-plugins (83783d9c730eadb76570068ceb0939d8e131ea8c)
+github.com/go-chassis/gohessian (v0.0.0-20180702061429-e5130c25af55)
+github.com/go-chassis/huawei-apm (5b80092faa2d027fa4d926dd7be3a83e6dd53428)
+github.com/go-chassis/paas-lager (v1.0.2-0.20190328010332-cf506050ddb2)
 
 ================================================================
 For onsi/gomega (v1.4.2)
