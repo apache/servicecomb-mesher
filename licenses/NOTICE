@@ -1,0 +1,70 @@
+Apache ServiceComb Mersher
+Copyright 2017-2019 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
+
+================================================================
+Notice for gopkg.in/yaml.v2:
+
+See licenses/NOTICE-gopkg.in-yamlv2
+
+================================================================
+Notice for github.com/apache/thrift:
+
+See licenses/NOTICE-apache-thrift
+
+================================================================
+Notice for github.com/go-chassis/go-chassis:
+
+See licenses/NOTICE-go-chassis
+
+================================================================
+Notice for github.com/go-chassis/go-archaius:
+
+See licenses/NOTICE-go-chassis-go-archaius
+
+================================================================
+Notice for github.com/go-chassis/paas-lager:
+
+See licenses/NOTICE-go-chassis-paas-lager
+
+================================================================
+Notice for github.com/go-mesh/openlogging:
+
+See licenses/NOTICE-go-mesh-openlogging
+
+================================================================
+Notice for github.com/go-chassis/gohessian:
+
+See licenses/NOTICE-gohessian
+
+================================================================
+Notice for github.com/lyft/protoc-gen-validate:
+
+See licenses/NOTICE-lyft-protoc-gen-validate
+
+================================================================
+Notice for github.com/matttproud/golang_protobuf_extensions:
+
+See licenses/NOTICE-matttproud-golang_protobuf_extensions
+
+================================================================
+Notice for github.com/prometheus/client_model:
+
+See licenses/NOTICE-prometheus-client_model
+
+================================================================
+Notice for github.com/prometheus/client_golang:
+
+See licenses/NOTICE-prometheus-client_golang
+
+================================================================
+Notice for github.com/prometheus/common:
+
+See licenses/NOTICE-prometheus-common
+
+================================================================
+Notice for github.com/prometheus/procfs:
+
+See licenses/NOTICE-prometheus-procfs
