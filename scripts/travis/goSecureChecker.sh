@@ -16,10 +16,10 @@
 
 issueCount=$(gosec ./... | grep "Issues"  |awk -F":" '{print $2}')
 if [ $? == 0 ] && [[ $issueCount -eq 0 ]] ; then
-	echo "No GoLint warnings found"
+	echo "No GoSecure warnings found"
 	exit 0
 else
-  echo "GoLint Warnings found"
+  echo "GoSecure Warnings found"
 	exit 1
 fi
 
