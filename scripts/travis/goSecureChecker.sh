@@ -15,7 +15,7 @@
 # limitations under the License.
 
 issueCount=$(gosec ./... | grep "Issues"  |awk -F":" '{print $2}')
-if [ $? == 0 ] && [[ $issueCount -le 43 ]] ; then
+if [ $? == 0 ] && [[ $issueCount -eq 0 ]] ; then
 	echo "No GoLint warnings found"
 	exit 0
 else
