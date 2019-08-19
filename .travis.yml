@@ -41,6 +41,10 @@ jobs:
       script:
         - go get github.com/fzipp/gocyclo
         - bash -x scripts/travis/goCycloChecker.sh
+    - stage: GoSecure Checker
+      script:
+        - go get github.com/securego/gosec/cmd/gosec
+        - bash -x scripts/travis/goSecureChecker.sh
     - stage: Build
       script: 
         - GO111MODULE=on go mod download
