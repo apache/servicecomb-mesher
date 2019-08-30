@@ -15,8 +15,6 @@ echo "GOPATH is "${GOPATH}
 if [ "$VERSION" == "" ]; then
     echo "using latest code"
     VERSION="latest"
-else
-    git checkout $VERSION
 fi
 
 release_dir=$PROJECT_DIR/release
@@ -25,6 +23,7 @@ cd $PROJECT_DIR
 GO111MODULE=on go mod download
 GO111MODULE=on go mod vendor
 go build -a github.com/apache/servicecomb-mesher/cmd/mesher
+
 cp -r $PROJECT_DIR/licenses $release_dir
 cp -r $PROJECT_DIR/conf $release_dir
 cp $PROJECT_DIR/start.sh  $release_dir
@@ -48,16 +47,19 @@ cd $release_dir
 
 chmod +x start.sh mesher
 
-pkg_name="mesher-$VERSION-linux-amd64.tar.gz"
+x86_pkg_name="mesher-$VERSION-linux-amd64.tar.gz"
+arm_pkg_name="mesher-$VERSION-linux-arm64.tar.gz"
 
-tar zcvf $pkg_name licenses conf mesher VERSION
-tar zcvf mesher.tar.gz licenses conf mesher VERSION start.sh
-
-
-
+#x86 release
+tar zcvf $x86_pkg_name licenses conf mesher VERSION
+tar zcvf mesher.tar.gz licenses conf mesher VERSION start.sh # for docker image
 
 
 echo "building docker..."
 cd ${release_dir}
 cp ${PROJECT_DIR}/build/docker/proxy/Dockerfile ./
 sudo docker build -t servicecomb/mesher-sidecar:${VERSION} .
+
+# arm release
+GOARCH=arm64 go build -a github.com/apache/servicecomb-mesher/cmd/mesher
+tar zcvf $arm_pkg_name licenses conf mesher VERSION
