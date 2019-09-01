@@ -21,6 +21,7 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
 	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/go-chassis/go-archaius"
+	"github.com/go-chassis/go-archaius/core"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/lager"
@@ -35,12 +36,30 @@ import (
 
 //Constant for mesher conf file
 const (
-	ConfFile       = "mesher.yaml"
-	EgressConfFile = "egress.yaml"
+	ConfFile        = "mesher.yaml"
+	EgressConfFile  = "egress.yaml"
+	ConfigCenterKie = "servicecomb-kie"
 )
 
 var mesherConfig *MesherConfig
 var egressConfig *EgressConfig
+
+type ConfigCenterEvent struct {
+}
+
+//Event is used for Configcenter changes.
+func (configEvent *ConfigCenterEvent) Event(event *core.Event) {
+	openlogging.GetLogger().Debugf("Configcenter Event. event:%s %s %s", event.EventType, event.Key, event.EventSource)
+	if event.EventType == "UPDATE" {
+		globalDef := &model.GlobalCfg{}
+		err := yaml.Unmarshal([]byte(event.Value.(string)), globalDef)
+		if err != nil {
+			openlogging.GetLogger().Warn("Config chassis.yaml change unmarshal err:" + err.Error())
+			return
+		}
+		openlogging.GetLogger().Debugf("Configcener Event succ. event:%s %s %s", event.EventType, event.Key, event.EventSource)
+	}
+}
 
 //GetConfig returns mesher config
 func GetConfig() *MesherConfig {
@@ -104,6 +123,16 @@ func Init() error {
 	if err := yaml.Unmarshal([]byte(egressContents), egressConfig); err != nil {
 		return err
 	}
+	//Register event in archaius for kie.
+	if config.GetConfigCenterConf().Type == ConfigCenterKie {
+		var configEvent = &ConfigCenterEvent{}
+		err := archaius.RegisterListener(configEvent, fileutil.Global)
+		if err != nil {
+			openlogging.GetLogger().Errorf("Archaius RegisterListener failed. key:%s, err:%s", fileutil.Global, err.Error())
+		}
+		openlogging.GetLogger().Debugf("Archaius RegisterListener succ. key:%s", fileutil.Global)
+	}
+
 	return nil
 }
 
