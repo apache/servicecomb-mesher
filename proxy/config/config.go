@@ -44,6 +44,7 @@ const (
 var mesherConfig *MesherConfig
 var egressConfig *EgressConfig
 
+//ConfigCenter event implemented.
 type ConfigCenterEvent struct {
 }
 
