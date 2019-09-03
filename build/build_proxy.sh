@@ -63,8 +63,9 @@ cd $release_dir
 
 chmod +x start.sh mesher
 
-x86_pkg_name="mesher-$VERSION-linux-amd64.tar.gz"
-arm_pkg_name="mesher-$VERSION-linux-arm64.tar.gz"
+component="apache-servicecomb-mesher"
+x86_pkg_name="$component-$VERSION-linux-amd64.tar.gz"
+arm_pkg_name="$component-$VERSION-linux-arm64.tar.gz"
 
 #x86 release
 tar zcvf $x86_pkg_name licenses conf mesher VERSION
