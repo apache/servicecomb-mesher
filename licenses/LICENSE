@@ -217,7 +217,7 @@ github.com/apache/thrift (3d556248a8b97310da49939195330691dfe9d9ad)
 github.com/lyft/protoc-gen-validate (v0.0.11)
 github.com/envoyproxy/go-control-plane (v0.6.0)
 github.com/go-mesh/openlogging (v1.0.0)
-github.com/gogo/googleapis (v1.1.0) 
+github.com/gogo/googleapis (v1.1.0)
 github.com/golang/glog (v0.0.0-20160126235308-23def4e6c14b)
 github.com/google/gofuzz (v0.0.0-20170612174753-24818f796faf)
 github.com/matttproud/golang_protobuf_extensions (v1.0.1)
@@ -256,7 +256,7 @@ github.com/go-chassis/paas-lager (v1.0.2-0.20190328010332-cf506050ddb2)
 ================================================================
 For onsi/gomega (v1.4.2)
 ================================================================
-This product bundles onsi/gomega which is licensed under 
+This product bundles onsi/gomega which is licensed under
 the MIT License.
 For details, see https://github.com/onsi/gomega
 You can find a copy of the License at licenses/LICENSE-onsi-gomega
@@ -264,7 +264,7 @@ You can find a copy of the License at licenses/LICENSE-onsi-gomega
 ================================================================
 For onsi/ginkgo (v1.6.0)
 ================================================================
-This product bundles onsi/ginkgo which is licensed under 
+This product bundles onsi/ginkgo which is licensed under
 the MIT License.
 For details, see https://github.com/onsi/ginkgo
 You can find a copy of the License at licenses/LICENSE-onsi-ginkgo
@@ -272,7 +272,7 @@ You can find a copy of the License at licenses/LICENSE-onsi-ginkgo
 ================================================================
 For honnef.co/go/tools (v0.0.0-20180728063816-88497007e858)
 ================================================================
-This product bundles honnef.co/go/tools which is licensed under 
+This product bundles honnef.co/go/tools which is licensed under
 the MIT License.
 For details, see https://github.com/dominikh/go-tools
 You can find a copy of the License at licenses/LICENSE-honnef.co-go-tools
@@ -280,7 +280,7 @@ You can find a copy of the License at licenses/LICENSE-honnef.co-go-tools
 ================================================================
 For Shopify/toxiproxy (v2.1.3+incompatible)
 ================================================================
-This product bundles perks which is licensed under 
+This product bundles perks which is licensed under
 the MIT License.
 For details, see https://github.com/Shopify/toxiproxy
 You can find a copy of the License at licenses/LICENSE-Shopify-toxiproxy
@@ -288,7 +288,7 @@ You can find a copy of the License at licenses/LICENSE-Shopify-toxiproxy
 ================================================================
 For go-stack/stack (v1.8.0)
 ================================================================
-This product bundles go-stack/stack which is licensed under 
+This product bundles go-stack/stack which is licensed under
 the MIT License.
 For details, see https://github.com/go-stack/stack
 You can find a copy of the License at licenses/LICENSE-go-stack-stack
@@ -296,7 +296,7 @@ You can find a copy of the License at licenses/LICENSE-go-stack-stack
 ================================================================
 For go-kit/kit (v0.8.0)
 ================================================================
-This product bundles go-kit/kit which is licensed under 
+This product bundles go-kit/kit which is licensed under
 the MIT License.
 For details, see https://github.com/go-kit/kit
 You can find a copy of the License at licenses/LICENSE-go-kit-kit
@@ -304,7 +304,7 @@ You can find a copy of the License at licenses/LICENSE-go-kit-kit
 ================================================================
 For beorn7/perks (3a771d992973f24aa725d07868b467d1ddfceafb)
 ================================================================
-This product bundles perks which is licensed under 
+This product bundles perks which is licensed under
 the MIT License.
 For details, see https://github.com/beorn7/perks
 You can find a copy of the License at licenses/LICENSE-beorn7-perks
@@ -312,7 +312,7 @@ You can find a copy of the License at licenses/LICENSE-beorn7-perks
 ================================================================
 For Shopify/sarama (v1.18.0)
 ================================================================
-This product bundles perks which is licensed under 
+This product bundles perks which is licensed under
 the MIT License.
 For details, see https://github.com/Shopify/sarama
 You can find a copy of the License at licenses/LICENSE-Shopify-sarama
@@ -320,7 +320,7 @@ You can find a copy of the License at licenses/LICENSE-Shopify-sarama
 ================================================================
 For alecthomas/units (v0.0.0-20151022065526-2efee857e7cf)
 ================================================================
-This product bundles the alecthomas/units library which is licensed under 
+This product bundles the alecthomas/units library which is licensed under
 the MIT License.
 For details, see https://github.com/alecthomas/units
 You can find a copy of the License at licenses/LICENSE-alecthomas-units
@@ -328,7 +328,7 @@ You can find a copy of the License at licenses/LICENSE-alecthomas-units
 ================================================================
 For github.com/konsorten/go-windows-terminal-sequences (v1.0.1)
 ================================================================
-This product bundles the konsorten/go-windows-terminal-sequences library which is licensed under 
+This product bundles the konsorten/go-windows-terminal-sequences library which is licensed under
 the MIT License.
 For details, see https://github.com/konsorten/go-windows-terminal-sequences
 You can find a copy of the License at licenses/LICENSE-konsorten-go-windows-terminal-sequences
@@ -336,7 +336,7 @@ You can find a copy of the License at licenses/LICENSE-konsorten-go-windows-term
 ================================================================
 For eapache/go-resiliency (v1.1.0)
 ================================================================
-This product bundles the eapache/go-resiliency library which is licensed under 
+This product bundles the eapache/go-resiliency library which is licensed under
 the MIT License.
 For details, see https://github.com/eapache/go-resiliency
 You can find a copy of the License at licenses/LICENSE-eapache-go-resiliency
@@ -344,7 +344,7 @@ You can find a copy of the License at licenses/LICENSE-eapache-go-resiliency
 ================================================================
 For kr/logfmt (v0.0.0-20140226030751-b84e30acd515)
 ================================================================
-This product bundles the kr/logfmt library which is licensed under 
+This product bundles the kr/logfmt library which is licensed under
 the MIT License.
 For details, see https://github.com/kr/logfmt
 You can find a copy of the License at licenses/LICENSE-kr-logfmt
@@ -352,7 +352,7 @@ You can find a copy of the License at licenses/LICENSE-kr-logfmt
 ================================================================
 For gopkg.in/alecthomas/kingpin.v2 (v2.2.6)
 ================================================================
-This product bundles gopkg.in/alecthomas/kingpin.v2 which is licensed under 
+This product bundles gopkg.in/alecthomas/kingpin.v2 which is licensed under
 the MIT License.
 For details, see https://github.com/alecthomas/kingpin
 You can find a copy of the License at licenses/LICENSE-gopkg.in-alecthomas-kingpin.v2
@@ -360,7 +360,7 @@ You can find a copy of the License at licenses/LICENSE-gopkg.in-alecthomas-kingp
 ================================================================
 For kisielk/gotool (v1.0.0)
 ================================================================
-This product bundles the kisielk/gotool library which is licensed under 
+This product bundles the kisielk/gotool library which is licensed under
 the MIT License.
 For details, see https://github.com/kisielk/gotool
 You can find a copy of the License at licenses/LICENSE-kisielk-gotool
@@ -368,7 +368,7 @@ You can find a copy of the License at licenses/LICENSE-kisielk-gotool
 ================================================================
 For eapache/go-xerial-snappy (776d5712da21bc4762676d614db1d8a64f4238b0)
 ================================================================
-This product bundles the eapache/go-xerial-snappy library which is licensed under 
+This product bundles the eapache/go-xerial-snappy library which is licensed under
 the MIT License.
 For details, see https://github.com/eapache/go-xerial-snappy
 You can find a copy of the License at licenses/LICENSE-eapache-go-xerial-snappy
@@ -376,7 +376,7 @@ You can find a copy of the License at licenses/LICENSE-eapache-go-xerial-snappy
 ================================================================
 For emicklei/go-restful-swagger12 (v0.0.0-20170926063155-7524189396c6)
 ================================================================
-This product bundles the emicklei/go-restful-swagger12 library which is licensed under 
+This product bundles the emicklei/go-restful-swagger12 library which is licensed under
 the MIT License.
 For details, see https://github.com/emicklei/go-restful-swagger12
 You can find a copy of the License at licenses/LICENSE-emicklei-go-restful-swagger12
@@ -384,7 +384,7 @@ You can find a copy of the License at licenses/LICENSE-emicklei-go-restful-swagg
 ================================================================
 For eapache/queue (v1.1.0)
 ================================================================
-This product bundles the eapache/queue library which is licensed under 
+This product bundles the eapache/queue library which is licensed under
 the MIT License.
 For details, see https://github.com/eapache/queue
 You can find a copy of the License at licenses/LICENSE-eapache-queue
@@ -392,7 +392,7 @@ You can find a copy of the License at licenses/LICENSE-eapache-queue
 ================================================================
 For emicklei/go-restful (v2.8.0+incompatible)
 ================================================================
-This product bundles the emicklei/go-restful library which is licensed under 
+This product bundles the emicklei/go-restful library which is licensed under
 the MIT License.
 For details, see https://github.com/emicklei/go-restful
 You can find a copy of the License at licenses/LICENSE-emicklei-go-restful
@@ -400,7 +400,7 @@ You can find a copy of the License at licenses/LICENSE-emicklei-go-restful
 ================================================================
 For ghodss/yaml (v1.0.0)
 ================================================================
-This product bundles ghodss/yaml which is licensed under 
+This product bundles ghodss/yaml which is licensed under
 the MIT License.
 For details, see https://github.com/ghodss/yaml
 You can find a copy of the License at licenses/LICENSE-ghodss-yaml
@@ -408,7 +408,7 @@ You can find a copy of the License at licenses/LICENSE-ghodss-yaml
 ================================================================
 For sirupsen/logrus (v1.2.0)
 ================================================================
-This product bundles sirupsen/logrus which is licensed under 
+This product bundles sirupsen/logrus which is licensed under
 the MIT License.
 For details, see https://github.com/sirupsen/logrus
 You can find a copy of the License at licenses/LICENSE-sirupsen-logrus
@@ -416,7 +416,7 @@ You can find a copy of the License at licenses/LICENSE-sirupsen-logrus
 ================================================================
 For go-chassis/go-restful-swagger20 (v1.0.1)
 ================================================================
-This product bundles go-chassis/go-restful-swagger20 which is licensed under 
+This product bundles go-chassis/go-restful-swagger20 which is licensed under
 the MIT License.
 For details, see https://github.com/go-chassis/go-restful-swagger20
 You can find a copy of the License at licenses/LICENSE-go-restful-swagger20
@@ -424,7 +424,7 @@ You can find a copy of the License at licenses/LICENSE-go-restful-swagger20
 ================================================================
 For smartystreets/assertions (v0.0.0-20190116191733-b6c0e53d7304)
 ================================================================
-This product bundles smartystreets/assertions which is licensed under 
+This product bundles smartystreets/assertions which is licensed under
 the MIT License.
 For details, see https://github.com/smartystreets/assertions
 You can find a copy of the License at licenses/LICENSE-smartystreets-assertions
@@ -432,7 +432,7 @@ You can find a copy of the License at licenses/LICENSE-smartystreets-assertions
 ================================================================
 For smartystreets/goconvey (v0.0.0-20190330032615-68dc04aab96a)
 ================================================================
-This product bundles smartystreets/goconvey which is licensed under 
+This product bundles smartystreets/goconvey which is licensed under
 the MIT License.
 For details, see https://github.com/smartystreets/goconvey
 You can find a copy of the License at licenses/LICENSE-smartystreets-goconvey
@@ -440,7 +440,7 @@ You can find a copy of the License at licenses/LICENSE-smartystreets-goconvey
 ================================================================
 For jtolds/gls (v4.20.0+incompatible)
 ================================================================
-This product bundles jtolds/gls which is licensed under 
+This product bundles jtolds/gls which is licensed under
 the MIT License.
 For details, see https://github.com/jtolds/gls
 You can find a copy of the License at licenses/LICENSE-jtolds-gls
@@ -448,7 +448,7 @@ You can find a copy of the License at licenses/LICENSE-jtolds-gls
 ================================================================
 For go-logfmt/logfmt (v0.4.0)
 ================================================================
-This product bundles the go-logfmt/logfmt library which is licensed under 
+This product bundles the go-logfmt/logfmt library which is licensed under
 the MIT License.
 For details, see https://github.com/go-logfmt/logfmt
 You can find a copy of the License at licenses/LICENSE-go-logfmt
@@ -456,7 +456,7 @@ You can find a copy of the License at licenses/LICENSE-go-logfmt
 ================================================================
 For json-iterator/go (v1.1.5)
 ================================================================
-This product bundles json-iterator/go which is licensed under 
+This product bundles json-iterator/go which is licensed under
 the MIT License.
 For details, see https://github.com/json-iterator/go
 You can find a copy of the License at licenses/LICENSE-json-iterator-go
@@ -464,7 +464,7 @@ You can find a copy of the License at licenses/LICENSE-json-iterator-go
 ================================================================
 For spf13/cast (v1.2.0)
 ================================================================
-This product bundles spf13/cast which is licensed under 
+This product bundles spf13/cast which is licensed under
 the MIT License.
 For details, see https://github.com/spf13/cast
 You can find a copy of the License at licenses/LICENSE-spf13-cast
@@ -472,7 +472,7 @@ You can find a copy of the License at licenses/LICENSE-spf13-cast
 ================================================================
 For client9/misspell (v0.3.4)
 ================================================================
-This product bundles client9/misspell which is licensed under 
+This product bundles client9/misspell which is licensed under
 the MIT License.
 For details, see https://github.com/client9/misspell
 You can find a copy of the License at licenses/LICENSE-client9-misspell
@@ -480,7 +480,7 @@ You can find a copy of the License at licenses/LICENSE-client9-misspell
 ================================================================
 For openzipkin-contrib/zipkin-go-opentracing (v0.3.5)
 ================================================================
-This product bundles openzipkin-contrib/zipkin-go-opentracing which is licensed 
+This product bundles openzipkin-contrib/zipkin-go-opentracing which is licensed
 under the MIT License.
 For details, see https://github.com/openzipkin-contrib/zipkin-go-opentracing
 You can find a copy of the License at licenses/LICENSE-openzipkin-contrib-zipkin-go-opentracing
@@ -512,7 +512,7 @@ You can find a copy of the License at licenses/LICENSE-stretchr-testify
 ================================================================
 For urfave/cli (v1.20.1-0.20181029213200-b67dcf995b6a)
 ================================================================
-This product bundles urfave/cli which is licensed under 
+This product bundles urfave/cli which is licensed under
 the MIT License.
 For details, see https://github.com/urfave/cli
 You can find a copy of the License at licenses/LICENSE-urfave-cli
@@ -577,15 +577,15 @@ gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405
 ================================================================
 For pkg/errors (v0.8.1)
 ================================================================
-This product bundles pkg/errors which is licensed under 
+This product bundles pkg/errors which is licensed under
 the 2-Clause BSD License.
-For details, see https://github.com/pkg/errors 
+For details, see https://github.com/pkg/errors
 You can find a copy of the License at licenses/LICENSE-pkg-errors
 
 ================================================================
 For gorilla/websocket (v1.4.0)
 ================================================================
-This product bundles gorilla/websocket which is licensed under 
+This product bundles gorilla/websocket which is licensed under
 the 2-Clause BSD License.
 For details, see https://github.com/gorilla/websocket
 You can find a copy of the License at licenses/LICENSE-gorilla-websocket
@@ -593,7 +593,7 @@ You can find a copy of the License at licenses/LICENSE-gorilla-websocket
 ================================================================
 For fsnotify/fsnotify (v1.4.7)
 ================================================================
-This product bundles the fsnotify/fsnotify library which is licensed under 
+This product bundles the fsnotify/fsnotify library which is licensed under
 the 3-Clause BSD License.
 For details, see https://github.com/fsnotify/fsnotify
 You can find a copy of the License at licenses/LICENSE-fsnotify
@@ -601,7 +601,7 @@ You can find a copy of the License at licenses/LICENSE-fsnotify
 ================================================================
 For julienschmidt/httprouter (v1.2.0)
 ================================================================
-This product bundles the julienschmidt/httprouter library which is licensed under 
+This product bundles the julienschmidt/httprouter library which is licensed under
 the 3-Clause BSD License.
 For details, see https://github.com/julienschmidt/httprouter
 You can find a copy of the License at licenses/LICENSE-julienschmidt-httprouter
@@ -729,7 +729,7 @@ You can find a copy of the License at licenses/LICENSE-imdario-mergo
 ================================================================
 For golang/protobuf (v1.2.0)
 ================================================================
-This product bundles protobuf which is licensed under 
+This product bundles protobuf which is licensed under
 the 3-Clause BSD License.
 For details, see https://github.com/golang/protobuf
 You can find a copy of the License at licenses/LICENSE-golang-protobuf
@@ -737,7 +737,7 @@ You can find a copy of the License at licenses/LICENSE-golang-protobuf
 ================================================================
 For golang/snappy (v0.0.1)
 ================================================================
-This product bundles the snappy library which is licensed under 
+This product bundles the snappy library which is licensed under
 the 3-Clause BSD License.
 For details, see https://github.com/golang/snappy
 You can find a copy of the License at licenses/LICENSE-snappy
@@ -745,7 +745,7 @@ You can find a copy of the License at licenses/LICENSE-snappy
 ================================================================
 For alecthomas/template (v0.0.0-20160405071501-a0175ee3bccc)
 ================================================================
-This product bundles the alecthomas/template library which is licensed under 
+This product bundles the alecthomas/template library which is licensed under
 the 3-Clause BSD License.
 For details, see https://github.com/alecthomas/template
 You can find a copy of the License at licenses/LICENSE-alecthomas-template
@@ -753,7 +753,7 @@ You can find a copy of the License at licenses/LICENSE-alecthomas-template
 ================================================================
 For pmezard/go-difflib (v1.0.0)
 ================================================================
-This product bundles the pmezard/go-difflib library which is licensed under 
+This product bundles the pmezard/go-difflib library which is licensed under
 the 3-Clause BSD License.
 For details, see https://github.com/pmezard/go-difflib
 You can find a copy of the License at licenses/LICENSE-pmezard-go-difflib
@@ -761,7 +761,7 @@ You can find a copy of the License at licenses/LICENSE-pmezard-go-difflib
 ================================================================
 For golang/lint (v0.0.0-20180702182130-06c8688daad7)
 ================================================================
-This product bundles the golang/lint library which is licensed under 
+This product bundles the golang/lint library which is licensed under
 the 3-Clause BSD License.
 For details, see https://github.com/golang/lint
 You can find a copy of the License at licenses/LICENSE-golang-lint

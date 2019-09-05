@@ -26,8 +26,8 @@ cd $PROJECT_DIR/release
 gpg --armor --output "${x86_pkg_name}".asc --detach-sig "${x86_pkg_name}"
 gpg --armor --output "${arm_pkg_name}".asc --detach-sig "${arm_pkg_name}"
 #512
-gpg --print-md SHA512 "${x86_pkg_name}" > "${x86_pkg_name}".sha512
-gpg --print-md SHA512 "${arm_pkg_name}" > "${arm_pkg_name}".sha512
+sha512sum "${x86_pkg_name}" > "${x86_pkg_name}".sha512
+sha512sum "${arm_pkg_name}" > "${arm_pkg_name}".sha512
 #src
 wget "https://github.com/apache/servicecomb-mesher/archive/v${VERSION}.tar.gz"
 
@@ -36,4 +36,4 @@ mv "v${VERSION}.tar.gz" "${src_name}"
 
 gpg --armor --output "$src_name.asc" --detach-sig "${src_name}"
 
-gpg --print-md SHA512 "${src_name}" > "${src_name}".sha512
+sha512sum "${src_name}" > "${src_name}".sha512
