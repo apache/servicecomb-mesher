@@ -59,5 +59,8 @@ it will build binary and docker image
 - docker image name: servicecomb/mesher-sidecar:latest
 
 # Documentations
+# Documentations
+You can see more documentations in [here](https://mesher.readthedocs.io/en/latest/), 
+this online doc is for latest version of mesher, if you want to see your version's doc,
+follow [here](docs/README.md) to generate it in local
 
-https://mesher.readthedocs.io/en/latest/

@@ -41,6 +41,8 @@ GO111MODULE=on go mod vendor
 go build -a github.com/apache/servicecomb-mesher/cmd/mesher
 
 cp -r $PROJECT_DIR/licenses $release_dir
+cp -r $PROJECT_DIR/licenses/LICENSE $release_dir
+cp -r $PROJECT_DIR/licenses/NOTICE $release_dir
 cp -r $PROJECT_DIR/conf $release_dir
 cp $PROJECT_DIR/start.sh  $release_dir
 cp $PROJECT_DIR/mesher  $release_dir
@@ -63,12 +65,13 @@ cd $release_dir
 
 chmod +x start.sh mesher
 
-x86_pkg_name="mesher-$VERSION-linux-amd64.tar.gz"
-arm_pkg_name="mesher-$VERSION-linux-arm64.tar.gz"
+component="apache-servicecomb-mesher"
+x86_pkg_name="$component-$VERSION-linux-amd64.tar.gz"
+arm_pkg_name="$component-$VERSION-linux-arm64.tar.gz"
 
 #x86 release
-tar zcvf $x86_pkg_name licenses conf mesher VERSION
-tar zcvf mesher.tar.gz licenses conf mesher VERSION start.sh # for docker image
+tar zcvf $x86_pkg_name licenses conf mesher VERSION LICENSE NOTICE
+tar zcvf mesher.tar.gz licenses conf mesher VERSION LICENSE NOTICE start.sh # for docker image
 
 
 echo "building docker..."
@@ -78,4 +81,4 @@ sudo docker build -t servicecomb/mesher-sidecar:${VERSION} .
 
 # arm release
 GOARCH=arm64 go build -a github.com/apache/servicecomb-mesher/cmd/mesher
-tar zcvf $arm_pkg_name licenses conf mesher VERSION
+tar zcvf $arm_pkg_name licenses conf mesher VERSION LICENSE NOTICE
