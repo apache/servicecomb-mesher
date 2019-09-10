@@ -33,7 +33,7 @@ const Local = "127.0.0.1"
 //ConfigFromCmd store cmd params
 type ConfigFromCmd struct {
 	ConfigFile        string
-	Mode              string
+	Role              string
 	LocalServicePorts string
 	PortsMap          map[string]string
 }
@@ -54,10 +54,10 @@ func parseConfigFromCmd(args []string) (err error) {
 		},
 		cli.StringFlag{
 			Name:  "mode",
-			Value: common.ModeSidecar,
-			Usage: fmt.Sprintf("mesher running mode [ %s|%s|%s ]",
-				common.ModePerHost, common.ModeSidecar, common.ModeIngress),
-			Destination: &Configs.Mode,
+			Value: common.RoleSidecar,
+			Usage: fmt.Sprintf("mesher role [ %s|%s|%s ]",
+				common.RolePerHost, common.RoleSidecar, common.RoleEdge),
+			Destination: &Configs.Role,
 		},
 		cli.StringFlag{
 			Name:        "service-ports",

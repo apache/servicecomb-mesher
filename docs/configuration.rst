@@ -10,3 +10,4 @@ User guides
    configurations/admin
    configurations/health
    configurations/destination_resolver
+   configurations/edge

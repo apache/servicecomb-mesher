@@ -32,14 +32,14 @@ const (
 //ComponentName is contant for component name
 const ComponentName = "mesher"
 
-//ModeSidecar is constant for side car mode
-const ModeSidecar = "sidecar"
+//RoleSidecar is constant for side car mode
+const RoleSidecar = "sidecar"
 
-//ModeIngress run as a api gateway, or ingress in k8s
-const ModeIngress = "ingress"
+//RoleEdge run as a edge service, or ingress in k8s
+const RoleEdge = "edge"
 
-//ModePerHost is constant for side car mode
-const ModePerHost = "per-host"
+//RolePerHost is constant for side car mode
+const RolePerHost = "per-host"
 
 //Constants for env specific addr and service ports
 const (

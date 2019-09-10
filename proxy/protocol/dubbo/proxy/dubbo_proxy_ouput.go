@@ -226,7 +226,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 			ctx.Req.SetAttachment(common.HeaderSourceName, chassisconfig.SelfServiceName)
 			ctx.Req.SetAttachment(ProxyTag, "true")
 
-			if mesherRuntime.Mode == mesherCommon.ModeSidecar {
+			if mesherRuntime.Role == mesherCommon.RoleSidecar {
 				c, err = handler.GetChain(common.Consumer, mesherCommon.ChainConsumerOutgoing)
 				if err != nil {
 					openlogging.Error("Get Consumer chain failed: " + err.Error())
@@ -330,12 +330,12 @@ func ProxyRestHandler(ctx *dubbo.InvokeContext) error {
 		h[k] = req.Header.Get(k)
 	}
 	//Resolve Destination
-	_, err = dr.Resolve(source, h, inv.URLPathFormat, &inv.MicroServiceName)
+	destination, _, err := dr.Resolve(source, "", inv.URLPathFormat, h)
 	if err != nil {
 		return err
 	}
-
-	if mesherRuntime.Mode == mesherCommon.ModeSidecar {
+	inv.MicroServiceName = destination
+	if mesherRuntime.Role == mesherCommon.RoleSidecar {
 		c, err = handler.GetChain(common.Consumer, mesherCommon.ChainConsumerOutgoing)
 		if err != nil {
 			lager.Logger.Error("Get chain failed: " + err.Error())

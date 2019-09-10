@@ -61,26 +61,26 @@ func TestResolve(t *testing.T) {
 	header := http.Header{}
 	header.Add("cookie", "user=jason")
 	header.Add("X-Age", "18")
-	mystring := "Server"
-	var destinationString = &mystring
-	p, err := d.Resolve("abc", map[string]string{}, "127.0.1.1", destinationString)
+	destinationString := "Server"
+	destinationString, p, err := d.Resolve("127.0.1.1", "abc", "", map[string]string{})
 	assert.Error(t, err)
 	assert.Equal(t, "", p)
 
-	p, err = d.Resolve("abc", map[string]string{}, "", destinationString)
+	destinationString, p, err = d.Resolve("abc", "", "", map[string]string{})
 	assert.Error(t, err)
 	assert.Equal(t, "", p)
 
-	p, err = d.Resolve("abc", map[string]string{}, "http://127.0.0.1:80/test", destinationString)
+	destinationString, p, err = d.Resolve("abc", "", "http://127.0.0.1:80/test", map[string]string{})
 	assert.NoError(t, err)
 	assert.Equal(t, "80", p)
 
-	p, err = d.Resolve("abc", map[string]string{}, "Server:80/test", destinationString)
+	destinationString, p, err = d.Resolve("abc", "", "Server:80/test", map[string]string{})
 	assert.Error(t, err)
 
-	p, err = d.Resolve("abc", map[string]string{}, "127.0.0.1:80", destinationString)
+	destinationString, p, err = d.Resolve("abc", "", "127.0.0.1:80", map[string]string{})
 	assert.Error(t, err)
 	assert.Equal(t, "", p)
+	t.Log(destinationString)
 }
 
 func TestGetDestinationResolver(t *testing.T) {
@@ -97,9 +97,7 @@ func BenchmarkDefaultDestinationResolver_Resolve(b *testing.B) {
 	lager.Initialize("", "DEBUG", "",
 		"size", true, 1, 10, 7)
 	d := &DefaultDestinationResolver{}
-	mystring := "Server"
-	var destinationString = &mystring
 	for i := 0; i < b.N; i++ {
-		d.Resolve("abc", map[string]string{}, "http://127.0.0.1:80/test", destinationString)
+		d.Resolve("abc", "", "http://127.0.0.1:80/test", map[string]string{})
 	}
 }

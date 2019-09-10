@@ -82,20 +82,21 @@ func Start() error {
 
 //DecideMode get config mode
 func DecideMode() error {
-	runtime.Mode = cmd.Configs.Mode
-	openlogging.GetLogger().Info("Running as " + runtime.Mode)
+	runtime.Role = cmd.Configs.Role
+	openlogging.GetLogger().Info("Running as " + runtime.Role)
 	return nil
 }
 
 //RegisterFramework registers framework
 func RegisterFramework() {
-	if framework := metadata.NewFramework(); cmd.Configs.Mode == common.ModeSidecar {
-		version := GetVersion()
+	version := GetVersion()
+	if framework := metadata.NewFramework(); cmd.Configs.Role == common.RoleSidecar {
 		framework.SetName("Mesher")
 		framework.SetVersion(version)
 		framework.SetRegister("SIDECAR")
-	} else if cmd.Configs.Mode == common.ModePerHost {
+	} else {
 		framework.SetName("Mesher")
+		framework.SetVersion(version)
 	}
 }
 

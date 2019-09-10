@@ -14,11 +14,11 @@ you can develop micro services with java chassis or go chassis frameworks
 and use mesher to make other service join to the same system.
 - flexible: you can develop and customize your own service mesh
 - OS: support both linux and windows OS, which means you can govern your services writen in .net with java, go etc.
-
+- API gateway: mesher is able to run as a independent edge service and manage ingress traffic.
 # Features
 - Build on top of go micro service framework: so that mesher has all of features of 
 [go chassis](https://github.com/go-chassis/go-chassis),a high flexible go micro service framework. 
-you can custom your own service mesh by extending lots of components.
+you can custom your own service mesh and API gateway by extending lots of components.
 - Admin API：Listen on an isolated port, expose useful runtime information and metrics.
 - support protocols: http and grpc
 - No IP tables forwarding: Mesher leverage 
@@ -58,7 +58,6 @@ it will build binary and docker image
 - tar file: release/mesher-latest-linux-amd64.tar
 - docker image name: servicecomb/mesher-sidecar:latest
 
-# Documentations
 # Documentations
 You can see more documentations in [here](https://mesher.readthedocs.io/en/latest/), 
 this online doc is for latest version of mesher, if you want to see your version's doc,

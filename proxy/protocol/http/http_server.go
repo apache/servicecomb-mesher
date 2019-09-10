@@ -18,24 +18,26 @@
 package http
 
 import (
+	"context"
 	"crypto/tls"
 	"errors"
 	"fmt"
-	"github.com/apache/servicecomb-mesher/proxy/common"
-	"github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/proxy"
-	"github.com/apache/servicecomb-mesher/proxy/resolver"
+	"github.com/apache/servicecomb-mesher/proxy/ingress"
 	"net"
 	"net/http"
 	"strings"
 
-	"context"
+	"github.com/apache/servicecomb-mesher/proxy/common"
+	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/runtime"
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/proxy"
+	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	chassisCom "github.com/go-chassis/go-chassis/core/common"
 	chassisConfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/server"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
+	chassisRuntime "github.com/go-chassis/go-chassis/pkg/runtime"
 	"github.com/go-mesh/openlogging"
 )
 
@@ -75,11 +77,11 @@ func (hs *httpServer) Start() error {
 		return fmt.Errorf("only support ipv4, input is [%s]", hs.opts.Address)
 	}
 
-	switch runtime.Mode {
-	case common.ModeSidecar:
+	switch runtime.Role {
+	case common.RoleSidecar:
 		err = hs.startSidecar(host, port)
-	case common.ModePerHost:
-		err = hs.startPerHost()
+	default:
+		err = hs.startCommonProxy()
 	}
 	if err != nil {
 		return err
@@ -139,20 +141,22 @@ func (hs *httpServer) startSidecar(host, port string) error {
 	return nil
 }
 
-func (hs *httpServer) startPerHost() error {
-	sslTag := genTag(common.ComponentName, chassisCom.Provider)
+func (hs *httpServer) startCommonProxy() error {
+	if err := ingress.Init(); err != nil {
+		return err
+	}
 	mesherTLSConfig, mesherSSLConfig, err := chassisTLS.GetTLSConfigByService(
-		common.ComponentName, "", chassisCom.Provider)
+		chassisRuntime.ServiceName, "rest", chassisCom.Provider)
 	if err != nil {
 		if !chassisTLS.IsSSLConfigNotExist(err) {
 			return err
 		}
 	} else {
-		lager.Logger.Warnf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
-			sslTag, mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin)
+		lager.Logger.Warnf("TLS mode, verify peer: %t, cipher plugin: %s.",
+			mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin)
 	}
 
-	err = hs.listenAndServe(hs.opts.Address, mesherTLSConfig, http.HandlerFunc(LocalRequestHandler))
+	err = hs.listenAndServe(hs.opts.Address, mesherTLSConfig, http.HandlerFunc(HandleIngressTraffic))
 	if err != nil {
 		return err
 	}
@@ -165,6 +169,7 @@ func (hs *httpServer) listenAndServe(addr string, t *tls.Config, h http.Handler)
 		return err
 	}
 	if t != nil {
+		openlogging.Info("run as https")
 		lnTLS := tls.NewListener(ln, t)
 		ln = lnTLS
 	}
@@ -181,7 +186,7 @@ func (hs *httpServer) listenAndServe(addr string, t *tls.Config, h http.Handler)
 }
 
 func (hs *httpServer) Stop() error {
-	//go 1.8+ drain connections before stop server
+	//go 1.8+ drain connections handleIncomingTraffic stop server
 	if hs.server == nil {
 		openlogging.Info("http server don't need to be stopped")
 		return nil

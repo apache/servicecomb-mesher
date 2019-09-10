@@ -26,12 +26,13 @@ import (
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/client/chassis"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/server"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/simpleRegistry"
-
-	_ "github.com/go-chassis/go-chassis/configcenter" //use config center
+	// config server
+	_ "github.com/go-chassis/go-chassis-config/servicecombkie"
 	//protocols
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/grpc"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/http"
-
+	//ingress rule fetcher
+	_ "github.com/apache/servicecomb-mesher/proxy/ingress/servicecomb"
 	"github.com/apache/servicecomb-mesher/proxy/server"
 
 	_ "github.com/apache/servicecomb-mesher/proxy/pkg/egress/archaius"
