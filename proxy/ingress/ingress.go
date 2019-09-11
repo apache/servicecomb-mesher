@@ -15,51 +15,42 @@
  * limitations under the License.
  */
 
-package util
+package ingress
 
 import (
-	"github.com/apache/servicecomb-mesher/proxy/common"
+	"errors"
+	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/go-chassis/go-chassis/core/invocation"
+	"github.com/go-chassis/go-archaius"
 )
 
-//EqualPolicy is a function
-func EqualPolicy(inv *invocation.Invocation, p *config.Policy) bool {
-	if inv.MicroServiceName != p.Destination {
-		return false
-	}
-	for k, v := range p.Tags {
-		if k == common.BuildInTagApp {
-			if v == "" {
-				v = common.DefaultApp
-			}
-			if v != inv.RouteTags.AppID() {
-				return false
-			}
-			continue
-		}
-		if k == common.BuildInTagVersion {
-			if v == "" {
-				v = common.DefaultVersion
-			}
-			if v != inv.RouteTags.Version() {
-				return false
-			}
-			continue
-		}
-		t, ok := inv.Metadata[k]
-		if !ok {
-			return false
-		}
-		if _, ok := t.(string); !ok {
-			return false
-		}
-	}
-	for k, v := range inv.Metadata {
-		if v != p.Tags[k] {
-			return false
-		}
-	}
-	return true
+//error in ingress package
+var (
+	ErrNotMatch = errors.New("no matching rule")
+)
+var plugin = make(map[string]func() (RuleFetcher, error))
 
+//RuleFetcher query ingress rule
+type RuleFetcher interface {
+	Fetch(protocol, host, apiPath string, headers map[string][]string) (*config.IngressRule, error)
+}
+
+//DefaultFetcher fetch config
+var DefaultFetcher RuleFetcher
+
+//InstallPlugin install implementation
+func InstallPlugin(name string, f func() (RuleFetcher, error)) {
+	plugin[name] = f
+}
+
+//Init initialize
+func Init() error {
+	t := archaius.GetString("mesher.ingress.type", "servicecomb")
+	f, ok := plugin[t]
+	if !ok {
+		return fmt.Errorf("do not support [%s]", t)
+	}
+	var err error
+	DefaultFetcher, err = f()
+	return err
 }

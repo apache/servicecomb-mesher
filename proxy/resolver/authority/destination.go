@@ -29,16 +29,15 @@ type GRPCDefaultDestinationResolver struct {
 }
 
 //Resolve resolves service name
-func (dr *GRPCDefaultDestinationResolver) Resolve(sourceAddr string, header map[string]string, rawURI string, destinationName *string) (string, error) {
+func (dr *GRPCDefaultDestinationResolver) Resolve(sourceAddr, host, rawURI string, header map[string]string) (string, string, error) {
 	s := strings.Split(rawURI, ":")
 	if len(s) != 2 {
 		err := fmt.Errorf("can not parse [%s]", rawURI)
 		openlogging.Error(err.Error())
-		return "", err
+		return "", "", err
 	}
 
-	*destinationName = s[0]
-	return s[1], nil
+	return s[0], s[1], nil
 }
 
 //New return return dr

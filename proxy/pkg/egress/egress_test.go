@@ -19,7 +19,11 @@ package egress_test
 
 import (
 	"fmt"
+	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
+	"github.com/stretchr/testify/assert"
+	"io"
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
@@ -36,9 +40,21 @@ import (
 func BenchmarkMatch(b *testing.B) {
 	lager.Initialize("", "DEBUG", "",
 		"size", true, 1, 10, 7)
-
-	gopath := os.Getenv("GOPATH")
-	os.Setenv("CHASSIS_HOME", gopath+"/src/github.com/apache/servicecomb-mesher")
+	chassis := []byte(`
+cse:
+  service:
+    registry:
+      #disabled: false           optional:禁用注册发现选项，默认开始注册发现
+      type: servicecenter           #optional:可选zookeeper/servicecenter，zookeeper供中软使用，不配置的情况下默认为servicecenter
+      scope: full                   #optional:scope不为full时，只允许在本app间访问，不允许跨app访问；为full就是注册时允许跨app，并且发现本租户全部微服务
+      address: http://127.0.0.1:30100
+      #register: manual          optional：register不配置时默认为自动注册，可选参数有自动注册auto和手动注册manual
+  
+`)
+	d, _ := os.Getwd()
+	filename1 := filepath.Join(d, "chassis.yaml")
+	f1, err := os.OpenFile(filename1, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0666)
+	_, err = f1.Write(chassis)
 	cmd.Init()
 	config.Init()
 	mesherconfig.Init()
@@ -68,7 +84,7 @@ egressRule:
           protocol: HTTP`
 
 	ss := mesherconfig.EgressConfig{}
-	err := yaml.Unmarshal([]byte(yamlContent), &ss)
+	err = yaml.Unmarshal([]byte(yamlContent), &ss)
 	if err != nil {
 		fmt.Println("unmarshal failed")
 	}
@@ -84,12 +100,44 @@ func TestMatch(t *testing.T) {
 	lager.Initialize("", "DEBUG", "",
 		"size", true, 1, 10, 7)
 
-	gopath := os.Getenv("GOPATH")
-	os.Setenv("CHASSIS_HOME", gopath+"/src/github.com/apache/servicecomb-mesher")
+	b := []byte(`
+cse:
+  service:
+    registry:
+      #disabled: false           optional:禁用注册发现选项，默认开始注册发现
+      type: servicecenter           #optional:可选zookeeper/servicecenter，zookeeper供中软使用，不配置的情况下默认为servicecenter
+      scope: full                   #optional:scope不为full时，只允许在本app间访问，不允许跨app访问；为full就是注册时允许跨app，并且发现本租户全部微服务
+      address: http://127.0.0.1:30100
+      #register: manual          optional：register不配置时默认为自动注册，可选参数有自动注册auto和手动注册manual
+  
+`)
+	d, _ := os.Getwd()
+	filename1 := filepath.Join(d, "chassis.yaml")
+	f1, err := os.OpenFile(filename1, os.O_RDWR|os.O_TRUNC|os.O_CREATE, 0666)
+	assert.NoError(t, err)
+	_, err = f1.Write(b)
+	b = []byte(`
+---
+#微服务的私有属性
+#APPLICATION_ID: CSE #optional
+service_description:
+  name: Client
+  #version: 0.1 #optional
+
+`)
+	d, _ = os.Getwd()
+	filename1 = filepath.Join(d, "microservice.yaml")
+	os.Remove(filename1)
+	f1, err = os.Create(filename1)
+	assert.NoError(t, err)
+	defer f1.Close()
+	_, err = io.WriteString(f1, string(b))
+	assert.NoError(t, err)
+	os.Setenv(fileutil.ChassisConfDir, d)
 	cmd.Init()
-	config.Init()
-	mesherconfig.Init()
-	egress.Init()
+	err = config.Init()
+	err = mesherconfig.Init()
+	err = egress.Init()
 	//control.Init()
 	var yamlContent = `---
 egress:
@@ -111,20 +159,20 @@ egressRule:
           protocol: HTTP`
 
 	ss := mesherconfig.EgressConfig{}
-	err := yaml.Unmarshal([]byte(yamlContent), &ss)
+	err = yaml.Unmarshal([]byte(yamlContent), &ss)
 	if err != nil {
 		fmt.Println("unmarshal failed")
 	}
 	archaius.SetEgressRule(ss.Destinations)
 
 	myString := "www.google.com"
-	b, _ := egress.Match(myString)
-	if b == false {
+	c, _ := egress.Match(myString)
+	if c == false {
 		t.Errorf("Expected true but got false")
 	}
 	myString = "*.yahoo.com"
-	b, _ = egress.Match(myString)
-	if b == false {
+	c, _ = egress.Match(myString)
+	if c == false {
 		t.Errorf("Expected true but got false")
 	}
 }

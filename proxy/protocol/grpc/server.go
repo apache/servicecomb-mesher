@@ -72,10 +72,10 @@ func (hs *httpServer) Start() error {
 		return fmt.Errorf("only support ipv4, input is [%s]", hs.opts.Address)
 	}
 
-	switch runtime.Mode {
-	case common.ModeSidecar:
+	switch runtime.Role {
+	case common.RoleSidecar:
 		err = hs.startSidecar(host, port)
-	case common.ModePerHost:
+	default:
 		err = hs.startPerHost()
 	}
 

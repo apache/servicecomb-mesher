@@ -18,6 +18,10 @@
 package config
 
 import (
+	"io/ioutil"
+	"os"
+	"path/filepath"
+
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
 	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/go-chassis/go-archaius"
@@ -28,9 +32,6 @@ import (
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
 	"github.com/go-mesh/openlogging"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
-	"os"
-	"path/filepath"
 )
 
 //Constant for mesher conf file
@@ -88,6 +89,16 @@ func InitProtocols() error {
 //Init reads config and initiates
 func Init() error {
 	mesherConfig = &MesherConfig{}
+	egressConfig = &EgressConfig{}
+	p, err := GetConfigFilePath(ConfFile)
+	if err != nil {
+		return err
+	}
+	err = archaius.AddFile(p)
+	if err != nil {
+		return err
+	}
+
 	contents, err := GetConfigContents(ConfFile)
 	if err != nil {
 		return err
@@ -96,7 +107,6 @@ func Init() error {
 		return err
 	}
 
-	egressConfig = &EgressConfig{}
 	egressContents, err := GetConfigContents(EgressConfFile)
 	if err != nil {
 		return err

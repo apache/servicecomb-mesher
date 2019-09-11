@@ -13,6 +13,7 @@ Welcome to Mesher's documentation!
    intro
    get-started
    configuration
+   development
    protocols
    istio-guides
    sidecar

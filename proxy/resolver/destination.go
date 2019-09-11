@@ -43,34 +43,34 @@ var ErrUnknownResolver = errors.New("unknown Destination Resolver")
 
 //DestinationResolver is a interface with Resolve method
 type DestinationResolver interface {
-	Resolve(sourceAddr string, header map[string]string, rawURI string, destinationName *string) (string, error)
+	Resolve(remoteIP, host, rawURI string, header map[string]string) (string, string, error)
 }
 
 //DefaultDestinationResolver is a struct
+//mesher as sidecar must use DefaultDestinationResolver
 type DefaultDestinationResolver struct {
 }
 
 //Resolve resolves service's endpoint
 //service may have multiple port for same protocol
-func (dr *DefaultDestinationResolver) Resolve(sourceAddr string, header map[string]string, rawURI string, destinationName *string) (string, error) {
+func (dr *DefaultDestinationResolver) Resolve(remoteIP, host, rawURI string, header map[string]string) (string, string, error) {
 	u, err := url.Parse(rawURI)
 	if err != nil {
 		openlogging.Error("Can not parse url: " + err.Error())
-		return "", err
+		return "", "", err
 	}
 
 	if u.Host == "" {
-		return "", errors.New(`Invalid uri, please check:
+		return "", "", errors.New(`Invalid uri, please check:
 1, For provider, mesher listens on external ip
 2, Set http_proxy as mesher address, before sending request`)
 	}
 
 	if u.Host == SelfEndpoint {
-		return "", errors.New(`uri format must be: http://serviceName/api`)
+		return "", "", errors.New(`uri format must be: http://serviceName/api`)
 	}
 
-	*destinationName = u.Hostname()
-	return u.Port(), nil
+	return u.Hostname(), u.Port(), nil
 }
 
 //New function returns new DefaultDestinationResolver struct object

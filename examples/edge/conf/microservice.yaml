@@ -1,0 +1,3 @@
+service_description:
+  name: mesher-edge
+  version: 0.0.1

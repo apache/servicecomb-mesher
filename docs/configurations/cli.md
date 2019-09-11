@@ -13,7 +13,7 @@ mesher --config=mesher.yaml --service-ports=rest:8080
 
 
 **--mode**
->*(optional, string)* mesher has 2 work mode, sidecar and per-host, default is sidecar
+>*(optional, string)* mesher has 2 work mode, sidecar and edge, default is sidecar
 
 
 **--service-ports**

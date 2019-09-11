@@ -106,12 +106,12 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Host == "" {
 		r.URL.Host = r.Host
 	}
-	port, err := dr.Resolve(source, h, r.URL.String(), &inv.MicroServiceName)
+	serviceName, port, err := dr.Resolve(source, "", r.URL.String(), h)
 	if err != nil {
 		WriteErrorResponse(inv, w, r, http.StatusBadRequest, err)
 		return
 	}
-
+	inv.MicroServiceName = serviceName
 	if port != "" {
 		h[XForwardedPort] = port
 	}

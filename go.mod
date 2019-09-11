@@ -2,20 +2,22 @@ module github.com/apache/servicecomb-mesher
 
 require (
 	github.com/Shopify/toxiproxy v2.1.3+incompatible // indirect
+	github.com/apache/servicecomb-kie v0.1.0 // indirect
 	github.com/emicklei/go-restful-swagger12 v0.0.0-20170926063155-7524189396c6 // indirect
 	github.com/envoyproxy/go-control-plane v0.6.0
-	github.com/ghodss/yaml v1.0.0 // indirect
+	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.0.0-20190621030543-c3b63f787f4c
 	github.com/go-chassis/go-archaius v0.20.0
-	github.com/go-chassis/go-chassis v1.6.1
+	github.com/go-chassis/go-chassis v1.7.1-0.20190903133217-e4a22c998fe1
+	github.com/go-chassis/go-chassis-config v0.10.0
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
-	github.com/go-mesh/openlogging v1.0.0
+	github.com/go-logfmt/logfmt v0.4.0 // indirect
+	github.com/go-mesh/openlogging v1.0.1-0.20181205082104-3d418c478b2d
 	github.com/gogo/googleapis v1.1.0 // indirect
 	github.com/gogo/protobuf v1.2.0
 	github.com/google/gofuzz v0.0.0-20170612174753-24818f796faf // indirect
 	github.com/imdario/mergo v0.3.6 // indirect
 	github.com/lyft/protoc-gen-validate v0.0.11 // indirect
-	github.com/onsi/gomega v1.4.2 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v0.9.1
 	github.com/prometheus/client_model v0.0.0-20190115171406-56726106282f
@@ -23,7 +25,6 @@ require (
 	github.com/stretchr/testify v1.3.0
 	github.com/uber-go/atomic v1.3.2 // indirect
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
-	go.uber.org/atomic v1.3.2 // indirect
 	golang.org/x/net v0.0.0-20190311183353-d8887717615a
 	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
 	google.golang.org/grpc v1.16.0

@@ -95,7 +95,7 @@ func providerPreHandler(req *http.Request) *invocation.Invocation {
 func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	prepareRequest(r)
 	inv := consumerPreHandler(r)
-	source := stringutil.SplitFirstSep(r.RemoteAddr, ":")
+	remoteIP := stringutil.SplitFirstSep(r.RemoteAddr, ":")
 
 	var err error
 	h := make(map[string]string)
@@ -103,12 +103,12 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		h[k] = r.Header.Get(k)
 	}
 	//Resolve Destination
-	port, err := dr.Resolve(source, h, r.URL.String(), &inv.MicroServiceName)
+	destination, port, err := dr.Resolve(remoteIP, r.Host, r.URL.String(), h)
 	if err != nil {
 		handleErrorResponse(inv, w, http.StatusBadRequest, err)
 		return
 	}
-
+	inv.MicroServiceName = destination
 	if port != "" {
 		h[XForwardedPort] = port
 	}

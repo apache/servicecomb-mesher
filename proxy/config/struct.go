@@ -19,6 +19,7 @@ package config
 
 //MesherConfig has all mesher config
 type MesherConfig struct {
+	Mesher      Mesher         `yaml:"mesher"`
 	PProf       *PProf         `yaml:"pprof"`
 	Plugin      *Plugin        `yaml:"plugin"`
 	Admin       Admin          `yaml:"admin"`
