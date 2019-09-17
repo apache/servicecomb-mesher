@@ -29,8 +29,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 func TestAdaptEndpoints(t *testing.T) {
-	lager.Initialize("", "INFO", "", "size", true, 1, 10, 7)
 	protoMap := make(map[string]model.Protocol)
 	config.GlobalDefinition = &model.GlobalCfg{
 		Cse: model.CseStruct{

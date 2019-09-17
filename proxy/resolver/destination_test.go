@@ -33,30 +33,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// Testcase is trying to create files inside /tmp/build folder which is dynamic, so in travis it is not possible to create folder in prior, so can't test this case in travis
-/*func TestInit(t *testing.T) {
-	s, _ := fileutil.GetWorkDir()
-	os.Setenv(fileutil.ChassisHome, s)
-	chassisConf := filepath.Join(os.Getenv(fileutil.ChassisHome), "conf")
-	os.MkdirAll(chassisConf, 0600)
-	f, err := os.Create(filepath.Join(chassisConf, "chassis.yaml"))
-	t.Log(f.Name())
-	assert.NoError(t, err)
-	f, err = os.Create(filepath.Join(chassisConf, "microservice.yaml"))
-	t.Log(f.Name())
-	assert.NoError(t, err)
-	err = cConfig.Init()
-	err = cmd.Init()
-	lager.Initialize("", "INFO", "", "size", true, 1, 10, 7)
-	archaius.Init()
-	config.Init()
-	err = Init()
-	assert.NoError(t, err)
-}*/
-
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 func TestResolve(t *testing.T) {
-	lager.Initialize("", "DEBUG", "",
-		"size", true, 1, 10, 7)
 	d := &DefaultDestinationResolver{}
 	header := http.Header{}
 	header.Add("cookie", "user=jason")
@@ -94,8 +74,6 @@ func TestGetDestinationResolver(t *testing.T) {
 }
 
 func BenchmarkDefaultDestinationResolver_Resolve(b *testing.B) {
-	lager.Initialize("", "DEBUG", "",
-		"size", true, 1, 10, 7)
 	d := &DefaultDestinationResolver{}
 	for i := 0; i < b.N; i++ {
 		d.Resolve("abc", "", "http://127.0.0.1:80/test", map[string]string{})

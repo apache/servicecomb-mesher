@@ -37,9 +37,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 func BenchmarkMatch(b *testing.B) {
-	lager.Initialize("", "DEBUG", "",
-		"size", true, 1, 10, 7)
 	chassis := []byte(`
 cse:
   service:
@@ -97,8 +98,6 @@ egressRule:
 }
 
 func TestMatch(t *testing.T) {
-	lager.Initialize("", "DEBUG", "",
-		"size", true, 1, 10, 7)
 
 	b := []byte(`
 cse:

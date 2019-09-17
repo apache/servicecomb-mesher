@@ -35,6 +35,9 @@ var (
 	mockError = errors.New("test mock error")
 )
 
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 func TestGetMesherHealth(t *testing.T) {
 	testGetServiceStatusSuccess(t)
 	testGetServiceStatusFailed(t)
@@ -48,7 +51,6 @@ func TestGetMesherHealth(t *testing.T) {
 }
 
 func testInit() {
-	lager.Initialize("", "INFO", "", "size", true, 1, 10, 7)
 	p := filepath.Join(os.Getenv("GOPATH"), "src", "github.com", "go-chassis", "mesher", "conf")
 	os.Setenv("CHASSIS_CONF_DIR", p)
 	err := config.Init()

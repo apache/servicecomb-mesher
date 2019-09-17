@@ -24,7 +24,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/lager"
-	_ "github.com/go-chassis/go-chassis/core/router/cse"
+	_ "github.com/go-chassis/go-chassis/core/router/servicecomb"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 )
@@ -78,10 +78,12 @@ routeRule:
         weight: 100
 `
 
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 func TestInit(t *testing.T) {
 	t.Log("testing mesher admin protocol when protocol URI is valid")
 	assert := assert.New(t)
-	lager.Initialize("", "INFO", "", "size", true, 1, 10, 7)
 	mesherConfig := new(mesherconfig.MesherConfig)
 	yaml.Unmarshal([]byte(mesherConf), mesherConfig)
 	mesherconfig.SetConfig(mesherConfig)

@@ -29,8 +29,10 @@ import (
 	"time"
 )
 
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 func TestHttpCheck(t *testing.T) {
-	lager.Initialize("", "DEBUG", "", "size", true, 1, 10, 7)
 	server := &http.Server{
 		Addr: "127.0.0.1:3000",
 	}
@@ -113,7 +115,6 @@ func TestHttpCheck(t *testing.T) {
 }
 
 func TestParseConfig(t *testing.T) {
-	lager.Initialize("", "DEBUG", "", "size", true, 1, 10, 7)
 	check := &config.HealthCheck{
 		Port: "8080",
 		URI:  "/health",
@@ -139,7 +140,6 @@ func TestParseConfig(t *testing.T) {
 	assert.Error(t, err)
 }
 func TestL4Check(t *testing.T) {
-	lager.Initialize("", "DEBUG", "", "size", true, 1, 10, 7)
 	err := health.L4Check("127.0.0.1:3000")
 	assert.Error(t, err)
 	net.Listen("tcp", "127.0.0.1:3000")

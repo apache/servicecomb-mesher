@@ -2,13 +2,12 @@ module github.com/apache/servicecomb-mesher
 
 require (
 	github.com/Shopify/toxiproxy v2.1.3+incompatible // indirect
-	github.com/apache/servicecomb-kie v0.1.0 // indirect
 	github.com/emicklei/go-restful-swagger12 v0.0.0-20170926063155-7524189396c6 // indirect
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.0.0-20190621030543-c3b63f787f4c
 	github.com/go-chassis/go-archaius v0.20.0
-	github.com/go-chassis/go-chassis v1.7.1-0.20190903133217-e4a22c998fe1
+	github.com/go-chassis/go-chassis v1.7.2-0.20190917011915-d49fa9cdd27d
 	github.com/go-chassis/go-chassis-config v0.10.0
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
@@ -16,11 +15,14 @@ require (
 	github.com/gogo/googleapis v1.1.0 // indirect
 	github.com/gogo/protobuf v1.2.0
 	github.com/google/gofuzz v0.0.0-20170612174753-24818f796faf // indirect
+	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
 	github.com/imdario/mergo v0.3.6 // indirect
 	github.com/lyft/protoc-gen-validate v0.0.11 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v0.9.1
 	github.com/prometheus/client_model v0.0.0-20190115171406-56726106282f
+	github.com/prometheus/procfs v0.0.0-20190117184657-bf6a532e95b1 // indirect
+	github.com/smartystreets/assertions v0.0.0-20190116191733-b6c0e53d7304 // indirect
 	github.com/spf13/pflag v1.0.3 // indirect
 	github.com/stretchr/testify v1.3.0
 	github.com/uber-go/atomic v1.3.2 // indirect
