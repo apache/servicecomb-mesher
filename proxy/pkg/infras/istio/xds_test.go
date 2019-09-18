@@ -18,13 +18,13 @@
 package pilotv2
 
 import (
+	"github.com/go-chassis/go-chassis/core/lager"
 	"os"
 	"os/user"
 	"testing"
 	"time"
 
 	apiv2 "github.com/envoyproxy/go-control-plane/envoy/api/v2"
-	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/pkg/util/iputil"
 )
 
@@ -46,8 +46,10 @@ var (
 	err error
 )
 
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 func TestXdsClient_CDS(t *testing.T) {
-	lager.Initialize("", "DEBUG", "", "size", true, 1, 10, 7)
 	// Get kube config path and local ip
 	if KUBE_CONFIG := os.Getenv("KUBE_CONFIG"); KUBE_CONFIG != "" {
 		KubeConfig = KUBE_CONFIG

@@ -48,7 +48,6 @@ func TestPortRewriteHandler_ValidEndpoint(t *testing.T) {
 		assert.NoError(t, r.Err)
 		return r.Err
 	})
-	c.Reset()
 }
 
 func TestPortRewriteHandler_InValidEndpoint(t *testing.T) {
@@ -72,7 +71,6 @@ func TestPortRewriteHandler_InValidEndpoint(t *testing.T) {
 		return r.Err
 	})
 
-	c.Reset()
 }
 
 func TestPortRewriteHandler_Names(t *testing.T) {

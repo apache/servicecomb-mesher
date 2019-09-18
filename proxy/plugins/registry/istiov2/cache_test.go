@@ -44,8 +44,10 @@ var (
 	err              error
 )
 
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 func TestNewCacheManager2(t *testing.T) {
-	lager.Initialize("", "DEBUG", "", "size", true, 1, 10, 7)
 	// Get kube config path and local ip
 	if KUBE_CONFIG := os.Getenv("KUBE_CONFIG"); KUBE_CONFIG != "" {
 		KubeConfig = KUBE_CONFIG

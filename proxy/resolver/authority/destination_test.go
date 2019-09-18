@@ -27,9 +27,10 @@ import (
 	"net/http"
 )
 
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 func TestResolve(t *testing.T) {
-	lager.Initialize("", "DEBUG", "",
-		"size", true, 1, 10, 7)
 	d := &authority.GRPCDefaultDestinationResolver{}
 	header := http.Header{}
 	header.Add("cookie", "user=jason")
@@ -56,8 +57,6 @@ func TestResolve(t *testing.T) {
 }
 
 func BenchmarkDefaultDestinationResolver_Resolve(b *testing.B) {
-	lager.Initialize("", "DEBUG", "",
-		"size", true, 1, 10, 7)
 	d := &authority.GRPCDefaultDestinationResolver{}
 	for i := 0; i < b.N; i++ {
 		d.Resolve("abc", "", "127.0.0.1:80", map[string]string{})
