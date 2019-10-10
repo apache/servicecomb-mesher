@@ -1,0 +1,14 @@
+{
+  "name": "httpserver_webapp",
+  "version": "1.0.0",
+  "description": "webapp server",
+  "main": "httpserver_webapp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "servicecomb",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}
