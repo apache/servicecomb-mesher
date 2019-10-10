@@ -23,13 +23,13 @@ import (
 	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
+	chassisRuntime "github.com/go-chassis/go-chassis/pkg/runtime"
 	"net"
 	"net/http"
 	"strings"
 
 	"github.com/apache/servicecomb-mesher/proxy/pkg/runtime"
 	chassisCom "github.com/go-chassis/go-chassis/core/common"
-	chassisConfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/server"
 	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
@@ -113,13 +113,13 @@ func (hs *httpServer) startSidecar(host, port string) error {
 		return nil
 	default:
 		serverTLSConfig, serverSSLConfig, serverErr := chassisTLS.GetTLSConfigByService(
-			chassisConfig.SelfServiceName, chassisCom.ProtocolRest, chassisCom.Provider)
+			chassisRuntime.ServiceName, chassisCom.ProtocolRest, chassisCom.Provider)
 		if serverErr != nil {
 			if !chassisTLS.IsSSLConfigNotExist(serverErr) {
 				return serverErr
 			}
 		} else {
-			sslTag := genTag(chassisConfig.SelfServiceName, chassisCom.ProtocolRest, chassisCom.Provider)
+			sslTag := genTag(chassisRuntime.ServiceName, chassisCom.ProtocolRest, chassisCom.Provider)
 			lager.Logger.Warnf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
 				sslTag, serverSSLConfig.VerifyPeer, serverSSLConfig.CipherPlugin)
 		}

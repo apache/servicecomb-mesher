@@ -19,6 +19,7 @@ package dubboproxy
 
 import (
 	"fmt"
+	"github.com/go-chassis/go-chassis/pkg/runtime"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -160,8 +161,8 @@ func getJVMType(v schema.MethParam, arg *util.Argument, bytesTmp [][]byte, query
 
 func preHandleToDubbo(req *http.Request) (*invocation.Invocation, string) {
 	inv := new(invocation.Invocation)
-	inv.MicroServiceName = chassisconfig.SelfServiceName
-	inv.RouteTags = utiltags.NewDefaultTag(chassisconfig.SelfVersion, chassisconfig.GlobalDefinition.AppID)
+	inv.MicroServiceName = runtime.ServiceName
+	inv.RouteTags = utiltags.NewDefaultTag(runtime.Version, chassisconfig.GlobalDefinition.AppID)
 
 	inv.Protocol = "dubbo"
 	inv.URLPathFormat = req.URL.Path

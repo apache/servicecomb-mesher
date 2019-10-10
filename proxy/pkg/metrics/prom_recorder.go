@@ -19,7 +19,6 @@ package metrics
 
 import (
 	"errors"
-	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"sync"
 	"time"
@@ -27,59 +26,41 @@ import (
 
 var onceEnable sync.Once
 
-type promRecorder struct {
+//PromRecorder record metrics
+type PromRecorder struct {
 	LabelNames []string
 }
 
 //NewPromRecorder return a prom recorder
-func NewPromRecorder(opts *Options) (Recorder, error) {
-	promConfig := getPrometheusSinker(getSystemPrometheusRegistry())
+func NewPromRecorder(opts *Options) (*PromRecorder, error) {
 	if opts != nil {
-		if opts.EnableGoRuntimeMetrics {
-			onceEnable.Do(func() {
-				promConfig.PromRegistry.MustRegister(prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}))
-				promConfig.PromRegistry.MustRegister(prometheus.NewGoCollector())
-			})
-		}
-		return &promRecorder{LabelNames: opts.LabelNames}, nil
+		return &PromRecorder{LabelNames: opts.LabelNames}, nil
 	}
 	return nil, errors.New("options can not be nil")
 }
 
-//GetLN return label names based on options
-func (e *promRecorder) GetLN(opts *RecordOptions) (ln []string) {
-	ln = e.LabelNames
-	if opts != nil && len(opts.LabelNames) != 0 {
-		ln = opts.LabelNames
-	}
-	return
-}
-
 //RecordStatus record different metrics based on status
-func (e *promRecorder) RecordStatus(LabelValues map[string]string, statusCode int, opts *RecordOptions) {
-	ln := e.GetLN(opts)
+func (e *PromRecorder) RecordStatus(LabelValues map[string]string, statusCode int) {
 	if statusCode >= http.StatusBadRequest && statusCode <= http.StatusUnavailableForLegalReasons {
-		DefaultPrometheusExporter.Count(LError4XX, ln, LabelValues)
-		DefaultPrometheusExporter.Count(LTotalFailures, ln, LabelValues)
+		DefaultPrometheusExporter.Count(LError4XX, e.LabelNames, LabelValues)
+		DefaultPrometheusExporter.Count(LTotalFailures, e.LabelNames, LabelValues)
 	} else if statusCode >= http.StatusInternalServerError && statusCode <= http.StatusNetworkAuthenticationRequired {
-		DefaultPrometheusExporter.Count(LError5XX, ln, LabelValues)
-		DefaultPrometheusExporter.Count(LTotalFailures, ln, LabelValues)
+		DefaultPrometheusExporter.Count(LError5XX, e.LabelNames, LabelValues)
+		DefaultPrometheusExporter.Count(LTotalFailures, e.LabelNames, LabelValues)
 	} else if statusCode >= http.StatusOK && statusCode <= http.StatusIMUsed {
-		DefaultPrometheusExporter.Count(LTotalSuccess, ln, LabelValues)
+		DefaultPrometheusExporter.Count(LTotalSuccess, e.LabelNames, LabelValues)
 	}
-	DefaultPrometheusExporter.Count(LTotalRequest, ln, LabelValues)
+	DefaultPrometheusExporter.Count(LTotalRequest, e.LabelNames, LabelValues)
 }
 
 //RecordLatency record operation latency
-func (e *promRecorder) RecordLatency(LabelValues map[string]string, latency float64, opts *RecordOptions) {
-	ln := e.GetLN(opts)
-	DefaultPrometheusExporter.Summary(LRequestLatencySeconds, latency, ln, LabelValues)
+func (e *PromRecorder) RecordLatency(LabelValues map[string]string, latency float64) {
+	DefaultPrometheusExporter.Summary(LRequestLatencySeconds, latency, e.LabelNames, LabelValues)
 
 }
 
 //RecordStartTime save start time
-func (e *promRecorder) RecordStartTime(LabelValues map[string]string, start time.Time, opts *RecordOptions) {
-	ln := e.GetLN(opts)
-	DefaultPrometheusExporter.Gauge(LStartTime, float64(start.Unix()), ln, LabelValues)
+func (e *PromRecorder) RecordStartTime(LabelValues map[string]string, start time.Time) {
+	DefaultPrometheusExporter.Gauge(LStartTime, float64(start.Unix()), e.LabelNames, LabelValues)
 
 }

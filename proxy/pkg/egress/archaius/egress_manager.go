@@ -18,6 +18,8 @@
 package archaius
 
 import (
+	"github.com/go-chassis/go-archaius/event"
+	"github.com/go-chassis/go-archaius/source/util"
 	"gopkg.in/yaml.v2"
 	"path/filepath"
 	"strings"
@@ -25,8 +27,6 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"github.com/go-chassis/go-archaius"
-	"github.com/go-chassis/go-archaius/core"
-	"github.com/go-chassis/go-archaius/sources/utils"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
 )
@@ -37,7 +37,7 @@ const EgressYaml = "egress.yaml"
 type egressRuleEventListener struct{}
 
 // update egress rule of a service
-func (r *egressRuleEventListener) Event(e *core.Event) {
+func (r *egressRuleEventListener) Event(e *event.Event) {
 	if e == nil {
 		lager.Logger.Warn("Event pointer is nil", nil)
 		return
@@ -76,7 +76,7 @@ func (r *egressRuleEventListener) Event(e *core.Event) {
 // initialize the config mgr and add several sources
 func initEgressManager() error {
 	egressListener := &egressRuleEventListener{}
-	archaius.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), archaius.WithFileHandler(utils.Convert2configMap))
+	archaius.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), archaius.WithFileHandler(util.UseFileNameAsKeyContentAsValue))
 	archaius.RegisterListener(egressListener, ".*")
 
 	return nil

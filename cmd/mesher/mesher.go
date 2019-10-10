@@ -27,7 +27,7 @@ import (
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/server"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/simpleRegistry"
 	// config server
-	_ "github.com/go-chassis/go-chassis-config/servicecombkie"
+	_ "github.com/go-chassis/go-chassis-config/servicecomb"
 	//protocols
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/grpc"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/http"

@@ -36,7 +36,6 @@ import (
 	"github.com/go-chassis/go-chassis/client/rest"
 	"github.com/go-chassis/go-chassis/core/common"
 	chassisCommon "github.com/go-chassis/go-chassis/core/common"
-	chassisconfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-chassis/go-chassis/core/lager"
@@ -223,7 +222,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 		//发送请求
 		//value := ctx.Req.GetAttachment(ProxyTag, "")
 		if !IsProvider { //come from proxyedDubboSvc
-			ctx.Req.SetAttachment(common.HeaderSourceName, chassisconfig.SelfServiceName)
+			ctx.Req.SetAttachment(common.HeaderSourceName, runtime.ServiceName)
 			ctx.Req.SetAttachment(ProxyTag, "true")
 
 			if mesherRuntime.Role == mesherCommon.RoleSidecar {

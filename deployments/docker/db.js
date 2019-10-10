@@ -15,35 +15,15 @@
  * limitations under the License.
  */
 
-package route
-
-import (
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/router"
-)
-
-//Rules is the struct for route rule
-type Rules struct {
-	Destinations map[string][]*config.RouteRule `yaml:"routeRule"`
-}
-
-var routeRules *Rules
-
-//GetServiceRouteRule gets route rule for that service
-func GetServiceRouteRule(serviceName string) []*config.RouteRule {
-	if routeRules != nil {
-		if v, ok := routeRules.Destinations[serviceName]; ok {
-			return v
-		}
-	}
-
-	rules := router.DefaultRouter.FetchRouteRuleByServiceName(serviceName)
-	if routeRules == nil {
-		routeRules = new(Rules)
-	}
-	if routeRules.Destinations == nil {
-		routeRules.Destinations = make(map[string][]*config.RouteRule)
-	}
-	routeRules.Destinations[serviceName] = rules
-	return rules
-}
+db.createUser(
+    {
+        user: "kie",
+        pwd: "123",
+        roles:[
+            {
+                role: "readWrite",
+                db:   "kie"
+            }
+        ]
+    }
+);

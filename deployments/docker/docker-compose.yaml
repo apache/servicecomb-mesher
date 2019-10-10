@@ -1,0 +1,83 @@
+## ---------------------------------------------------------------------------
+## Licensed to the Apache Software Foundation (ASF) under one or more
+## contributor license agreements.  See the NOTICE file distributed with
+## this work for additional information regarding copyright ownership.
+## The ASF licenses this file to You under the Apache License, Version 2.0
+## (the "License"); you may not use this file except in compliance with
+## the License.  You may obtain a copy of the License at
+##
+##      http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+## ---------------------------------------------------------------------------
+version: '3.1'
+services:
+  mongo:
+    image: mongo:3.4
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_DATABASE: kie
+      MONGO_INITDB_ROOT_USERNAME: kie
+      MONGO_INITDB_ROOT_PASSWORD: 123
+    volumes:
+      - ./db.js:/docker-entrypoint-initdb.d/db.js:ro
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: kie
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 123
+  kie:
+    image: servicecomb/kie:latest
+    restart: always
+    ports:
+      - 30110:30110
+    environment:
+      MONGODB_USER: kie
+      MONGODB_PWD: 123
+      MONGODB_ADDR: mongo
+  etcd:
+    image: 'quay.io/coreos/etcd:latest'
+    # restart: always
+    environment:
+      ETCD_ADVERTISE_CLIENT_URLS: http://etcd:2379
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+      ETCD_INITIAL_ADVERTISE_PEER_URLS: http://etcd:2380
+      ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
+      ETCD_INITIAL_CLUSTER: default=http://etcd:2380
+
+  service-center:
+    depends_on:
+      - etcd
+    image: 'servicecomb/service-center:latest'
+    ports:
+      - "30100:30100"
+    environment:
+      BACKEND_ADDRESS: etcd:2379
+
+  scfrontend:
+    depends_on:
+      - service-center
+    image: 'servicecomb/scfrontend:latest'
+    ports:
+      - "30103:30103"
+    environment:
+      SC_ADDRESS: http://service-center:30100
+  mesher-edge:
+    depends_on:
+      - service-center
+      - kie
+    image: 'servicecomb/mesher-edge:latest'
+    ports:
+      - "80:30101"
+    environment:
+      PAAS_CSE_SC_ENDPOINT: service-center:30100
+      PAAS_CSE_CC_ENDPOINT: kie:30110

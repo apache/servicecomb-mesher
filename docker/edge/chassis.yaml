@@ -32,3 +32,9 @@ ssl:
 #  mesher-edge.rest.Provider.certFile: server.crt
 #  mesher-edge.rest.Provider.keyFile: server.key
 #  mesher-edge.rest.Provider.certPwdFile:
+
+#tracing:
+#  enabled: true #enable distribution tracing
+#  collectorType: zipkin       #zipkin: Send tracing info to zipkin server
+#                              #namedPipe: Write tracing info to linux named pipe.
+#  collectorTarget: http://localhost:9411/api/v1/spans #If the collectorType is "zipkin", the target is a zipkin server url, if the collecterType is "file" or "namedPipe", the target is a file path.

@@ -146,7 +146,7 @@ func SetKeyValueByFile(key, f string) string {
 		return ""
 	}
 	contents = string(b)
-	archaius.AddKeyValue(key, contents)
+	archaius.Set(key, contents)
 	return contents
 }
 

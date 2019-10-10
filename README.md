@@ -58,6 +58,19 @@ it will build binary and docker image
 - tar file: release/mesher-latest-linux-amd64.tar
 - docker image name: servicecomb/mesher-sidecar:latest
 
+#### Build mesher edge service
+```shell script
+sudo docker build -t servicecomb/mesher-edge -f docker/edge/Dockerfile .
+```
+
+### How to run
+#### edge service
+```shell script
+sudo docker run -e PAAS_CSE_SC_ENDPOINT="" \
+-e PAAS_CSE_CC_ENDPOINT="" \
+-p 80:30101 \
+--name mesher-edge servicecomb/mesher-edge
+```
 # Documentations
 You can see more documentations in [here](https://mesher.readthedocs.io/en/latest/), 
 this online doc is for latest version of mesher, if you want to see your version's doc,

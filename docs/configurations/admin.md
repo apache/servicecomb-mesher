@@ -16,13 +16,10 @@ tune admin api in mesher.yaml
 ```yaml
 admin: 
   enable: true
-  goRuntimeMetrics : true # enable metrics
 ```
 
 
 **admin.enable**
 >*(optional, bool)* default is false
 
-**admin.goRuntimeMetrics**
->*(optional, bool)* default is false, enable to expose go runtime metrics in /v1/mesher/metrics
 
