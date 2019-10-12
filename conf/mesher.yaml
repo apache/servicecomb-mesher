@@ -21,3 +21,8 @@ admin: #admin API
 #    match:
 #      status: 200
 #      body: ok
+
+#appPerfManage:
+#  apmName: skywalking
+#  enable: true
+#  serverUri: 192.168.88.64:11800

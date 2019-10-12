@@ -24,13 +24,13 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
 	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/apache/servicecomb-mesher/proxy/register"
-	"github.com/apache/servicecomb-mesher/proxy/resolver"
-
 	"github.com/apache/servicecomb-mesher/proxy/control"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/apm"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/metrics"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/runtime"
+	"github.com/apache/servicecomb-mesher/proxy/register"
+	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	"github.com/apache/servicecomb-mesher/proxy/resource/v1"
 	"github.com/apache/servicecomb-mesher/proxy/resource/v1/version"
 	"github.com/go-chassis/go-chassis"
@@ -56,6 +56,7 @@ func Start() error {
 		return err
 	}
 	metrics.Init()
+	apm.Init()
 	if err := v1.Init(); err != nil {
 		log.Println("Error occurred in starting admin server", err)
 	}

@@ -27,6 +27,7 @@ import (
 	"time"
 
 	"github.com/apache/servicecomb-mesher/proxy/common"
+	"github.com/apache/servicecomb-mesher/proxy/pkg/apm"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/metrics"
 	"github.com/apache/servicecomb-mesher/proxy/protocol"
@@ -149,6 +150,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		metrics.RecordLatency(serviceLabelValues, timeTaken, nil)
 	}(time.Now())
 	var invRsp *invocation.Response
+	spans, err := apm.CreateSpans(inv)
 	c.Next(inv, func(ir *invocation.Response) error {
 		//Send the request to the destination
 		invRsp = ir
@@ -162,6 +164,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		lager.Logger.Error("Handle request failed: " + err.Error())
 		return
 	}
+	apm.EndSpans(spans, invRsp.Status)
 	RecordStatus(inv, resp.StatusCode)
 }
 
@@ -198,6 +201,7 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 		r.Header.Set(XForwardedHost, r.Host)
 	}
 	var invRsp *invocation.Response
+	spans, err := apm.CreateSpans(inv)
 	c.Next(inv, func(ir *invocation.Response) error {
 		//Send the request to the destination
 		invRsp = ir
@@ -209,6 +213,7 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 	if _, err = handleRequest(w, inv, invRsp); err != nil {
 		lager.Logger.Error("Handle request failed: " + err.Error())
 	}
+	apm.EndSpans(spans, invRsp.Status)
 }
 
 func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
@@ -280,7 +285,7 @@ func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invoca
 		}
 		//transparent proxy
 		copyChassisResp2HttpResp(w, resp)
-
+		RecordStatus(inv, resp.StatusCode)
 		return resp, nil
 	} else {
 		handleErrorResponse(inv, w, http.StatusBadGateway, protocol.ErrUnExpectedHandlerChainResponse)
@@ -306,6 +311,7 @@ func RecordStatus(inv *invocation.Invocation, statusCode int) {
 	LabelValues := map[string]string{metrics.LServiceName: inv.MicroServiceName, metrics.LApp: inv.RouteTags.AppID(), metrics.LVersion: inv.RouteTags.Version()}
 	metrics.RecordStatus(LabelValues, statusCode, nil)
 }
+
 func copyHeader(dst, src http.Header) {
 	for k, vs := range src {
 		for _, v := range vs {

@@ -25,6 +25,7 @@ type MesherConfig struct {
 	Admin       Admin          `yaml:"admin"`
 	HealthCheck []*HealthCheck `yaml:"localHealthCheck"`
 	ProxyedPro  string         `yaml:"proxyedProtocol"`
+	APM         *AppPerfManage `yaml:"appPerfManage"`
 }
 
 //HealthCheck define how to check local ports
@@ -66,4 +67,11 @@ type Admin struct {
 	Enable           bool   `yaml:"enable"`
 	ServerURI        string `yaml:"serverUri"`
 	GoRuntimeMetrics bool   `yaml:"goRuntimeMetrics"`
+}
+
+//AppPerfMan has attributes for serverURI for Application Performance Management
+type AppPerfManage struct {
+	ApmName   string `yaml:"apmName"`
+	Enable    bool   `yaml:"enable"`
+	ServerURI string `yaml:"serverUri"`
 }

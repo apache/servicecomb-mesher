@@ -20,12 +20,11 @@ package main
 import (
 	_ "net/http/pprof"
 
-	_ "github.com/apache/servicecomb-mesher/proxy/resolver/authority"
-
 	_ "github.com/apache/servicecomb-mesher/proxy/handler"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/client/chassis"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/server"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/simpleRegistry"
+	_ "github.com/apache/servicecomb-mesher/proxy/resolver/authority"
 	// config server
 	_ "github.com/go-chassis/go-chassis-config/servicecombkie"
 	//protocols
@@ -39,6 +38,8 @@ import (
 	_ "github.com/apache/servicecomb-mesher/proxy/pkg/egress/pilot"
 
 	_ "github.com/apache/servicecomb-mesher/proxy/control/istio"
+
+	_ "github.com/apache/servicecomb-mesher/proxy/pkg/apm/skywalking"
 )
 
 func main() {
