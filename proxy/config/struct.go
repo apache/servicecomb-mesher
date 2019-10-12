@@ -69,7 +69,7 @@ type Admin struct {
 	GoRuntimeMetrics bool   `yaml:"goRuntimeMetrics"`
 }
 
-//AppPerfMan has attributes for serverURI for Application Performance Management
+//AppPerfManage has attributes for serverURI for Application Performance Management
 type AppPerfManage struct {
 	ApmName   string `yaml:"apmName"`
 	Enable    bool   `yaml:"enable"`

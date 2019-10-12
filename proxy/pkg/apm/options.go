@@ -17,6 +17,7 @@
 
 package apm
 
+//Options for application performance manage client init
 type Options struct {
 	Name      string
 	ServerUri string

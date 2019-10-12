@@ -30,16 +30,17 @@ import (
 )
 
 const (
-	HttpPrefix             = "http://"
+	HTTPPrefix             = "http://"
 	CrossProcessProtocolV2 = "Sw6"
 	Name                   = "skywalking"
 )
 
 const (
-	HttpClientComponentID = 2
-	HttpServerComponentID = 49
+	HTTPClientComponentID = 2
+	HTTPServerComponentID = 49
 )
 
+//SkyWalkingClient for connecting and reporting to skywalking server
 type SkyWalkingClient struct {
 	reporter go2sky.Reporter
 	tracer   *go2sky.Tracer
@@ -58,7 +59,7 @@ func (s *SkyWalkingClient) CreateEntrySpan(i *invocation.Invocation) (interface{
 	span.Tag(go2sky.TagHTTPMethod, i.Protocol)
 	span.Tag(go2sky.TagURL, i.Endpoint+i.URLPathFormat)
 	span.SetSpanLayer(common.SpanLayer_Http)
-	span.SetComponent(HttpServerComponentID)
+	span.SetComponent(HTTPServerComponentID)
 	i.Ctx = ctx
 	return &span, err
 }
@@ -75,9 +76,9 @@ func (s *SkyWalkingClient) CreateExitSpan(i *invocation.Invocation) (interface{}
 		return &span, err
 	}
 	span.Tag(go2sky.TagHTTPMethod, i.Protocol)
-	span.Tag(go2sky.TagURL, HttpPrefix+i.MicroServiceName+i.URLPathFormat)
+	span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPathFormat)
 	span.SetSpanLayer(common.SpanLayer_Http)
-	span.SetComponent(HttpClientComponentID)
+	span.SetComponent(HTTPClientComponentID)
 	return &span, err
 }
 
@@ -106,9 +107,9 @@ func (s *SkyWalkingClient) CreateSpans(i *invocation.Invocation) ([]interface{},
 	l := list.New()
 	l.PushBack(1)
 	span.Tag(go2sky.TagHTTPMethod, i.Protocol)
-	span.Tag(go2sky.TagURL, HttpPrefix+i.MicroServiceName+i.URLPathFormat)
+	span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPathFormat)
 	span.SetSpanLayer(common.SpanLayer_Http)
-	span.SetComponent(HttpServerComponentID)
+	span.SetComponent(HTTPServerComponentID)
 	spans = append(spans, &span)
 	spanExit, err := s.tracer.CreateExitSpan(ctx, i.MicroServiceName, i.Endpoint+i.URLPathFormat, func(header string) error {
 		i.SetHeader(CrossProcessProtocolV2, header)
@@ -121,7 +122,7 @@ func (s *SkyWalkingClient) CreateSpans(i *invocation.Invocation) ([]interface{},
 	spanExit.Tag(go2sky.TagHTTPMethod, i.Protocol)
 	spanExit.Tag(go2sky.TagURL, i.Endpoint+i.URLPathFormat)
 	spanExit.SetSpanLayer(common.SpanLayer_Http)
-	spanExit.SetComponent(HttpClientComponentID)
+	spanExit.SetComponent(HTTPClientComponentID)
 	spans = append(spans, &spanExit)
 	return spans, nil
 

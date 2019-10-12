@@ -24,17 +24,13 @@ import (
 	"strconv"
 )
 
+//ApmClient is an interface for application performance manage client
 type ApmClient interface {
 	CreateSpans(i *invocation.Invocation) ([]interface{}, error)
 	EndSpans(spans []interface{}, status int) error
 	CreateEntrySpan(i *invocation.Invocation) (interface{}, error)
 	CreateExitSpan(i *invocation.Invocation) (interface{}, error)
 	EndSpan(sp interface{}, statusCode int) error
-}
-
-type ApmManager struct {
-	apmClientPlugins map[string]func(Options) (ApmClient, error)
-	apmClients       map[string]ApmClient
 }
 
 var apmClientPlugins = make(map[string]func(Options) (ApmClient, error))
