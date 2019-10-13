@@ -32,7 +32,7 @@ const (
 	SkyWalkingConsumer     = "skywalking-consumer"
 	SkyWalkingProvider     = "skywalking-provider"
 	SkyWalkingName         = "skywalking"
-	DeafaultSWServerUri    = "127.0.0.1:11800"
+	DeafaultSWServerURI    = "127.0.0.1:11800"
 )
 
 var r go2sky.Reporter
@@ -45,7 +45,7 @@ func CreateEntrySpan(i *invocation.Invocation) (go2sky.Span, context.Context, er
 	})
 }
 
-//CreateEntrySpan use tracer to create and start an exit span for client
+//CreateExitSpan use tracer to create and start an exit span for client
 func CreateExitSpan(ctx context.Context, i *invocation.Invocation) (go2sky.Span, error) {
 	return tracer.CreateExitSpan(ctx, i.MicroServiceName, i.Endpoint+i.URLPathFormat, func(header string) error {
 		i.SetHeader(CrossProcessProtocolV2, header)
@@ -62,7 +62,7 @@ func CreateLocalSpan(ctx context.Context, opts ...go2sky.SpanOption) (go2sky.Spa
 func Init() {
 	openlogging.GetLogger().Debugf("SkyWalking manager Init begin config:%#v", config.GetConfig().APM)
 	var err error
-	serverUri := DeafaultSWServerUri
+	serverUri := DeafaultSWServerURI
 	if config.GetConfig().APM.ServerURI != "" {
 		serverUri = config.GetConfig().APM.ServerURI
 	}
