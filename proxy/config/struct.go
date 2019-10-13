@@ -25,6 +25,7 @@ type MesherConfig struct {
 	Admin       Admin          `yaml:"admin"`
 	HealthCheck []*HealthCheck `yaml:"localHealthCheck"`
 	ProxyedPro  string         `yaml:"proxyedProtocol"`
+	APM         *AppPerfManage `yaml:"appPerfManage"`
 }
 
 //HealthCheck define how to check local ports
@@ -63,6 +64,13 @@ type Plugin struct {
 
 //Admin has attributes for enabling, serverURI and metrics for admin data
 type Admin struct {
+	Enable    bool   `yaml:"enable"`
+	ServerURI string `yaml:"serverUri"`
+}
+
+//AppPerfManage has attributes for serverURI for Application Performance Management
+type AppPerfManage struct {
+	ApmName   string `yaml:"apmName"`
 	Enable    bool   `yaml:"enable"`
 	ServerURI string `yaml:"serverUri"`
 }
