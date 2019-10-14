@@ -21,7 +21,8 @@ admin: #admin API
 #    match:
 #      status: 200
 #      body: ok
-#apm:
-#  tracing:
-#    enable: true
-#    serverUri: 127.0.0.1:11800
+#servicecomb:
+#  apm:
+#    tracing:
+#      enable: true
+#      serverUri: 127.0.0.1:11800
