@@ -60,11 +60,11 @@ func CreateLocalSpan(ctx context.Context, opts ...go2sky.SpanOption) (go2sky.Spa
 
 //Init skywalking manager
 func Init() {
-	openlogging.GetLogger().Debugf("SkyWalking manager Init begin config:%#v", config.GetConfig().APM)
+	openlogging.GetLogger().Debugf("SkyWalking manager Init begin config:%#v", config.GetConfig().ServiceComb.APM)
 	var err error
 	serverURI := DeafaultSWServerURI
-	if config.GetConfig().APM.Tracing.ServerURI != "" && config.GetConfig().APM.Tracing.Enable {
-		serverURI = config.GetConfig().APM.Tracing.ServerURI
+	if config.GetConfig().ServiceComb.APM.Tracing.ServerURI != "" && config.GetConfig().ServiceComb.APM.Tracing.Enable {
+		serverURI = config.GetConfig().ServiceComb.APM.Tracing.ServerURI
 	}
 	r, err = reporter.NewGRPCReporter(serverURI)
 	if err != nil {

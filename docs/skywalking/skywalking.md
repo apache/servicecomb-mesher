@@ -5,18 +5,19 @@ Skywalking-manager is a handler plugin of mesher, it reports tracing data to sky
 ## Configurations
 **In conf/mesher.conf**
 
-**apm.tracing.enable**
+**servicecomb.apm.tracing.enable**
 >  *(optional, bool)* enable apm
 
-**apm.tracing.serverUri**
+**servicecomb.apm.tracing.serverUri**
 >  *(optional, string)* server address of skywalking
 
 ## Example
 ```yaml
-apm:
-  tracing:
-    enable: true
-    serverUri: 127.0.0.1:11800
+servicecomb:
+  apm:
+    tracing:
+      enable: true
+      serverUri: 127.0.0.1:11800
 ```
 
 ## SkyWawlking-Manager Init
