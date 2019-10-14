@@ -44,7 +44,7 @@ func initGcConfig() {
 
 //initMesherConfig
 func initMesherConfig() {
-	config.SetConfig(&config.MesherConfig{APM: &config.AppPerfManage{ApmName: "skywalking", ServerURI: "192.168.0.1:17289"}})
+	config.SetConfig(&config.MesherConfig{APM: &config.Apm{config.Tracing{Enable: true, ServerURI: "192.168.0.1:17289"}}})
 }
 
 //initInv

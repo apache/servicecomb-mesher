@@ -40,14 +40,14 @@ var tracer *go2sky.Tracer
 
 //CreateEntrySpan use tracer to create and start an entry span for incoming request
 func CreateEntrySpan(i *invocation.Invocation) (go2sky.Span, context.Context, error) {
-	return tracer.CreateEntrySpan(i.Ctx, i.URLPathFormat, func() (string, error) {
+	return tracer.CreateEntrySpan(i.Ctx, i.MicroServiceName+i.URLPathFormat, func() (string, error) {
 		return i.Headers()[CrossProcessProtocolV2], nil
 	})
 }
 
 //CreateExitSpan use tracer to create and start an exit span for client
 func CreateExitSpan(ctx context.Context, i *invocation.Invocation) (go2sky.Span, error) {
-	return tracer.CreateExitSpan(ctx, i.MicroServiceName, i.Endpoint+i.URLPathFormat, func(header string) error {
+	return tracer.CreateExitSpan(ctx, i.MicroServiceName+i.URLPathFormat, i.Endpoint+i.URLPathFormat, func(header string) error {
 		i.SetHeader(CrossProcessProtocolV2, header)
 		return nil
 	})
@@ -63,8 +63,8 @@ func Init() {
 	openlogging.GetLogger().Debugf("SkyWalking manager Init begin config:%#v", config.GetConfig().APM)
 	var err error
 	serverURI := DeafaultSWServerURI
-	if config.GetConfig().APM.ServerURI != "" && config.GetConfig().APM.ApmName == SkyWalkingName {
-		serverURI = config.GetConfig().APM.ServerURI
+	if config.GetConfig().APM.Tracing.ServerURI != "" && config.GetConfig().APM.Tracing.Enable {
+		serverURI = config.GetConfig().APM.Tracing.ServerURI
 	}
 	r, err = reporter.NewGRPCReporter(serverURI)
 	if err != nil {
