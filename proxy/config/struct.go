@@ -79,7 +79,7 @@ type Apm struct {
 	Tracing Tracing `yaml:"tracing"`
 }
 
-//ServiceComb
+//ServiceComb is for servicecomb config
 type ServiceComb struct {
 	APM Apm `yaml:"apm"`
 }
