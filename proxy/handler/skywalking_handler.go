@@ -19,7 +19,6 @@ package handler
 
 import (
 	"github.com/apache/servicecomb-mesher/proxy/pkg/skywalking"
-	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-mesh/openlogging"
@@ -50,15 +49,11 @@ func (sp *SkyWalkingProviderHandler) Handle(chain *handler.Chain, i *invocation.
 	}
 	chain.Next(i, func(r *invocation.Response) (err error) {
 		err = cb(r)
-		switch i.Protocol {
-		case common.ProtocolRest:
-			span.Tag(go2sky.TagHTTPMethod, i.Protocol)
-			span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPathFormat)
-			span.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
-			span.SetSpanLayer(skycom.SpanLayer_Http)
-			span.SetComponent(HTTPServerComponentID)
-		default:
-		}
+		span.Tag(go2sky.TagHTTPMethod, i.Protocol)
+		span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPathFormat)
+		span.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
+		span.SetSpanLayer(skycom.SpanLayer_Http)
+		span.SetComponent(HTTPServerComponentID)
 		span.End()
 		return
 	})
@@ -91,21 +86,18 @@ func (sc *SkyWalkingConsumerHandler) Handle(chain *handler.Chain, i *invocation.
 	}
 	chain.Next(i, func(r *invocation.Response) (err error) {
 		err = cb(r)
-		switch i.Protocol {
-		case common.ProtocolRest:
-			span.Tag(go2sky.TagHTTPMethod, i.Protocol)
-			span.Tag(go2sky.TagURL, i.Endpoint+i.URLPathFormat)
-			span.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
-			span.SetSpanLayer(skycom.SpanLayer_Http)
-			span.SetComponent(HTTPServerComponentID)
+		span.Tag(go2sky.TagHTTPMethod, i.Protocol)
+		span.Tag(go2sky.TagURL, i.MicroServiceName+i.URLPathFormat)
+		span.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
+		span.SetSpanLayer(skycom.SpanLayer_Http)
+		span.SetComponent(HTTPServerComponentID)
 
-			spanExit.Tag(go2sky.TagHTTPMethod, i.Protocol)
-			spanExit.Tag(go2sky.TagURL, i.Endpoint+i.URLPathFormat)
-			spanExit.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
-			spanExit.SetSpanLayer(skycom.SpanLayer_Http)
-			spanExit.SetComponent(HTTPClientComponentID)
-		default:
-		}
+		spanExit.Tag(go2sky.TagHTTPMethod, i.Protocol)
+		spanExit.Tag(go2sky.TagURL, i.MicroServiceName+i.URLPathFormat)
+		spanExit.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
+		spanExit.SetSpanLayer(skycom.SpanLayer_Http)
+		spanExit.SetComponent(HTTPClientComponentID)
+
 		spanExit.End()
 		span.End()
 		openlogging.GetLogger().Debugf("SkyWalkingConsumerHandler end.")
