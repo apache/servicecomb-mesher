@@ -18,12 +18,11 @@
 package metrics_test
 
 import (
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/stretchr/testify/assert"
 	"net/http"
 	"strings"
 	"testing"
-
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/stretchr/testify/assert"
 
 	"github.com/apache/servicecomb-mesher/proxy/pkg/metrics"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
@@ -63,4 +62,13 @@ func TestRecordStatus(t *testing.T) {
 	assert.Equal(errorcount4xx, float64(1))
 	assert.Equal(errorcount5xx, float64(1))
 
+	metrics.RecordLatency(lvs, 1000)
+	metricFamilies, err = prometheus.DefaultGatherer.Gather()
+	var c float64
+	for _, metricFamily := range metricFamilies {
+		if name := metricFamily.GetName(); strings.Contains(name, metrics.LRequestLatencySeconds) {
+			c = *metricFamily.Metric[0].Summary.SampleSum
+		}
+	}
+	assert.Equal(1000, int(c))
 }

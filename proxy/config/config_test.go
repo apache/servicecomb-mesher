@@ -24,6 +24,7 @@ import (
 	//	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
 	"github.com/apache/servicecomb-mesher/proxy/config"
+	"github.com/go-chassis/go-archaius"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
@@ -37,7 +38,10 @@ func init() {
 }
 func TestGetConfigFilePath(t *testing.T) {
 	var key = "mesher.yaml"
+	archaius.Init(archaius.WithENVSource())
 	cmd.Init()
+	err := config.Init()
+	assert.Error(t, err)
 	f, _ := config.GetConfigFilePath(key)
 	assert.Contains(t, f, key)
 }
