@@ -71,6 +71,5 @@ type Admin struct {
 //AppPerfManage has attributes for serverURI for Application Performance Management
 type AppPerfManage struct {
 	ApmName   string `yaml:"apmName"`
-	Enable    bool   `yaml:"enable"`
 	ServerURI string `yaml:"serverUri"`
 }
