@@ -63,7 +63,7 @@ func Init() {
 	openlogging.GetLogger().Debugf("SkyWalking manager Init begin config:%#v", config.GetConfig().APM)
 	var err error
 	serverURI := DeafaultSWServerURI
-	if config.GetConfig().APM.ServerURI != "" {
+	if config.GetConfig().APM.ServerURI != "" && config.GetConfig().APM.ApmName == SkyWalkingName {
 		serverURI = config.GetConfig().APM.ServerURI
 	}
 	r, err = reporter.NewGRPCReporter(serverURI)
