@@ -79,6 +79,17 @@ type Apm struct {
 	Tracing Tracing `yaml:"tracing"`
 }
 
+//Tracing has attributes for APM
+type Tracing struct {
+	Enable    bool   `yaml:"enable"`
+	ServerURI string `yaml:"serverUri"`
+}
+
+//Apm is for Application Performance Management
+type Apm struct {
+	Tracing Tracing `yaml:"tracing"`
+}
+
 //ServiceComb is for servicecomb config
 type ServiceComb struct {
 	APM Apm `yaml:"apm"`
