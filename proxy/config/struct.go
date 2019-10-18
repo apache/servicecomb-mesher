@@ -25,6 +25,7 @@ type MesherConfig struct {
 	Admin       Admin          `yaml:"admin"`
 	HealthCheck []*HealthCheck `yaml:"localHealthCheck"`
 	ProxyedPro  string         `yaml:"proxyedProtocol"`
+	ServiceComb *ServiceComb   `yaml:"servicecomb"`
 }
 
 //HealthCheck define how to check local ports
