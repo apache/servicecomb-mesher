@@ -52,13 +52,13 @@ func (r *PilotEgress) Init(o egress.Options) error {
 
 // refresh all the egress config
 func refresh() error {
-	configs := pilotfetcher.GetConfigurations()
+	configs := pilotfetcher.Configs()
 
 	d := make(map[string][]*config.EgressRule)
 	for k, v := range configs {
 		rules, ok := v.([]*config.EgressRule)
 		if !ok {
-			err := fmt.Errorf("Egress rule type assertion fail, key: %s", k)
+			err := fmt.Errorf("egress rule type assertion fail, key: %s", k)
 			return err
 		}
 		d[k] = rules

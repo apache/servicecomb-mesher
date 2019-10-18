@@ -18,19 +18,19 @@
 package route
 
 import (
-	"github.com/go-chassis/go-chassis/core/config/model"
+	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/router"
 )
 
 //Rules is the struct for route rule
 type Rules struct {
-	Destinations map[string][]*model.RouteRule `yaml:"routeRule"`
+	Destinations map[string][]*config.RouteRule `yaml:"routeRule"`
 }
 
 var routeRules *Rules
 
 //GetServiceRouteRule gets route rule for that service
-func GetServiceRouteRule(serviceName string) []*model.RouteRule {
+func GetServiceRouteRule(serviceName string) []*config.RouteRule {
 	if routeRules != nil {
 		if v, ok := routeRules.Destinations[serviceName]; ok {
 			return v
@@ -42,7 +42,7 @@ func GetServiceRouteRule(serviceName string) []*model.RouteRule {
 		routeRules = new(Rules)
 	}
 	if routeRules.Destinations == nil {
-		routeRules.Destinations = make(map[string][]*model.RouteRule)
+		routeRules.Destinations = make(map[string][]*config.RouteRule)
 	}
 	routeRules.Destinations[serviceName] = rules
 	return rules

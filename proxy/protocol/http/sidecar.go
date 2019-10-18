@@ -84,8 +84,8 @@ func consumerPreHandler(req *http.Request) *invocation.Invocation {
 
 func providerPreHandler(req *http.Request) *invocation.Invocation {
 	inv := preHandler(req)
-	inv.MicroServiceName = chassisconfig.SelfServiceName
-	inv.RouteTags = utiltags.NewDefaultTag(chassisconfig.SelfVersion, chassisconfig.GlobalDefinition.AppID)
+	inv.MicroServiceName = runtime.ServiceName
+	inv.RouteTags = utiltags.NewDefaultTag(runtime.Version, chassisconfig.GlobalDefinition.AppID)
 	inv.SourceMicroService = req.Header.Get(chassisCommon.HeaderSourceName)
 	inv.Ctx = context.TODO()
 	return inv
@@ -119,19 +119,18 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	var c *handler.Chain
 	ok, egressRule := egress.Match(inv.MicroServiceName)
 	if ok {
-		var intport int32 = 80
+		var targetPort int32 = 80
 		for _, port := range egressRule.Ports {
 			if strings.EqualFold(port.Protocol, common.HTTPProtocol) {
-				intport = port.Port
+				targetPort = port.Port
 				break
 			}
 		}
-		inv.Endpoint = inv.MicroServiceName + ":" + strconv.Itoa(int(intport))
+		inv.Endpoint = inv.MicroServiceName + ":" + strconv.Itoa(int(targetPort))
 		c, err = handler.GetChain(common.ConsumerEgress, common.ChainConsumerEgress)
-
 		if err != nil {
 			handleErrorResponse(inv, w, http.StatusBadGateway, err)
-			lager.Logger.Error("Get chain failed" + err.Error())
+			openlogging.Error("Get chain failed" + err.Error())
 			return
 		}
 
@@ -139,14 +138,14 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		c, err = handler.GetChain(chassisCommon.Consumer, common.ChainConsumerOutgoing)
 		if err != nil {
 			handleErrorResponse(inv, w, http.StatusBadGateway, err)
-			lager.Logger.Error("Get chain failed: " + err.Error())
+			openlogging.Error("Get chain failed: " + err.Error())
 			return
 		}
 	}
 	defer func(begin time.Time) {
 		timeTaken := time.Since(begin).Seconds()
 		serviceLabelValues := map[string]string{metrics.LServiceName: inv.MicroServiceName, metrics.LApp: inv.RouteTags.AppID(), metrics.LVersion: inv.RouteTags.Version()}
-		metrics.RecordLatency(serviceLabelValues, timeTaken, nil)
+		metrics.RecordLatency(serviceLabelValues, timeTaken)
 	}(time.Now())
 	var invRsp *invocation.Response
 	c.Next(inv, func(ir *invocation.Response) error {
@@ -159,7 +158,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	resp, err := handleRequest(w, inv, invRsp)
 	if err != nil {
-		lager.Logger.Error("Handle request failed: " + err.Error())
+		openlogging.Error("handle request failed: " + err.Error())
 		return
 	}
 	RecordStatus(inv, resp.StatusCode)
@@ -304,7 +303,7 @@ func handleErrorResponse(inv *invocation.Invocation, w http.ResponseWriter, stat
 //RecordStatus record an operation status
 func RecordStatus(inv *invocation.Invocation, statusCode int) {
 	LabelValues := map[string]string{metrics.LServiceName: inv.MicroServiceName, metrics.LApp: inv.RouteTags.AppID(), metrics.LVersion: inv.RouteTags.Version()}
-	metrics.RecordStatus(LabelValues, statusCode, nil)
+	metrics.RecordStatus(LabelValues, statusCode)
 }
 func copyHeader(dst, src http.Header) {
 	for k, vs := range src {

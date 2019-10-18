@@ -19,7 +19,7 @@ package servicecomb
 
 import (
 	"github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/go-chassis/go-archaius/core"
+	"github.com/go-chassis/go-archaius/event"
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-mesh/openlogging"
 )
@@ -27,7 +27,7 @@ import (
 type ingressRuleEventListener struct{}
 
 //Event update ingress rule
-func (r *ingressRuleEventListener) Event(e *core.Event) {
+func (r *ingressRuleEventListener) Event(e *event.Event) {
 	if e == nil {
 		openlogging.Warn("Event pointer is nil")
 		return

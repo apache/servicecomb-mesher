@@ -44,29 +44,10 @@ type PrometheusMesherSinker struct {
 var (
 	//DefaultPrometheusExporter stores value of default prometheus exporter type
 	DefaultPrometheusExporter = GetPrometheusExporter()
-	prometheusRegistry        = prometheus.NewRegistry()
 	onceInit                  sync.Once
 	//DefaultPrometheusSinker stores value of default prometheus exporter type
 	DefaultPrometheusSinker *PrometheusMesherSinker
 )
-
-//GetSystemPrometheusRegistry return prometheus registry which mesher use
-func getSystemPrometheusRegistry() *prometheus.Registry {
-	return prometheusRegistry
-}
-
-func newPrometheusProvider(promRegistry prometheus.Registerer) *PrometheusMesherSinker {
-	return &PrometheusMesherSinker{
-		PromRegistry: promRegistry,
-	}
-}
-
-func getPrometheusSinker(pr *prometheus.Registry) *PrometheusMesherSinker {
-	onceInit.Do(func() {
-		DefaultPrometheusSinker = newPrometheusProvider(pr)
-	})
-	return DefaultPrometheusSinker
-}
 
 //GetPrometheusExporter returns default prometheus exporter
 func GetPrometheusExporter() *PrometheusExporter {

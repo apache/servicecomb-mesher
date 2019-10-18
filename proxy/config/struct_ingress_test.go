@@ -59,4 +59,6 @@ mesher:
 	rules, err := config.NewRules(c.Mesher.Ingress.Rule["http"])
 	assert.NoError(t, err)
 	assert.Equal(t, 2, rules.Len())
+	v := rules.Value()
+	assert.Equal(t, "example", v[0].Service.Name)
 }

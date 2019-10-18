@@ -70,15 +70,17 @@ func Run() {
 func profile() {
 	if config.GetConfig().PProf != nil {
 		if config.GetConfig().PProf.Enable {
-			go func() {
-				if config.GetConfig().PProf.Listen == "" {
-					config.GetConfig().PProf.Listen = "127.0.0.1:6060"
-				}
-				openlogging.Warn("Enable pprof on " + config.GetConfig().PProf.Listen)
-				if err := http.ListenAndServe(config.GetConfig().PProf.Listen, nil); err != nil {
-					openlogging.Error("Can not enable pprof: " + err.Error())
-				}
-			}()
+			go startProfiling()
 		}
+	}
+}
+
+func startProfiling() {
+	if config.GetConfig().PProf.Listen == "" {
+		config.GetConfig().PProf.Listen = "127.0.0.1:6060"
+	}
+	openlogging.Warn("Enable pprof on " + config.GetConfig().PProf.Listen)
+	if err := http.ListenAndServe(config.GetConfig().PProf.Listen, nil); err != nil {
+		openlogging.Error("Can not enable pprof: " + err.Error())
 	}
 }

@@ -15,41 +15,15 @@
  * limitations under the License.
  */
 
-package mock
-
-import (
-	"github.com/go-chassis/go-chassis/core/config/model"
-	"github.com/go-chassis/go-chassis/core/router"
-	"github.com/stretchr/testify/mock"
-)
-
-//RouterMock ..
-type RouterMock struct {
-	mock.Mock
-}
-
-//Init ..
-func (m *RouterMock) Init(router.Options) error {
-	return nil
-}
-
-//SetRouteRule ..
-func (m *RouterMock) SetRouteRule(map[string][]*model.RouteRule) {}
-
-//FetchRouteRule ..
-func (m *RouterMock) FetchRouteRule() map[string][]*model.RouteRule {
-	return nil
-}
-
-//InitRouteRuleByKey ..
-func (m *RouterMock) InitRouteRuleByKey(k string) {}
-
-//FetchRouteRuleByServiceName ..
-func (m *RouterMock) FetchRouteRuleByServiceName(s string) []*model.RouteRule {
-	args := m.Called(s)
-	rules, ok := args.Get(0).([]*model.RouteRule)
-	if !ok {
-		return nil
-	}
-	return rules
-}
+db.createUser(
+    {
+        user: "kie",
+        pwd: "123",
+        roles:[
+            {
+                role: "readWrite",
+                db:   "kie"
+            }
+        ]
+    }
+);

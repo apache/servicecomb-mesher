@@ -1,0 +1,55 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+cse:
+  protocols:
+    http:
+      listenAddress: 127.0.0.1:30101
+    rest-admin:
+      listenAddress: 127.0.0.1:30102 # listen addr use to adminAPI
+  service:
+    registry:
+      address: http://127.0.0.1:30100 # uri of service center
+      scope: full #set full to be able to discover other app's service
+    config:
+      client:
+        serverUri: https://127.0.0.1:30110 #uri of config center
+        type: servicecomb-kie
+        refreshMode: 1 # 1: only pull config.
+        refreshInterval: 30 # unit is second
+  handler:
+    chain:
+      Consumer:
+        outgoing: router,bizkeeper-consumer,loadbalance,tracing-consumer,transport #consumer handlers
+      Provider:
+        incoming: tracing-provider #provider handlers
+
+## Mesher TLS is base on Go Chassis TLS config,  https://docs.go-chassis.com/user-guides/tls.html
+ssl:
+#  mesher-edge.rest.Provider.cipherPlugin: default
+#  mesher-edge.rest.Provider.verifyPeer: false
+#  mesher-edge.rest.Provider.cipherSuits: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+#  mesher-edge.rest.Provider.protocol: TLSv1.2
+#  mesher-edge.rest.Provider.caFile:
+#  mesher-edge.rest.Provider.certFile: server.crt
+#  mesher-edge.rest.Provider.keyFile: server.key
+#  mesher-edge.rest.Provider.certPwdFile:
+
+#tracing:
+#  enabled: true #enable distribution tracing
+#  collectorType: zipkin       #zipkin: Send tracing info to zipkin server
+#                              #namedPipe: Write tracing info to linux named pipe.
+#  collectorTarget: http://localhost:9411/api/v1/spans #If the collectorType is "zipkin", the target is a zipkin server url, if the collecterType is "file" or "namedPipe", the target is a file path.

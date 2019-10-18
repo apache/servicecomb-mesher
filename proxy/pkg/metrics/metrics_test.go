@@ -18,24 +18,17 @@
 package metrics_test
 
 import (
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/stretchr/testify/assert"
 	"net/http"
 	"strings"
 	"testing"
 
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/stretchr/testify/assert"
-
-	mc "github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/metrics"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
 )
 
 func TestInit(t *testing.T) {
-	mc.SetConfig(&mc.MesherConfig{
-		Admin: mc.Admin{
-			GoRuntimeMetrics: false,
-		},
-	})
 	err := metrics.Init()
 	runtime.ServiceName = "A"
 	runtime.Version = "v1.1"
@@ -51,9 +44,9 @@ func TestRecordStatus(t *testing.T) {
 		metrics.LVersion:     "",
 		metrics.LApp:         "",
 	}
-	metrics.RecordStatus(lvs, http.StatusOK, nil)
-	metrics.RecordStatus(lvs, http.StatusNotFound, nil)
-	metrics.RecordStatus(lvs, http.StatusInternalServerError, nil)
+	metrics.RecordStatus(lvs, http.StatusOK)
+	metrics.RecordStatus(lvs, http.StatusNotFound)
+	metrics.RecordStatus(lvs, http.StatusInternalServerError)
 	metricFamilies, err := prometheus.DefaultGatherer.Gather()
 	assert.Nil(err, "error should be nil while collecting metrics from prometheus")
 	for _, metricFamily := range metricFamilies {
@@ -69,4 +62,13 @@ func TestRecordStatus(t *testing.T) {
 	assert.Equal(errorcount4xx, float64(1))
 	assert.Equal(errorcount5xx, float64(1))
 
+	metrics.RecordLatency(lvs, 1000)
+	metricFamilies, err = prometheus.DefaultGatherer.Gather()
+	var c float64
+	for _, metricFamily := range metricFamilies {
+		if name := metricFamily.GetName(); strings.Contains(name, metrics.LRequestLatencySeconds) {
+			c = *metricFamily.Metric[0].Summary.SampleSum
+		}
+	}
+	assert.Equal(1000, int(c))
 }

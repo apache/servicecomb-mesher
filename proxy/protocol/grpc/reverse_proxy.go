@@ -32,7 +32,6 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/util"
 	"github.com/go-chassis/go-chassis/client/rest"
 	chassisCommon "github.com/go-chassis/go-chassis/core/common"
-	chassisconfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-chassis/go-chassis/core/lager"
@@ -81,8 +80,8 @@ func consumerPreHandler(req *http.Request) *invocation.Invocation {
 
 func providerPreHandler(req *http.Request) *invocation.Invocation {
 	inv := preHandler(req)
-	inv.MicroServiceName = chassisconfig.SelfServiceName
-	inv.RouteTags = utiltags.NewDefaultTag(chassisconfig.SelfVersion, chassisconfig.GlobalDefinition.AppID)
+	inv.MicroServiceName = runtime.ServiceName
+	inv.RouteTags = utiltags.NewDefaultTag(runtime.Version, runtime.App)
 	inv.SourceMicroService = req.Header.Get(chassisCommon.HeaderSourceName)
 	inv.Ctx = context.TODO()
 	return inv
@@ -127,7 +126,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	defer func(begin time.Time) {
 		timeTaken := time.Since(begin).Seconds()
 		serviceLabelValues := map[string]string{metrics.LServiceName: inv.MicroServiceName, metrics.LApp: inv.RouteTags.AppID(), metrics.LVersion: inv.RouteTags.Version()}
-		metrics.RecordLatency(serviceLabelValues, timeTaken, nil)
+		metrics.RecordLatency(serviceLabelValues, timeTaken)
 	}(time.Now())
 	var invRsp *invocation.Response
 	c.Next(inv, func(ir *invocation.Response) error {
@@ -259,7 +258,7 @@ func WriteErrorResponse(inv *invocation.Invocation, w http.ResponseWriter, r *ht
 //RecordStatus record an operation status
 func RecordStatus(inv *invocation.Invocation, statusCode int) {
 	LabelValues := map[string]string{metrics.LServiceName: inv.MicroServiceName, metrics.LApp: inv.RouteTags.AppID(), metrics.LVersion: inv.RouteTags.Version()}
-	metrics.RecordStatus(LabelValues, statusCode, nil)
+	metrics.RecordStatus(LabelValues, statusCode)
 }
 func copyHeader(dst, src http.Header) {
 	for k, vs := range src {

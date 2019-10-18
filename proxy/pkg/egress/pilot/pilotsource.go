@@ -20,6 +20,8 @@ package pilot
 import (
 	"errors"
 	"fmt"
+	"github.com/go-chassis/go-archaius/event"
+	"github.com/go-chassis/go-archaius/source"
 	"os"
 	"reflect"
 	"strconv"
@@ -31,9 +33,6 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/control/istio"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	istioinfra "github.com/apache/servicecomb-mesher/proxy/pkg/infras/istio"
-	"github.com/go-chassis/go-archaius/core"
-	cm "github.com/go-chassis/go-archaius/core/config-manager"
-	"github.com/go-chassis/go-archaius/core/event-system"
 	"github.com/go-chassis/go-chassis/core/lager"
 )
 
@@ -50,7 +49,7 @@ const clusteroriginaldst = 4
 // TODO: use stream instead
 var DefaultPilotRefresh = 10 * time.Second
 
-var pilotfetcher core.ConfigMgr
+var pilotfetcher *source.Manager
 var pilotChan = make(chan string, 10)
 
 func setChanForPilot(k string) bool {
@@ -64,12 +63,9 @@ func setChanForPilot(k string) bool {
 
 // InitPilotFetcher init the config mgr and add several sources
 func InitPilotFetcher(o egress.Options) error {
-	d := eventsystem.NewDispatcher()
-
 	// register and init pilot fetcher
-	d.RegisterListener(&pilotEventListener{}, ".*")
-	pilotfetcher = cm.NewConfigurationManager(d)
-
+	pilotfetcher = source.NewManager()
+	pilotfetcher.RegisterListener(&pilotEventListener{}, ".*")
 	return addEgressPilotSource(o)
 }
 
@@ -133,10 +129,9 @@ func (r *pilotSource) GetSourceName() string { return egressPilotSourceName }
 func (r *pilotSource) GetPriority() int      { return r.priority }
 func (r *pilotSource) Cleanup() error        { return nil }
 
-func (r *pilotSource) AddDimensionInfo(d string) (map[string]string, error)           { return nil, nil }
-func (r *pilotSource) GetConfigurationsByDI(d string) (map[string]interface{}, error) { return nil, nil }
-func (r *pilotSource) GetConfigurationByKeyAndDimensionInfo(key, d string) (interface{}, error) {
-	return nil, nil
+//AddDimensionInfo no use
+func (r *pilotSource) AddDimensionInfo(labels map[string]string) error {
+	return nil
 }
 
 func (r *pilotSource) GetConfigurations() (map[string]interface{}, error) {
@@ -160,6 +155,16 @@ func (r *pilotSource) GetConfigurationByKey(k string) (interface{}, error) {
 		return value, nil
 	}
 	return nil, fmt.Errorf("not found %s", k)
+}
+
+//Set no use
+func (r *pilotSource) Set(key string, value interface{}) error {
+	return nil
+}
+
+//Delete no use
+func (r *pilotSource) Delete(key string) error {
+	return nil
 }
 
 // get egress config from pilot
@@ -201,7 +206,7 @@ func (r *pilotSource) setPortForDestination(service, port string) {
 func (r *pilotSource) SetPriority(priority int) {
 	r.priority = priority
 }
-func (r *pilotSource) DynamicConfigHandler(callback core.DynamicConfigCallback) error {
+func (r *pilotSource) Watch(callback source.EventHandler) error {
 	// Periodically refresh configurations
 	ticker := time.NewTicker(r.refreshInverval)
 	for {
@@ -250,8 +255,8 @@ func (r *pilotSource) refreshConfigurations() (map[string]interface{}, error) {
 	return data, nil
 }
 
-func (r *pilotSource) populateEvents(updates map[string]interface{}) ([]*core.Event, error) {
-	events := make([]*core.Event, 0)
+func (r *pilotSource) populateEvents(updates map[string]interface{}) ([]*event.Event, error) {
+	events := make([]*event.Event, 0)
 	new := make(map[string]interface{})
 
 	// generate create and update event
@@ -263,16 +268,16 @@ func (r *pilotSource) populateEvents(updates map[string]interface{}) ([]*core.Ev
 		new[key] = value
 		currentValue, ok := current[key]
 		if !ok { // if new configuration introduced
-			events = append(events, constructEvent(core.Create, key, value))
+			events = append(events, constructEvent(event.Create, key, value))
 		} else if !reflect.DeepEqual(currentValue, value) {
-			events = append(events, constructEvent(core.Update, key, value))
+			events = append(events, constructEvent(event.Update, key, value))
 		}
 	}
 	// generate delete event
 	for key, value := range current {
 		_, ok := new[key]
 		if !ok { // when old config not present in new config
-			events = append(events, constructEvent(core.Delete, key, value))
+			events = append(events, constructEvent(event.Delete, key, value))
 		}
 	}
 
@@ -283,8 +288,8 @@ func (r *pilotSource) populateEvents(updates map[string]interface{}) ([]*core.Ev
 	return events, nil
 }
 
-func constructEvent(eventType string, key string, value interface{}) *core.Event {
-	return &core.Event{
+func constructEvent(eventType string, key string, value interface{}) *event.Event {
+	return &event.Event{
 		EventType:   eventType,
 		EventSource: egressPilotSourceName,
 		Value:       value,
@@ -296,13 +301,13 @@ func constructEvent(eventType string, key string, value interface{}) *core.Event
 type pilotEventListener struct{}
 
 // update egress rule of a service
-func (r *pilotEventListener) Event(e *core.Event) {
+func (r *pilotEventListener) Event(e *event.Event) {
 	if e == nil {
 		lager.Logger.Warn("pilot event pointer is nil", nil)
 		return
 	}
 
-	v := pilotfetcher.GetConfigurationsByKey(e.Key)
+	v := pilotfetcher.GetConfig(e.Key)
 	if v == nil {
 		istio.SaveToEgressCache(nil)
 		return

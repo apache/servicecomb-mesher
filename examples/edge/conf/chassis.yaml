@@ -8,71 +8,27 @@ cse:
   service:
     registry:
       address: http://127.0.0.1:30100 # uri of service center
-      #address: https://cse.cn-north-1.myhuaweicloud.com:443 # uri of service center
       scope: full #set full to be able to discover other app's service
-      watch: false # set if you want to watch instance change event
-      autoIPIndex: true # set to true if u want to resolve source IP to micro service
-#    config:
-#      client:
-#        serverUri: https://127.0.0.1:30110 #uri of config center
-#        type: servicecomb-kie
-#        refreshMode: 1 # 1: only pull config.
-#        refreshInterval: 30 # unit is second
-  #  monitor: #Send monitoring data to CSE monitor Server
-  #    client:
-  #      serverUri: https://cse.cn-north-1.myhuaweicloud.com:443   # monitor server url
+    config:
+      client:
+        serverUri: https://127.0.0.1:30110 #uri of config center
+        type: servicecomb-kie
+        refreshMode: 1 # 1: only pull config.
+        refreshInterval: 30 # unit is second
   handler:
     chain:
       Consumer:
-        outgoing:  router,bizkeeper-consumer,loadbalance,tracing-consumer,transport #consumer handlers
+        outgoing: router,bizkeeper-consumer,loadbalance,tracing-consumer,transport #consumer handlers
       Provider:
-        incoming:   tracing-provider #provider handlers
-#  loadbalance:
-#    strategy:
-#      name: RoundRobin  # Random|RoundRobin|SessionStickiness
-#    retryEnabled: false # if there is error, retry request or not
-#    retryOnNext: 2      # times to switch to another instance based on strategy
-#    retryOnSame: 3      # times to retry on the same instance
-#    backoff:            # backoff policy of retried request
-#      kind: constant    # jittered/constant/zero
-#      MinMs: 200        # millisecond, Minimum duration to backoff
-#      MaxMs: 400        # millisecond, Maximum duration to backoff
-## circuit breaker configurations
-#  isolation:
-#    Consumer:
-#      timeout:
-#        enabled: true
-#      timeoutInMilliseconds: 1000
-#      maxConcurrentRequests: 100
-#  circuitBreaker:
-#    Consumer:
-#      enabled: true
-#      forceOpen: false
-#      forceClosed: false
-#      sleepWindowInMilliseconds: 10000
-#      requestVolumeThreshold: 20
-#      errorThresholdPercentage: 50
-#  fallback:
-#    Consumer:
-#      enabled: true
-#      maxConcurrentRequests: 20
-#  fallbackpolicy:
-#    Consumer:
-#      policy: throwexception
+        incoming: tracing-provider #provider handlers
 
-## Mesher TLS is base on Go Chassis TLS config
+## Mesher TLS is base on Go Chassis TLS config,  https://docs.go-chassis.com/user-guides/tls.html
 ssl:
 #  mesher-edge.rest.Provider.cipherPlugin: default
 #  mesher-edge.rest.Provider.verifyPeer: false
 #  mesher-edge.rest.Provider.cipherSuits: TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 #  mesher-edge.rest.Provider.protocol: TLSv1.2
 #  mesher-edge.rest.Provider.caFile:
-  mesher-edge.rest.Provider.certFile: server.crt
-  mesher-edge.rest.Provider.keyFile: server.key
+#  mesher-edge.rest.Provider.certFile: server.crt
+#  mesher-edge.rest.Provider.keyFile: server.key
 #  mesher-edge.rest.Provider.certPwdFile:
-
-#tracing:
-#  enabled: true #enable distribution tracing
-#  collectorType: zipkin       #zipkin: Send tracing info to zipkin server
-#                              #namedPipe: Write tracing info to linux named pipe.
-#  collectorTarget: http://localhost:9411/api/v1/spans #If the collectorType is "zipkin", the target is a zipkin server url, if the collecterType is "file" or "namedPipe", the target is a file path.
