@@ -1,17 +1,19 @@
 module github.com/apache/servicecomb-mesher
 
 require (
+	github.com/apache/servicecomb-kie v0.0.0-20191021014716-b4dc01d3968b
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.0.0-20190621030543-c3b63f787f4c
-	github.com/go-chassis/go-archaius v0.23.0
-	github.com/go-chassis/go-chassis v1.7.2-0.20191014010950-405e29b7566e
-	github.com/go-chassis/go-chassis-config v0.12.1-0.20190926020053-87487eaa3a72
+	github.com/go-chassis/go-archaius v0.24.0
+	github.com/go-chassis/go-chassis v1.7.3-0.20191018125535-1a99ab41f7ea
+	github.com/go-chassis/go-chassis-config v0.14.0
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v1.0.1
 	github.com/gogo/googleapis v1.3.0 // indirect
 	github.com/gogo/protobuf v1.3.0
 	github.com/google/gofuzz v1.0.0 // indirect
+	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/lyft/protoc-gen-validate v0.1.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
