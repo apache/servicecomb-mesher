@@ -80,5 +80,5 @@ follow [here](docs/README.md) to generate it in local
 ## 1.7.0
 - mesher ingress: mesher as a edge service to manage ingress traffic
 - integrate with servicecomb kie: user can change mesher-sidecar and mesher-ingress in same config server, don't need to change local files
-## skywalking
+## in future
 - support skywalking
