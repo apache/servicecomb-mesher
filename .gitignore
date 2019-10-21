@@ -27,5 +27,4 @@ vendor
 
 _build
 coverage.txt
-go.sum
 release
