@@ -32,8 +32,9 @@ const (
 )
 
 const (
-	HTTPClientComponentID = 2
-	HTTPServerComponentID = 49
+	HTTPClientComponentID  = 2
+	ServiceCombComponentID = 28
+	HTTPServerComponentID  = 49
 )
 
 //SkyWalkingProviderHandler struct
