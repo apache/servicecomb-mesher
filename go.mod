@@ -21,14 +21,18 @@ require (
 	github.com/prometheus/client_model v0.0.0-20190115171406-56726106282f
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.3.0
+	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
 	golang.org/x/net v0.0.0-20190311183353-d8887717615a
 	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
-	google.golang.org/grpc v1.16.0
+	google.golang.org/grpc v1.19.1
 	gopkg.in/inf.v0 v0.9.1 // indirect
-	gopkg.in/yaml.v2 v2.2.1
+	gopkg.in/yaml.v2 v2.2.2
 	k8s.io/apimachinery v0.0.0-20181022183627-f71dbbc36e12
 	k8s.io/client-go v9.0.0+incompatible
 )
 
-replace github.com/openzipkin-contrib/zipkin-go-opentracing v0.3.5 => github.com/go-chassis/zipkin-go-opentracing v0.3.5-0.20190321072447-42cf74fc2a92
+replace (
+	github.com/openzipkin-contrib/zipkin-go-opentracing v0.3.5 => github.com/go-chassis/zipkin-go-opentracing v0.3.5-0.20190321072447-42cf74fc2a92
+	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277 => github.com/SkyAPM/go2sky v0.1.1-0.20190703154722-1eaab8035277
+)

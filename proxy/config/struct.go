@@ -25,6 +25,7 @@ type MesherConfig struct {
 	Admin       Admin          `yaml:"admin"`
 	HealthCheck []*HealthCheck `yaml:"localHealthCheck"`
 	ProxyedPro  string         `yaml:"proxyedProtocol"`
+	ServiceComb *ServiceComb   `yaml:"servicecomb"`
 }
 
 //HealthCheck define how to check local ports
@@ -65,4 +66,20 @@ type Plugin struct {
 type Admin struct {
 	Enable    bool   `yaml:"enable"`
 	ServerURI string `yaml:"serverUri"`
+}
+
+//Tracing has attributes for APM
+type Tracing struct {
+	Enable    bool   `yaml:"enable"`
+	ServerURI string `yaml:"serverUri"`
+}
+
+//APM is for Application Performance Management
+type APM struct {
+	Tracing Tracing `yaml:"tracing"`
+}
+
+//ServiceComb is for servicecomb config
+type ServiceComb struct {
+	APM APM `yaml:"apm"`
 }
