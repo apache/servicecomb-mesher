@@ -37,9 +37,9 @@ import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
-project = u'go-chassis'
-copyright = u'2018, xiaoliang'
-author = u'xiaoliang'
+project = u'servicecomb-mesher'
+copyright = u'2019-2019, The Apache Software Foundation'
+author = u'The Apache Software Foundation'
 
 # The short X.Y version
 version = u''
@@ -132,7 +132,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'go-chassisdoc'
+htmlhelp_basename = 'servicecomb-mesherdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -159,8 +159,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'go-chassis.tex', u'go-chassis Documentation',
-     u'xiaoliang', 'manual'),
+    (master_doc, 'servicecomb-mesher.tex', u'servicecomb-mesher Documentation',
+     u'The Apache Software Foundation', 'manual'),
 ]
 
 
@@ -169,7 +169,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'go-chassis', u'go-chassis Documentation',
+    (master_doc, 'servicecomb-mesher', u'servicecomb-mesher Documentation',
      [author], 1)
 ]
 
@@ -180,7 +180,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'go-chassis', u'go-chassis Documentation',
-     author, 'go-chassis', 'One line description of project.',
+    (master_doc, 'servicecomb-mesher', u'servicecomb-mesher Documentation',
+     author, 'servicecomb-mesher', 'One line description of project.',
      'Miscellaneous'),
 ]
