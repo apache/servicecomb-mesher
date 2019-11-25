@@ -1,13 +1,12 @@
 module github.com/apache/servicecomb-mesher
 
 require (
-	github.com/apache/servicecomb-kie v0.0.0-20191021014716-b4dc01d3968b
+	github.com/apache/servicecomb-kie v0.1.1-0.20191119112752-d564a5ac0115
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0
-	github.com/go-chassis/foundation v0.0.0-20190621030543-c3b63f787f4c
+	github.com/go-chassis/foundation v0.1.1-0.20191113114104-2b05871e9ec4
 	github.com/go-chassis/go-archaius v0.24.0
-	github.com/go-chassis/go-chassis v1.7.3-0.20191018125535-1a99ab41f7ea
-	github.com/go-chassis/go-chassis-config v0.14.0
+	github.com/go-chassis/go-chassis v1.7.6
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v1.0.1
 	github.com/gogo/googleapis v1.3.0 // indirect
@@ -36,3 +35,5 @@ replace (
 	github.com/openzipkin-contrib/zipkin-go-opentracing v0.3.5 => github.com/go-chassis/zipkin-go-opentracing v0.3.5-0.20190321072447-42cf74fc2a92
 	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277 => github.com/SkyAPM/go2sky v0.1.1-0.20190703154722-1eaab8035277
 )
+
+go 1.13
