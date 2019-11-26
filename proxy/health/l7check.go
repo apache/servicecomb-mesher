@@ -18,19 +18,19 @@
 package health
 
 import (
+	"context"
 	"errors"
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/foundation/httpclient"
 	"github.com/go-mesh/openlogging"
 	"io/ioutil"
-	"net/http"
 	"regexp"
 	"strconv"
 )
 
 //HTTPCheck checks http service
 func HTTPCheck(check *config.HealthCheck, address string) error {
-	c, err := httpclient.GetURLClient(&httpclient.DefaultURLClientOption)
+	c, err := httpclient.New(&httpclient.DefaultOptions)
 	if err != nil {
 		openlogging.Error("can not get http client: " + err.Error())
 		//must not return error, because it is mesher error
@@ -40,13 +40,7 @@ func HTTPCheck(check *config.HealthCheck, address string) error {
 	if check.URI != "" {
 		url = url + check.URI
 	}
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		openlogging.Error("can not get http req: " + err.Error())
-		//must not return error, because it is mesher error
-		return nil
-	}
-	resp, err := c.Do(req)
+	resp, err := c.Get(context.Background(), url, nil)
 	if err != nil {
 		openlogging.Error("server can not be connected: " + err.Error())
 		return err
