@@ -1,7 +1,7 @@
 # Concepts
 
 ### Sidecar
-Mesher leverage 
+Mesher leverages 
 [distributed design pattern, sidecar](https://kubernetes.io/blog/2015/06/the-distributed-system-toolkit-patterns/) 
 to work along with service. 
 
@@ -10,15 +10,15 @@ Mesher is a light weight sidecar proxy developed on top of go-chassis,
 so it has the same [concepts](http://go-chassis.readthedocs.io/en/latest/intro/concepts.html) with it 
 and it has all features of go chassis
 
-### DestinationResolver
+### Destination Resolver
 
-Destination Resolver parse request into a service name
+Destination Resolver parses request into a service name
 
 ### Source Resolver
 
-source resolver get remote IP and based on remote IP, it 
+Source resolver gets remote IP and based on remote IP, it provides a standard way for the applications to create media sources.
 
 ### Admin API
 
-Listen on isolated port, it gives a way to interact with mesher
+Admin API listens on isolated port, it gives a way to interact with mesher
 

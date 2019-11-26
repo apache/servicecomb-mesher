@@ -19,7 +19,7 @@ cse:
         address: grpc://istio-pilot.istio-system:15010
 ```
 
-Since mesher doesn't have to register the service to Pilot, the registrator config item should be disabled. Make serviceDiscovery.type to be pilotv2, to get service information by xDS v2 API(the v1 API is deprecated).
+Since mesher doesn't have to register the service to Pilot, the registrator config item should be disabled. Make serviceDiscovery.type to be pilotv2, to get service information by xDS v2 API (the v1 API is deprecated).
 
 ### The routing tags in Istio
 

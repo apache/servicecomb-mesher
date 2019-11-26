@@ -1,10 +1,10 @@
 # Route Rule
 
-Instead of using CSE and route config to manage route, mesher supports Istio as a control plane to set route rule and follows the envoy API reference to manage route. This page gives the examples to show how requests are routed between micro services.
+Instead of using CSE and route config to manage routes, mesher supports Istio as a control plane to set route rules and follows the envoy API reference to manage routes. This page gives the examples to show how requests are routed between micro services.
 
 ## Mesher Configurations
 
-In **Consumer** router.yaml, you can set router.infra to define which router plugin mesher fetches from.  The default router.infra  is cse, which means the routerule comes from route config in CSE config-center. If router.infra is set to be pilotv2, the router.address is necessary, such as the in-cluster istio-pilot grpc address.
+In **Consumer** router.yaml, you can set router.infra to define which router plugin mesher fetches from.  The default router.infra is cse, which means the route rule comes from route config in CSE config-center. If router.infra is set to be pilotv2, the router.address is necessary, such as the in-cluster istio-pilot grpc address.
 
 > Notice that `infra: pilot` is deprecated since Istio removes the xDS v1 API from 0.7.1
 
@@ -29,7 +29,7 @@ cse:
 
 ## Kubernetes Configurations
 
-The provider applications of v1, v2 and v3 version could be deployed in kubernetes cluster as **Deployment** with differenent labels. The labels of version is necessary now,  and you need to set env to generate nodeID in Istio system, such as **POD_NAMESPACE, POD_NAME** and **INSTANCE_IP**.
+The provider applications of v1, v2 and v3 version could be deployed in kubernetes cluster as **Deployment** with differenent labels. The labels of version are necessary now,  and you need to set env to generate nodeID in Istio system, such as **POD_NAMESPACE, POD_NAME** and **INSTANCE_IP**.
 
 ```yaml
 apiVersion: extensions/v1beta1
@@ -108,9 +108,9 @@ spec:
           secretName: istio.default
 ```
 
-## Istio v1alpha3 router configurations
+## Istio v1alpha3 Router Configurations
 
- [Traffic-management](https://istio.io/docs/tasks/traffic-management/request-routing/) gives references and examples of Istio new router rule schema. First, subsets is defined according to labels. Then you can set route rule of differenent weight for virtual services.
+ [Traffic-management](https://istio.io/docs/tasks/traffic-management/request-routing/) gives references and examples of Istio new route rule schema. First, subsets is defined according to labels. Then you can set route rules of different weights for virtual services.
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3
@@ -131,7 +131,7 @@ spec:
       version: v3
 ```
 
-> **NOTICE: The subsets only support labels of version to distinguish differenent virtual services, this constrains will canceled later.**
+> **NOTICE: The subsets only support labels of version to distinguish different virtual services, this constrains will be canceled later.**
 
 ```yaml
 apiVersion: networking.istio.io/v1alpha3

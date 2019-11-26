@@ -18,11 +18,11 @@ Assume you original client is
 		grpc.WithInsecure(),
 		)
 ```
-set http_proxy
+Set http_proxy:
 ```bash
 export http_proxy=http://127.0.0.1:40100
 ```
 
 
-## example
+## Example
 A gRPC example is [here](https://github.com/go-mesh/mesher-examples/tree/master/protocol/grpc-go)

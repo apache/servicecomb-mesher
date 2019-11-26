@@ -1,11 +1,11 @@
 # Destination Resolver
 
 Destination Resolver is a module to parse each protocol request to get a target service name. 
-you can write your own resolver implementation for different protocol.
+You can write your own resolver implementation for different protocols.
 
 ## Configurations
 
-example
+Example:
 ```yaml
 plugin:
   destinationResolver:
@@ -16,5 +16,6 @@ plugin:
 
 
 **plugin.destinationResolver**
->*(optional, map)* here you can define what kind of resolver, a protocol should use
+
+>*(optional, map)* Define what kind of resolver, a protocol should use
 

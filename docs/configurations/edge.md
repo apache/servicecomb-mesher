@@ -1,39 +1,41 @@
 # API gateway
-mesher is able to work as a API gateway to mange traffic,to run mesher as an API gateway
+Mesher is able to work as a API gateway to mange traffic, to run mesher as an API gateway:
 ```shell
 mesher --config=mesher.yaml --mode edge
 ```
-the ingress rule is in mesher.yaml
+The ingress rule is in mesher.yaml.
 
 ### Options
 
 **mesher.ingress.type**
->*(optional, string)* default is servicecomb, it reads servicecomb ingress rule. 
->it is a plugin, you can custom your own implementation
-
+>*(optional, string)* Default is servicecomb, it reads servicecomb ingress rule. 
+>It is a plugin, you can custom your own implementation.
 
 **mesher.ingress.rule.http**
->*(optional, string)* rule about how to forward http traffic. it holds a yaml content as rule.
 
-below explain the content, the rule list is like a filter, all the request will go through this rule list until match one rule.
+>*(optional, string)* Rule about how to forward http traffic. It holds a yaml content as rule.
+
+
+
+Below explaining the content, the rule list is like a filter, all the request will go through this rule list until matching one rule.
 
 **apiPath**
->*(required, string)* if request's url match this, it will use this rule
+
+>*(required, string)* If request's url matches this, it will use this rule.
 
 **host**
->*(optional, string)* if request HOST match this, mesher will use this rule, it can be empty, 
->if you set both host and apiPath, the request's host and api path must match them at the same time
+>*(optional, string)* If request HOST matches this, mesher will use this rule. It can be empty. 
+>If you set both host and apiPath, the request's host and api path must match them both.
 >
 **service.name**
->*(required, string)* target backend service name in registry service(like ServiceComb service center)
+>*(required, string)* Target back-end service name in registry service (like ServiceComb service center).
 >
 **service.redirectPath**
->*(optional, string)* by default, mesher use original request's url
+>*(optional, string)* By default, mesher uses original request's url.
 >
 **service.port.value**
->*(optional, string)* if you use java chassis or go chassis to develop backend service, no need to set it. 
->but if your backend service use mesher-sidecar, you must give your service port here.
->
+>*(optional, string)* If using java chassis or go chassis to develop back-end service, no need to set it. 
+>But if back-end service uses mesher-sidecar, service port must be given here.
 ### example
 ```yaml
 mesher:
@@ -59,15 +61,15 @@ mesher:
 
 
 ### Enable TLS
-generate private key
+Generate private key
 ```sh
 openssl genrsa -out server.key 2048
 ```
-sign cert with private key
+Sign cert with private key
 ```shell script
 openssl req -new -x509 -key server.key -out server.crt -days 3650
 ```
-set file path in chassis.yaml
+Set file path in chassis.yaml
 ```yaml
 ssl:
   mesher-edge.rest.Provider.certFile: server.crt
