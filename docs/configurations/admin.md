@@ -2,17 +2,17 @@
 
 ### Configurations
 
-admin api server leverage protocol server, it listens on isolated port, by default admin is enabled, and default value of goRuntimeMetrics is false.
+Admin API server leverages protocol server, it listens on isolated port. By default admin is enabled, and default value of goRuntimeMetrics is false.
 
-To start api server, set protocol server config in chassis.yaml
+To start API server, set protocol server config in chassis.yaml:
 ```yaml
 cse:
    protocols:
      rest-admin:
-       listenAddress: 0.0.0.0:30102  # listen addr for adminAPI
+       listenAddress: 0.0.0.0:30102  # listen addr for admin API
 ```
 
-tune admin api in mesher.yaml
+Tune admin api in mesher.yaml:
 ```yaml
 admin: 
   enable: true
@@ -20,6 +20,6 @@ admin:
 
 
 **admin.enable**
->*(optional, bool)* default is false
+>*(optional, bool)* Default is false
 
 
