@@ -7,6 +7,18 @@ admin: #admin API
   goRuntimeMetrics : true # enable metrics
   enable: true
 
+authorization:
+  type: oauth2       # set by the way of authentication
+  endpoint:
+    authURL:    "your auth url"
+    tokenURL:   "your token url"
+#   authStyle:
+  client:
+    clientID:      "your client ID"
+    clientSecret:  "your client secret"
+  scopes:            # your authorization scopes
+  redirectURL:       # you local redirect URL
+
 ## enable pprof to profile mesher runtime
 #pprof:
 #  enable: false

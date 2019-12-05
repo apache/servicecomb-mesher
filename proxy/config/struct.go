@@ -19,13 +19,36 @@ package config
 
 //MesherConfig has all mesher config
 type MesherConfig struct {
-	Mesher      Mesher         `yaml:"mesher"`
-	PProf       *PProf         `yaml:"pprof"`
-	Plugin      *Plugin        `yaml:"plugin"`
-	Admin       Admin          `yaml:"admin"`
-	HealthCheck []*HealthCheck `yaml:"localHealthCheck"`
-	ProxyedPro  string         `yaml:"proxyedProtocol"`
-	ServiceComb *ServiceComb   `yaml:"servicecomb"`
+	Mesher        Mesher         `yaml:"mesher"`
+	PProf         *PProf         `yaml:"pprof"`
+	Plugin        *Plugin        `yaml:"plugin"`
+	Admin         Admin          `yaml:"admin"`
+	HealthCheck   []*HealthCheck `yaml:"localHealthCheck"`
+	ProxyedPro    string         `yaml:"proxyedProtocol"`
+	ServiceComb   *ServiceComb   `yaml:"servicecomb"`
+	Authorization *Authorization `yaml:"authorization"`
+}
+
+//Authorization define the authorization info
+type Authorization struct {
+	Type        string   `yaml:"type"`
+	Endpoint    Endpoint `yaml:"endpoint"`
+	Client      Client   `yaml:"client"`
+	Scopes      []string `yaml:"scopes"`
+	RedirectURL string   `yaml:"redirectURL"`
+}
+
+//Client struct
+type Client struct {
+	ClientID     string `yaml:"clientID"`
+	ClientSecret string `yaml:"clientSecret"`
+}
+
+//Endpoint struct
+type Endpoint struct {
+	AuthURL   string `yaml:"authURL"`
+	TokenURL  string `yaml:"tokenURL"`
+	AuthStyle int    `yaml:"authStyle"`
 }
 
 //HealthCheck define how to check local ports

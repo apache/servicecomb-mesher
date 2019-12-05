@@ -2,11 +2,13 @@ module github.com/apache/servicecomb-mesher
 
 require (
 	github.com/apache/servicecomb-kie v0.1.1-0.20191119112752-d564a5ac0115
+	github.com/emicklei/go-restful v2.11.1+incompatible
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.1.1-0.20191113114104-2b05871e9ec4
 	github.com/go-chassis/go-archaius v0.24.0
 	github.com/go-chassis/go-chassis v1.7.6
+	github.com/go-chassis/go-chassis-config v0.15.0
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v1.0.1
 	github.com/gogo/googleapis v1.3.0 // indirect
@@ -23,6 +25,7 @@ require (
 	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
 	golang.org/x/net v0.0.0-20190311183353-d8887717615a
+	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
 	google.golang.org/grpc v1.19.1
 	gopkg.in/inf.v0 v0.9.1 // indirect
