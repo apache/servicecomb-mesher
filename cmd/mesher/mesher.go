@@ -39,6 +39,8 @@ import (
 	_ "github.com/apache/servicecomb-mesher/proxy/pkg/egress/pilot"
 
 	_ "github.com/apache/servicecomb-mesher/proxy/control/istio"
+
+	_ "github.com/apache/servicecomb-mesher/proxy/handler/oauth2"
 )
 
 func main() {

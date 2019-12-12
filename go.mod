@@ -23,6 +23,7 @@ require (
 	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
 	golang.org/x/net v0.0.0-20190311183353-d8887717615a
+	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	golang.org/x/time v0.0.0-20180412165947-fbb02b2291d2 // indirect
 	google.golang.org/grpc v1.19.1
 	gopkg.in/inf.v0 v0.9.1 // indirect
