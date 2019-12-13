@@ -50,6 +50,7 @@ func HandleIngressTraffic(w http.ResponseWriter, r *http.Request) {
 	inv := &invocation.Invocation{}
 	inv.Reply = rest.NewResponse()
 	inv.Protocol = "rest"
+	inv.Args = r
 	h := make(map[string]string)
 	for k := range r.Header {
 		h[k] = r.Header.Get(k)
