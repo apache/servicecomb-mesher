@@ -23,9 +23,6 @@ import (
 	_ "github.com/apache/servicecomb-mesher/proxy/resolver/authority"
 
 	_ "github.com/apache/servicecomb-mesher/proxy/handler"
-	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/client/chassis"
-	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/server"
-	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/simpleRegistry"
 	// config server
 	_ "github.com/apache/servicecomb-kie/client/adaptor"
 	//protocols

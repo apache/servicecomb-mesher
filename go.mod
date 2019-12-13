@@ -6,7 +6,7 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.1.1-0.20191113114104-2b05871e9ec4
 	github.com/go-chassis/go-archaius v1.0.0
-	github.com/go-chassis/go-chassis v1.8.1-0.20191213091237-f7ba7d0c8fe5
+	github.com/go-chassis/go-chassis v1.8.1-0.20191214091125-dfa5db7d4d1c
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v1.0.1
 	github.com/gogo/googleapis v1.3.0 // indirect
@@ -21,11 +21,11 @@ require (
 	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
 	golang.org/x/net v0.0.0-20191004110552-13f9640d40b9
-	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
+	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
 	google.golang.org/grpc v1.19.1
 	gopkg.in/yaml.v2 v2.2.4
-	k8s.io/apimachinery v0.0.0-20191213205550-43dfa306b0f3
-	k8s.io/client-go v11.0.0+incompatible
+	k8s.io/apimachinery v0.17.0
+	k8s.io/client-go v0.17.0
 )
 
 replace (
