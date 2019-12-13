@@ -20,7 +20,7 @@ cse:
       Consumer:
         outgoing: router,bizkeeper-consumer,loadbalance,tracing-consumer,transport #consumer handlers
       Provider:
-        incoming: tracing-provider #provider handlers
+        incoming: oauth2,tracing-provider #provider handlers
 
 ## Mesher TLS is base on Go Chassis TLS config,  https://docs.go-chassis.com/user-guides/tls.html
 ssl:
