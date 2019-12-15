@@ -67,7 +67,7 @@ func CreateK8SRestClient(kubeconfig, apiPath, group, version string) (*rest.REST
 		Group:   group,
 		Version: version,
 	}
-	config.NegotiatedSerializer = serializer.DirectCodecFactory{CodecFactory: serializer.NewCodecFactory(runtime.NewScheme())}
+	config.NegotiatedSerializer = serializer.NewCodecFactory(runtime.NewScheme())
 
 	k8sRestClient, err := rest.RESTClientFor(config)
 	if err != nil {
