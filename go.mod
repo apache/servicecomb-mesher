@@ -6,13 +6,11 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.1.1-0.20191113114104-2b05871e9ec4
 	github.com/go-chassis/go-archaius v1.0.0
-	github.com/go-chassis/go-chassis v1.8.1-0.20191214091125-dfa5db7d4d1c
+	github.com/go-chassis/go-chassis v1.8.1-0.20191220080831-5b58b80f31bc
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v1.0.1
-	github.com/gogo/googleapis v1.3.0 // indirect
+	github.com/gogo/googleapis v1.3.1 // indirect
 	github.com/gogo/protobuf v1.3.0
-	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
-	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/lyft/protoc-gen-validate v0.1.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v0.9.1
