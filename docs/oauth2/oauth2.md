@@ -22,7 +22,7 @@ For example, implement the authorization code model **In oauth2_handler.go**
 			ClientID:     "",                        // (required, string) your client_ID
 			ClientSecret: "",                        // (required, string) your client_Secret
 			Scopes:       []string{""},              // (optional, string) scope specifies requested permissions
-			RedirectURL:  "",                        // (required, string) URL to redirect users going through the OAuth2 flow, 
+			RedirectURL:  "",                        // (required, string) URL to redirect users going through the OAuth2 flow, here url is redirect to mesher
 			Endpoint: oauth2.Endpoint{               // (required, string) your auth server endpoint
 				AuthURL:  "",
 				TokenURL: "",

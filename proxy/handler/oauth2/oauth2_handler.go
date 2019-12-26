@@ -29,15 +29,18 @@ import (
 
 // errors
 var (
-	ErrNoGrandType  = errors.New("no grant_type found")
+	ErrInvalidState = errors.New("invalid state")
 	ErrInvalidCode  = errors.New("invalid code")
 	ErrInvalidToken = errors.New("invalid authorization")
 	ErrInvalidAuth  = errors.New("invalid authentication")
 	ErrExpiredToken = errors.New("expired token")
 )
 
-// AuthName is a constant
+// AuthName is the auth style
 const AuthName = "oauth2"
+
+// Random is a state value
+const Random = "random"
 
 // Handler is is a oauth2 pre process raw data in handler
 type Handler struct {
@@ -45,42 +48,40 @@ type Handler struct {
 
 // Handle is provider
 func (oa *Handler) Handle(chain *handler.Chain, inv *invocation.Invocation, cb invocation.ResponseCallBack) {
-	if req, ok := inv.Args.(*http.Request); ok {
-		grantType := req.FormValue("grant_type")
-		if grantType == "" {
-			WriteBackErr(ErrNoGrandType, http.StatusUnauthorized, cb)
-			return
-		}
+	if auth != nil && auth.GrantType == "authorization_code" {
+		if req, ok := inv.Args.(*http.Request); ok {
+			state := req.FormValue("state")
+			if state != Random && state != "" {
+				WriteBackErr(ErrInvalidState, http.StatusUnauthorized, cb)
+				return
+			}
 
-		if auth != nil && auth.GrantType == "authorization_code" {
-			if req, ok := inv.Args.(*http.Request); ok {
-				code := req.FormValue("code")
-				if code == "" {
-					WriteBackErr(ErrInvalidCode, http.StatusUnauthorized, cb)
-					return
-				}
+			code := req.FormValue("code")
+			if code == "" {
+				WriteBackErr(ErrInvalidCode, http.StatusUnauthorized, cb)
+				return
+			}
 
-				accessToken, err := getToken(code, cb)
+			accessToken, err := getToken(code, cb)
+			if err != nil {
+				openlogging.Error("authorization error: " + err.Error())
+				WriteBackErr(ErrInvalidToken, http.StatusUnauthorized, cb)
+				return
+			}
+
+			if auth.Authenticate != nil {
+				err = auth.Authenticate(accessToken, req)
 				if err != nil {
-					openlogging.Error("authorization error: " + err.Error())
-					WriteBackErr(ErrInvalidToken, http.StatusUnauthorized, cb)
+					openlogging.Error("authentication error: " + err.Error())
+					WriteBackErr(ErrInvalidAuth, http.StatusUnauthorized, cb)
 					return
-				}
-
-				if auth.Authenticate != nil {
-					err = auth.Authenticate(accessToken, req)
-					if err != nil {
-						openlogging.Error("authentication error: " + err.Error())
-						WriteBackErr(ErrInvalidAuth, http.StatusUnauthorized, cb)
-						return
-					}
 				}
 			}
 		}
-		chain.Next(inv, func(r *invocation.Response) error {
-			return cb(r)
-		})
 	}
+	chain.Next(inv, func(r *invocation.Response) error {
+		return cb(r)
+	})
 }
 
 // getToken deal with the authorization code and return the token

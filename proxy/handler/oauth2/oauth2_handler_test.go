@@ -85,8 +85,22 @@ func TestOAuth2_Handle(t *testing.T) {
 			return r.Err
 		})
 	})
+	t.Run("null grant_type", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodPost, "https://api/?grant_type=&code=test", nil)
+		if err != nil {
+			t.Errorf("authorization failed: %s", err.Error())
+			return
+		}
+		i.Args = req
 
-	t.Run("Normal grant_type", func(t *testing.T) {
+		i.SetHeader("Authorization", "Basic dGVzdDp0ZXN0")
+		c.Next(i, func(r *invocation.Response) error {
+			assert.NoError(t, r.Err)
+			return r.Err
+		})
+	})
+
+	t.Run("normal grant_type", func(t *testing.T) {
 		req, err := http.NewRequest(http.MethodPost, "https://api/?grant_type=authorization_code&code=test", nil)
 		if err != nil {
 			t.Errorf("authorization failed: %s", err.Error())
@@ -100,8 +114,8 @@ func TestOAuth2_Handle(t *testing.T) {
 		})
 	})
 
-	t.Run("Null grant_type", func(t *testing.T) {
-		req, err := http.NewRequest(http.MethodPost, "https://api/?grant_type=&code=test", nil)
+	t.Run("normal state", func(t *testing.T) {
+		req, err := http.NewRequest(http.MethodPost, "https://api/?grant_type=&code=test&state=random", nil)
 		if err != nil {
 			t.Errorf("authorization failed: %s", err.Error())
 			return
