@@ -126,12 +126,8 @@ func (hs *httpServer) startSidecar(host, port string) error {
 			lager.Logger.Warnf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
 				sslTag, serverSSLConfig.VerifyPeer, serverSSLConfig.CipherPlugin)
 		}
-		conf := config.GetConfig()
-		if conf.ProxyedPro == "dubbo" {
-			err = hs.listenAndServe(hs.opts.Address, serverTLSConfig, http.HandlerFunc(dubboproxy.TransparentForwardHandler))
-		} else {
-			err = hs.listenAndServe(hs.opts.Address, serverTLSConfig, http.HandlerFunc(RemoteRequestHandler))
-		}
+
+		err = hs.listenAndServe(hs.opts.Address, serverTLSConfig, http.HandlerFunc(RemoteRequestHandler))
 		if err != nil {
 			return err
 		}
