@@ -19,6 +19,7 @@ package chassisclient
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"sync"
 
@@ -62,29 +63,42 @@ func (c *dubboChassisClient) Close() error {
 	return nil
 }
 func (c *dubboChassisClient) Call(ctx context.Context, addr string, inv *invocation.Invocation, rsp interface{}) error {
+	resp := rsp.(*dubboClient.WrapResponse)
+	resp.Resp = &dubbo.DubboRsp{}
 	dubboReq := inv.Args.(*dubbo.Request)
-
 	endPoint := addr
+
 	if endPoint == dubboproxy.DubboListenAddr {
 		endPoint = os.Getenv(mesherCommon.EnvSpecificAddr)
 	}
 	if endPoint == "" {
-		return &util.BaseError{" The endpoint is empty"}
+		resp.Resp.DubboRPCResult.SetException("The endpoint is empty")
+		return &util.BaseError{"The endpoint is empty"}
 	}
 
-	dubboCli, err := dubboClient.CachedClients.GetClient(endPoint)
+	dubboCli, err := dubboClient.CachedClients.GetClient(endPoint, c.opts.Timeout)
 	if err != nil {
+		resp.Resp.DubboRPCResult.SetException(fmt.Sprintf("Invalid Request addr %s %s", endPoint, err))
 		lager.Logger.Errorf("Invalid Request addr %s %s", endPoint, err)
 		return err
 	}
 
-	dubboRsp, errSnd := dubboCli.Send(dubboReq)
-	if errSnd != nil {
-		lager.Logger.Error("Dubbo server exception: " + errSnd.Error())
-		return errSnd
+	dubboRsp, err := dubboCli.Send(dubboReq)
+	if err != nil {
+		resp.Resp.DubboRPCResult.SetException(fmt.Sprintf("Dubbo server exception: " + err.Error()))
+		lager.Logger.Error("Dubbo server exception: " + err.Error())
+		return err
 	}
-	resp := rsp.(*dubboClient.WrapResponse)
+
 	resp.Resp = dubboRsp
+	if dubboRsp == nil {
+		return nil
+	}
+
+	if dubboRsp.GetStatus() != dubbo.Ok {
+		return fmt.Errorf("Dubbo request error %s", dubboRsp.GetErrorMsg())
+	}
+
 	return nil
 }
 
