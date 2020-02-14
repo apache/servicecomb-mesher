@@ -29,7 +29,6 @@ import (
 	"strings"
 
 	"github.com/apache/servicecomb-mesher/proxy/common"
-	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	chassisCom "github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/lager"
