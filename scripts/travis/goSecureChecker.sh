@@ -14,6 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+gosec ./... > result.txt
+cat result.txt
+rm -rf result.txt
 issueCount=$(gosec ./... | grep "Issues"  |awk -F":" '{print $2}')
 if [ $? == 0 ] && [[ $issueCount -le 35 ]] ; then
 	echo "No GoSecure warnings found"
