@@ -202,12 +202,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	inv.Ctx = context.WithValue(context.Background(), chassisCommon.ContextHeaderKey{}, ctx.Req.GetAttachments())
 	inv.MicroServiceName = svc.ServiceName
 	inv.RouteTags = utiltags.NewDefaultTag(svc.Version, svc.AppID)
-	value := ctx.Req.GetAttachment(ProxyTag, "")
-	if value == "" { //come from proxyedDubboSvc
-		inv.Protocol = schema.GetSupportProto(svc)
-	} else {
-		inv.Protocol = "dubbo"
-	}
+	inv.Protocol = "dubbo"
 	inv.URLPathFormat = ""
 	inv.Reply = &dubboclient.WrapResponse{nil} //&rest.Response{Resp: &ctx.Response}
 	var err error

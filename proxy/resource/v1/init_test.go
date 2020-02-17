@@ -21,8 +21,6 @@ import (
 	"testing"
 
 	mesherconfig "github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/config/model"
 	"github.com/go-chassis/go-chassis/core/lager"
 	_ "github.com/go-chassis/go-chassis/core/router/servicecomb"
 	"github.com/stretchr/testify/assert"
@@ -31,7 +29,6 @@ import (
 
 var globalConfig = `
 ---
-APPLICATION_ID: sockshop
 cse:
   loadbalance:
     strategyName: RoundRobin
@@ -87,12 +84,6 @@ func TestInit(t *testing.T) {
 	mesherConfig := new(mesherconfig.MesherConfig)
 	yaml.Unmarshal([]byte(mesherConf), mesherConfig)
 	mesherconfig.SetConfig(mesherConfig)
-	if config.GlobalDefinition == nil {
-		config.GlobalDefinition = &model.GlobalCfg{
-			AppID: "default",
-		}
-
-	}
 	err := Init()
 	assert.Nil(err)
 }
@@ -104,12 +95,6 @@ func TestInit2(t *testing.T) {
 	yaml.Unmarshal([]byte(mesherConf), mesherConfig)
 	mesherConfig.Admin.ServerURI = "INVALID"
 	mesherconfig.SetConfig(mesherConfig)
-	if config.GlobalDefinition == nil {
-		config.GlobalDefinition = &model.GlobalCfg{
-			AppID: "default",
-		}
-
-	}
 	err := Init()
 	assert.Nil(err)
 }
