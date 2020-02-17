@@ -33,7 +33,6 @@ import (
 
 	"github.com/apache/servicecomb-mesher/proxy/protocol"
 	"github.com/go-chassis/go-chassis/core/common"
-	chassisconfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-chassis/go-chassis/core/loadbalancer"
@@ -162,7 +161,7 @@ func getJVMType(v schema.MethParam, arg *util.Argument, bytesTmp [][]byte, query
 func preHandleToDubbo(req *http.Request) (*invocation.Invocation, string) {
 	inv := new(invocation.Invocation)
 	inv.MicroServiceName = runtime.ServiceName
-	inv.RouteTags = utiltags.NewDefaultTag(runtime.Version, chassisconfig.GlobalDefinition.AppID)
+	inv.RouteTags = utiltags.NewDefaultTag(runtime.Version, runtime.App)
 
 	inv.Protocol = "dubbo"
 	inv.URLPathFormat = req.URL.Path

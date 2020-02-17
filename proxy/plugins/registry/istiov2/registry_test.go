@@ -69,30 +69,6 @@ func TestEmptyPilotAddrs(t *testing.T) {
 	NewDiscoveryService(emptyAddrsOptions)
 }
 
-func TestGetAllMicroServices(t *testing.T) {
-	services, err := VaildServiceDiscovery.GetAllMicroServices()
-	if err != nil {
-		t.Errorf("Failed to get all micro services: %s", err.Error())
-	}
-
-	if len(services) == 0 {
-		t.Log("Warn: no micro services found")
-	}
-
-}
-
-func TestGetMicroServiceID(t *testing.T) {
-	serviceName := "pilotv2server"
-	msID, err := VaildServiceDiscovery.GetMicroServiceID("default", serviceName, "v3", "")
-	if err != nil {
-		t.Errorf("Failed to get micro service id: %s", err.Error())
-	}
-
-	if msID != serviceName {
-		t.Errorf("In pilotv2 discovery, msID should be equal to serviceName(%s != %s)", msID, serviceName)
-	}
-}
-
 func TestGetMicroService(t *testing.T) {
 	serviceName := "istio-pilot"
 	svc, err := VaildServiceDiscovery.GetMicroService(serviceName)
@@ -101,30 +77,6 @@ func TestGetMicroService(t *testing.T) {
 	}
 	if svc == nil {
 		t.Errorf("istio-pilot service should not be nil")
-	}
-}
-
-func TestGetMicroServiceInstance(t *testing.T) {
-	// serviceName := "istio-pilot"
-	ms, err := VaildServiceDiscovery.GetAllMicroServices()
-	if err != nil {
-		t.Errorf("Failed to get micro services: %s", err.Error())
-	}
-	if len(ms) == 0 {
-		t.Log("[WARN] No micro service found, skip")
-		return
-	}
-
-	clusterInfo := istioinfra.ParseClusterName(ms[0].ServiceName)
-	if clusterInfo == nil {
-		t.Errorf("Failed to parse micro service: %s", ms[0].ServiceName)
-	}
-	instances, err := VaildServiceDiscovery.GetMicroServiceInstances("pilotv2client", clusterInfo.ServiceName)
-	if err != nil {
-		t.Errorf("Failed to get micro service instances of %s: %s", clusterInfo.ServiceName, err.Error())
-	}
-	if len(instances) == 0 {
-		t.Errorf("istio-pilot's instances should not be empty")
 	}
 }
 

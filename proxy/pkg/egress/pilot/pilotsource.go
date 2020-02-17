@@ -80,7 +80,7 @@ func addEgressPilotSource(o egress.Options) error {
 		return err
 	}
 	lager.Logger.Infof("New [%s] source success", s.GetSourceName())
-	return pilotfetcher.AddSource(s, s.GetPriority())
+	return pilotfetcher.AddSource(s)
 }
 
 // pilotSource keeps the egress rule in istio

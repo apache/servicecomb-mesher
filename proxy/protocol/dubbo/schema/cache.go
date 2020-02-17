@@ -24,7 +24,6 @@ import (
 
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
-	"github.com/go-chassis/go-chassis/pkg/runtime"
 	"github.com/patrickmn/go-cache"
 )
 
@@ -56,28 +55,6 @@ func newInterfaceJob(interfaceName string) Job {
 			svcToInterfaceCache.Set(interfaceName, svc[0], 0)
 		}
 	}}
-}
-
-func newProtoJob(serviceID string) Job {
-	return Job{Fn: func() {
-		ins, err := registry.DefaultServiceDiscoveryService.GetMicroServiceInstances(runtime.ServiceID, serviceID)
-		if err == nil {
-			proto := protoForService(ins)
-			lager.Logger.Infof("refresh cache proto %s for serviceID %s", proto, serviceID)
-			protoCache.Set(serviceID, proto, 0)
-		}
-	}}
-}
-
-func protoForService(ins []*registry.MicroServiceInstance) string {
-	proto := "dubbo"
-	for _, in := range ins {
-		if _, ok := in.EndpointsMap[proto]; !ok {
-			proto = "rest"
-			break
-		}
-	}
-	return proto
 }
 
 func newRefresher(t time.Duration) *refreshTicker {

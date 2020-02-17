@@ -34,7 +34,6 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/util"
 	"github.com/go-chassis/go-chassis/client/rest"
 	chassisCommon "github.com/go-chassis/go-chassis/core/common"
-	chassisconfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/fault"
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
@@ -85,7 +84,7 @@ func consumerPreHandler(req *http.Request) *invocation.Invocation {
 func providerPreHandler(req *http.Request) *invocation.Invocation {
 	inv := preHandler(req)
 	inv.MicroServiceName = runtime.ServiceName
-	inv.RouteTags = utiltags.NewDefaultTag(runtime.Version, chassisconfig.GlobalDefinition.AppID)
+	inv.RouteTags = utiltags.NewDefaultTag(runtime.Version, runtime.App)
 	inv.SourceMicroService = req.Header.Get(chassisCommon.HeaderSourceName)
 	inv.Ctx = context.TODO()
 	return inv

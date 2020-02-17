@@ -23,7 +23,6 @@ import (
 
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
-	"github.com/go-chassis/go-chassis/pkg/runtime"
 )
 
 const (
@@ -198,34 +197,6 @@ func GetSvcByInterface(interfaceName string) *registry.MicroService {
 		}
 	}
 	return nil
-}
-
-//GetSupportProto is a function to get supported protocol
-func GetSupportProto(svc *registry.MicroService) string {
-	if svc == nil {
-		return ""
-	}
-	proto := "dubbo"
-	value, ok := protoCache.Get(svc.ServiceID)
-	if !ok || value == nil {
-		lager.Logger.Infof("Get proto from remote, serviceID: %s", svc.ServiceID)
-		ins, err := registry.DefaultServiceDiscoveryService.GetMicroServiceInstances(runtime.ServiceID, svc.ServiceID)
-		if err != nil {
-			return proto
-		}
-		lager.Logger.Infof("Cached proto for serviceID %s", svc.ServiceID)
-		protoCache.Set(svc.ServiceID, protoForService(ins), 0)
-		refresher.Add(newProtoJob(svc.ServiceID))
-
-		value, ok = protoCache.Get(svc.ServiceID)
-	}
-
-	if value != nil {
-		if cached, ok2 := value.(string); ok2 {
-			return cached
-		}
-	}
-	return proto
 }
 
 //GetSvcNameByInterface is a function to get service name by interface
