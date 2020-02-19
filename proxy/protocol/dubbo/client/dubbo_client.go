@@ -108,6 +108,9 @@ func (this *ClientMgr) GetClient(addr string, timeout time.Duration) (*DubboClie
 func NewDubboClient(addr string, routeMgr *util.RoutineManager, timeout time.Duration) *DubboClient {
 	tmp := &DubboClient{}
 	tmp.addr = addr
+	if timeout <= 0 {
+		timeout = 30 * time.Second
+	}
 	tmp.Timeout = timeout
 	tmp.conn = nil
 	tmp.closed = true
