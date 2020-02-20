@@ -76,7 +76,7 @@ func (c *dubboChassisClient) Call(ctx context.Context, addr string, inv *invocat
 		return &util.BaseError{"The endpoint is empty"}
 	}
 
-	dubboCli, err := dubboClient.CachedClients.GetClient(endPoint)
+	dubboCli, err := dubboClient.CachedClients.GetClient(endPoint, c.opts.Timeout)
 	if err != nil {
 		resp.Resp.DubboRPCResult.SetException(fmt.Sprintf("Invalid Request addr %s %s", endPoint, err))
 		lager.Logger.Errorf("Invalid Request addr %s %s", endPoint, err)

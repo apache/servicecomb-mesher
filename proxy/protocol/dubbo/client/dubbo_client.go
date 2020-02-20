@@ -36,6 +36,7 @@ type DubboClient struct {
 	conn          *DubboClientConnection
 	closed        bool
 	routeMgr      *util.RoutineManager
+	Timeout       time.Duration
 }
 
 //WrapResponse is a struct
@@ -70,10 +71,17 @@ func NewClientMgr() *ClientMgr {
 }
 
 //GetClient is a function which returns the particular client for that address
-func (this *ClientMgr) GetClient(addr string) (*DubboClient, error) {
+func (this *ClientMgr) GetClient(addr string, timeout time.Duration) (*DubboClient, error) {
 	this.mapMutex.Lock()
 	defer this.mapMutex.Unlock()
 	if tmp, ok := this.clients[addr]; ok {
+		if timeout <= 0 {
+			timeout = 30 * time.Second
+		}
+		if tmp.Timeout != timeout {
+			tmp.Timeout = timeout
+			this.clients[addr] = tmp
+		}
 		if !tmp.Closed() {
 			lager.Logger.Info("GetClient from cached addr:" + addr)
 			return tmp, nil
@@ -89,7 +97,7 @@ func (this *ClientMgr) GetClient(addr string) (*DubboClient, error) {
 		}
 	}
 	lager.Logger.Info("GetClient from new open addr:" + addr)
-	tmp := NewDubboClient(addr, nil)
+	tmp := NewDubboClient(addr, nil, timeout)
 	err := tmp.Open()
 	if err != nil {
 		return nil, err
@@ -100,10 +108,10 @@ func (this *ClientMgr) GetClient(addr string) (*DubboClient, error) {
 }
 
 //NewDubboClient is a function which creates new dubbo client for given value
-func NewDubboClient(addr string, routeMgr *util.RoutineManager) *DubboClient {
+func NewDubboClient(addr string, routeMgr *util.RoutineManager, timeout time.Duration) *DubboClient {
 	tmp := &DubboClient{}
 	tmp.addr = addr
-
+	tmp.Timeout = timeout
 	tmp.conn = nil
 	tmp.closed = true
 	tmp.msgWaitRspMap = make(map[int64]*RespondResult)
@@ -217,7 +225,7 @@ func (this *DubboClient) Send(dubboReq *dubbo.Request) (*dubbo.DubboRsp, error) 
 	select {
 	case <-wait:
 		timeout = false
-	case <-time.After(300 * time.Second):
+	case <-time.After(this.Timeout):
 		timeout = true
 	}
 	if this.closed {
