@@ -75,6 +75,9 @@ func (this *ClientMgr) GetClient(addr string, timeout time.Duration) (*DubboClie
 	this.mapMutex.Lock()
 	defer this.mapMutex.Unlock()
 	if tmp, ok := this.clients[addr]; ok {
+		if timeout <= 0 {
+			timeout = 30 * time.Second
+		}
 		if tmp.Timeout != timeout {
 			tmp.Timeout = timeout
 			this.clients[addr] = tmp
@@ -220,7 +223,7 @@ func (this *DubboClient) Send(dubboReq *dubbo.Request) (*dubbo.DubboRsp, error) 
 	select {
 	case <-wait:
 		timeout = false
-	case <-time.After(300 * time.Second):
+	case <-time.After(this.Timeout):
 		timeout = true
 	}
 	if this.closed {
