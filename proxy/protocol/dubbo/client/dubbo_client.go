@@ -75,9 +75,6 @@ func (this *ClientMgr) GetClient(addr string, timeout time.Duration) (*DubboClie
 	this.mapMutex.Lock()
 	defer this.mapMutex.Unlock()
 	if tmp, ok := this.clients[addr]; ok {
-		if timeout <= 0 {
-			timeout = 30 * time.Second
-		}
 		if tmp.Timeout != timeout {
 			tmp.Timeout = timeout
 			this.clients[addr] = tmp
@@ -142,16 +139,14 @@ func (this *DubboClient) Open() error {
 }
 
 func (this *DubboClient) open() error {
-	tcpAddr, err := net.ResolveTCPAddr("tcp", this.addr)
-	if err != nil {
-		lager.Logger.Error(err.Error())
-		return err
-	}
-	conn, errDial := net.DialTCP("tcp", nil, tcpAddr)
-
+	c, errDial := net.DialTimeout("tcp", this.addr, this.Timeout)
 	if errDial != nil {
 		lager.Logger.Errorf("the addr: %s %s ", this.addr, errDial)
 		return errDial
+	}
+	conn, ok := c.(*net.TCPConn)
+	if !ok {
+		return fmt.Errorf("not TCPConn type")
 	}
 	this.conn = NewDubboClientConnetction(conn, this, nil)
 	this.conn.Open()
@@ -225,7 +220,7 @@ func (this *DubboClient) Send(dubboReq *dubbo.Request) (*dubbo.DubboRsp, error) 
 	select {
 	case <-wait:
 		timeout = false
-	case <-time.After(this.Timeout):
+	case <-time.After(300 * time.Second):
 		timeout = true
 	}
 	if this.closed {
