@@ -37,23 +37,6 @@ ROUTER_YAML="router.yaml"
 
 TMP_DIR="/tmp"
 
-check_sc_env_exist() {
-    if [ -z "$CSE_REGISTRY_ADDR" ]; then
-        /bin/echo "WARNING: Please export CSE_REGISTRY_ADDR=http(s)://ip:port"
-    fi
-}
-
-check_cc_env_exist() {
-    if [ -z "$CSE_CONFIG_CENTER_ADDR" ]; then
-        /bin/echo "WARNING: Please export CSE_CONFIG_CENTER_ADDR=http(s)://ip:port"
-    fi
-}
-
-check_metric_env_exist() {
-    if [ -z "$CSE_MONITOR_SERVER_ADDR" ]; then
-        /bin/echo "WARNING: Please export CSE_MONITOR_SERVER_ADDR=http(s)://ip:port"
-    fi
-}
 check_config_files(){
     # configs can be mounted, maybe config map
     if [ -f "$TMP_DIR/$MESHER_YAML" ]; then
@@ -102,19 +85,6 @@ fi
 # configure refreshInterval
 if [ ! -z "$REFRESH_INTERVAL" ]; then
     sed -i s/"refreshInterval:.*"/"refreshInterval: $REFRESH_INTERVAL"/g $MESHER_CONF_DIR/$CHASSIS_YAML
-fi
-
-# configure service description
-if [ ! -z "$SERVICE_NAME" ]; then
-    /bin/echo "Service description reset by env, service name: $SERVICE_NAME"
-    cat << EOF > $MESHER_CONF_DIR/$MICROSERVICE_YAML
-APPLICATION_ID: $APP_ID
-service_description:
-  name: $SERVICE_NAME
-  version: $VERSION
-  properties:
-    allowCrossApp: true
-EOF
 fi
 
 #add instance_properties if any provided
