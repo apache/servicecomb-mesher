@@ -87,9 +87,4 @@ func TestGetEgressEndpoints(t *testing.T) {
 	}
 
 	assert.Equal(t, "http://istio-pilot.istio-system:15010", c.Egress.Address)
-	assert.Equal(t, 0, len(config.GetEgressEndpoints()))
-}
-
-func TestInitProtocols(t *testing.T) {
-	config.InitProtocols()
 }
