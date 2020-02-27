@@ -1,7 +1,6 @@
 module github.com/apache/servicecomb-mesher
 
 require (
-	github.com/apache/servicecomb-kie v0.1.1-0.20191119112752-d564a5ac0115
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.1.1-0.20191113114104-2b05871e9ec4

@@ -23,8 +23,6 @@ import (
 	_ "github.com/apache/servicecomb-mesher/proxy/resolver/authority"
 
 	_ "github.com/apache/servicecomb-mesher/proxy/handler"
-	// config server
-	_ "github.com/apache/servicecomb-kie/client/adaptor"
 	//protocols
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/grpc"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/http"
