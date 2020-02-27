@@ -19,12 +19,12 @@ package skywalking
 
 import (
 	"context"
+	"github.com/SkyAPM/go2sky"
+	"github.com/SkyAPM/go2sky/reporter"
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	gcconfig "github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-mesh/openlogging"
-	"github.com/tetratelabs/go2sky"
-	"github.com/tetratelabs/go2sky/reporter"
 )
 
 const (

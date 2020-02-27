@@ -6,7 +6,7 @@ require (
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.1.1-0.20191113114104-2b05871e9ec4
 	github.com/go-chassis/go-archaius v1.0.1-0.20200121100918-32f6f1a3f33d
-	github.com/go-chassis/go-chassis v1.8.2-0.20200221015322-aa1decfd8f68
+	github.com/go-chassis/go-chassis v1.8.3-0.20200226063221-d581e154a0ed
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v1.0.1
 	github.com/gogo/googleapis v1.3.1 // indirect
@@ -15,6 +15,7 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v0.9.1
 	github.com/prometheus/client_model v0.0.0-20190115171406-56726106282f
+	github.com/SkyAPM/go2sky v0.2.1-0.20191224143142-f10048c76bda
 	github.com/stretchr/testify v1.4.0
 	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
@@ -28,7 +29,6 @@ require (
 
 replace (
 	github.com/openzipkin-contrib/zipkin-go-opentracing v0.3.5 => github.com/go-chassis/zipkin-go-opentracing v0.3.5-0.20190321072447-42cf74fc2a92
-	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277 => github.com/SkyAPM/go2sky v0.1.1-0.20190703154722-1eaab8035277
 )
 
 go 1.13

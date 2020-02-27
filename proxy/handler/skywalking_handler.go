@@ -18,12 +18,12 @@
 package handler
 
 import (
+	"github.com/SkyAPM/go2sky"
+	skycom "github.com/SkyAPM/go2sky/reporter/grpc/common"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/skywalking"
 	"github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/invocation"
 	"github.com/go-mesh/openlogging"
-	"github.com/tetratelabs/go2sky"
-	skycom "github.com/tetratelabs/go2sky/reporter/grpc/common"
 	"strconv"
 )
 
