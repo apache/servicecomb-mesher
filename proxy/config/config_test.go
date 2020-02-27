@@ -72,3 +72,24 @@ func TestSetConfig(t *testing.T) {
 	assert.Equal(t, "host", c.Plugin.DestinationResolver["http"])
 	assert.Equal(t, "8800", c.HealthCheck[0].Port)
 }
+
+var egressFile = []byte(`
+egress:
+  infra: cse  # pilot or cse
+  address: http://istio-pilot.istio-system:15010
+  `)
+
+func TestGetEgressEndpoints(t *testing.T) {
+	config.Init()
+	c := config.GetEgressConfig()
+	if err := yaml.Unmarshal([]byte(egressFile), c); err != nil {
+		t.Error(err)
+	}
+
+	assert.Equal(t, "http://istio-pilot.istio-system:15010", c.Egress.Address)
+	assert.Equal(t, 0, len(config.GetEgressEndpoints()))
+}
+
+func TestInitProtocols(t *testing.T) {
+	config.InitProtocols()
+}
