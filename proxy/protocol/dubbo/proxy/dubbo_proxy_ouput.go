@@ -209,8 +209,6 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	err = SetLocalServiceAddress(inv) //select local service
 	if err == nil {
 		IsProvider = true
-	} else {
-		openlogging.Warn(err.Error())
 	}
 
 	var c *handler.Chain
