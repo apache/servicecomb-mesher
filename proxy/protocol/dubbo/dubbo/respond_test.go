@@ -11,7 +11,7 @@ func TestDubboDubboRsp(t *testing.T) {
 	assert.Equal(t, "0.0.0", rsp.mVersion)
 	assert.Equal(t, false, rsp.mEvent)
 	assert.Equal(t, "", rsp.mErrorMsg)
-	assert.Equal(t, 0, rsp.mID)
+	assert.Equal(t, int64(0), rsp.mID)
 	assert.Equal(t, Ok, rsp.mStatus)
 
 	// Value
@@ -30,7 +30,7 @@ func TestDubboDubboRsp(t *testing.T) {
 
 	// ID
 	rsp.SetID(12345)
-	assert.Equal(t, 12345, rsp.GetID())
+	assert.Equal(t, int64(12345), rsp.GetID())
 
 	// Exception
 	rsp.SetException("Java Throw Exception")
