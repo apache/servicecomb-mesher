@@ -111,8 +111,8 @@ func (cm *CacheManager) pullMicroserviceInstance() error {
 				msi := &registry.MicroServiceInstance{}
 				msi.InstanceID = strings.Replace(addr, ":", "_", 0)
 				msi.HostName = clusterInfo.ClusterName
-				msi.EndpointsMap = map[string]string{
-					common.ProtocolRest: addr,
+				msi.EndpointsMap = map[string]*registry.Endpoint{
+					common.ProtocolRest: {Address: addr},
 				}
 				msi.DefaultEndpoint = addr
 				msi.DefaultProtocol = common.ProtocolRest

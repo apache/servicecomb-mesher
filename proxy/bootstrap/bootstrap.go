@@ -114,7 +114,7 @@ func SetHandlers() {
 	consumerChain := strings.Join([]string{
 		chassisHandler.Router,
 		chassisHandler.RateLimiterConsumer,
-		chassisHandler.BizkeeperConsumer,
+		"bizkeeper-consumer",
 		chassisHandler.Loadbalance,
 		chassisHandler.Transport,
 	}, ",")
@@ -137,7 +137,6 @@ func SetHandlers() {
 func InitEgressChain() error {
 	egresschain := strings.Join([]string{
 		handler.RateLimiterConsumer,
-		handler.BizkeeperConsumer,
 		handler.Transport,
 	}, ",")
 

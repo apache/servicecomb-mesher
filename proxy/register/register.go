@@ -49,16 +49,18 @@ func AdaptEndpoints() error {
 		newProtoMap[n] = proto
 	}
 	newProtoMap[chassisCommon.ProtocolRest] = oldProtoMap[common.HTTPProtocol]
-	registry.InstanceEndpoints, err = registry.MakeEndpointMap(newProtoMap)
+	eps, err := registry.MakeEndpointMap(newProtoMap)
 	if err != nil {
 		return err
 	}
-	for protocol, address := range registry.InstanceEndpoints {
-		if address == "" {
+	for protocol, ep := range eps {
+		if ep.Address == "" {
 			port := strings.Split(newProtoMap[protocol].Listen, ":")
 			if len(port) == 2 { //check if port is not specified along with ip address, eventually in case port is not specified, server start will fail in subsequent processing.
 				registry.InstanceEndpoints[protocol] = iputil.GetLocalIP() + ":" + port[1]
 			}
+		} else {
+			registry.InstanceEndpoints[protocol] = ep.Address
 		}
 	}
 
