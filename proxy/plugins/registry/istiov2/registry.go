@@ -100,8 +100,8 @@ func toMicroServiceInstance(clusterName string, lbendpoint *apiv2endpoint.LbEndp
 	msi.InstanceID = addr + "_" + portStr
 	msi.HostName = clusterName
 	msi.DefaultEndpoint = addr + ":" + portStr
-	msi.EndpointsMap = map[string]string{
-		common.ProtocolRest: msi.DefaultEndpoint,
+	msi.EndpointsMap = map[string]*registry.Endpoint{
+		common.ProtocolRest: {Address: msi.DefaultEndpoint},
 	}
 	msi.DefaultProtocol = common.ProtocolRest
 	msi.Metadata = tags
