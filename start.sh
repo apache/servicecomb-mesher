@@ -62,10 +62,6 @@ copy_tmp2mesher(){
     fi
 }
 
-check_sc_env_exist
-check_cc_env_exist
-check_metric_env_exist
-
 check_config_files
 
 net_name=$(ip -o -4 route show to default | awk '{print $5}')
