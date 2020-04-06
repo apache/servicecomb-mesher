@@ -216,7 +216,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	if inv.Protocol == "dubbo" {
 		//发送请求
 		//value := ctx.Req.GetAttachment(ProxyTag, "")
-		if !IsProvider { //come from proxyedDubboSvc
+		if !IsProvider || inv.MicroServiceName != runtime.ServiceName { //come from proxyedDubboSvc
 			ctx.Req.SetAttachment(common.HeaderSourceName, runtime.ServiceName)
 			ctx.Req.SetAttachment(ProxyTag, "true")
 
