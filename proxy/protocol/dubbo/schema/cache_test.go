@@ -18,6 +18,7 @@
 package schema
 
 import (
+	"sync"
 	"testing"
 	"time"
 
@@ -29,20 +30,22 @@ func TestFreshTicker(t *testing.T) {
 	r1.Run()
 
 	a1, a2 := 0, 0
+	var wg sync.WaitGroup
+	wg.Add(2)
 
 	r1.Add(Job{Fn: func() {
 		a1++
+		wg.Done()
 	}})
-	time.Sleep(time.Millisecond * 10)
+
 	r1.Add(Job{Fn: func() {
 		a2++
+		wg.Done()
 	}})
 
-	select {
-	case <-time.After(time.Second * 5):
-	}
+	wg.Wait()
 
-	assert.Equal(t, a1, 2)
-	assert.Equal(t, a2, 2)
+	assert.Equal(t, a1, 1)
+	assert.Equal(t, a2, 1)
 
 }
