@@ -33,7 +33,7 @@ func TestFreshTicker(t *testing.T) {
 	r1.Add(Job{Fn: func() {
 		a1++
 	}})
-	time.Sleep(time.Second)
+	time.Sleep(time.Millisecond * 10)
 	r1.Add(Job{Fn: func() {
 		a2++
 	}})
