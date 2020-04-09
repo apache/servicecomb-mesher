@@ -71,11 +71,19 @@ func TestDubboServer_Start(t *testing.T) {
 
 	// case listening error
 	s = f(server.Options{
-		Address:   "0.0.0.1:30201",
+		Address:   "99.0.0.1:30201",
 		ChainName: "default",
 	})
 	err = s.Start()
 	assert.Error(t, err)
+
+	// case ok
+	s = f(server.Options{
+		Address:   "127.0.0.1:30201",
+		ChainName: "default",
+	})
+	err = s.Start()
+	assert.NoError(t, err)
 }
 
 func TestDubboServer(t *testing.T) {
