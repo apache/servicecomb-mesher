@@ -126,11 +126,10 @@ func TestDubboServer(t *testing.T) {
 		var dubboClient *dubboclient.DubboClient
 		dubboClient, err := clientMgr.GetClient("127.0.0.1:40201", time.Second*5)
 		assert.NoError(t, err)
-		req := new(dubbo.Request)
 
+		req := new(dubbo.Request)
 		req.SetMsgID(int64(11111111))
 		req.SetVersion("1.0.0")
-
 		req.SetEvent("ok")
 
 		_, err = dubboClient.Send(req)
