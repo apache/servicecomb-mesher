@@ -23,6 +23,7 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/pkg/runtime"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
+	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/server"
 	"github.com/stretchr/testify/assert"
 	"net"
@@ -31,6 +32,10 @@ import (
 	"testing"
 	"time"
 )
+
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "INFO", RollingPolicy: "size"})
+}
 
 func externalIP() (net.IP, error) {
 	ifaces, err := net.Interfaces()
