@@ -55,7 +55,8 @@ func TestMsgQueue(t *testing.T) {
 		assert.Equal(t, eMSG, dMSG)
 
 		// case empty
-		go func() {
+		var done chan struct{}
+		go func(done chan struct{}) {
 			dMSG, err = q.Dequeue()
 			assert.NoError(t, err)
 
@@ -65,10 +66,13 @@ func TestMsgQueue(t *testing.T) {
 			// error
 			_, err = q.Dequeue()
 			assert.Error(t, err)
-		}()
+			close(done)
+
+		}(done)
 
 		select {
 		case <-time.After(time.Second * 10):
+		case <-done:
 		}
 
 	})
@@ -82,15 +86,18 @@ func TestMsgQueue(t *testing.T) {
 
 		err = q1.Enqueue(eMSG)
 		assert.NoError(t, err)
-
-		go func() {
+		var done chan struct{}
+		go func(c chan struct{}) {
 			err = q1.Enqueue(eMSG)
 			t.Log(err)
 			assert.Error(t, err)
-		}()
+
+			close(c)
+		}(done)
 
 		select {
 		case <-time.After(time.Second * 10):
+		case <-done:
 		}
 
 		// Deavtive
