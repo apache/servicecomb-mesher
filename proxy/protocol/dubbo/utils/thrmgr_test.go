@@ -25,7 +25,8 @@ import (
 
 func TestNewThreadGroupWait(t *testing.T) {
 	count := 0
-	go func() {
+	var done chan struct{}
+	go func(done chan struct{}) {
 		var tgw *ThreadGroupWait
 		tgw = NewThreadGroupWait()
 		tgw.Add(1)
@@ -34,10 +35,12 @@ func TestNewThreadGroupWait(t *testing.T) {
 			count++
 		}(tgw)
 		tgw.Wait()
-	}()
+		close(done)
+	}(done)
 
 	select {
 	case <-time.After(time.Second * 2):
+	case <-done:
 	}
 	assert.Equal(t, 1, count)
 
