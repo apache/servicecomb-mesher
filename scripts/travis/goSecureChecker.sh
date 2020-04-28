@@ -16,18 +16,13 @@
 
 gosec ./... > result.txt
 cat result.txt
+issueCount=$(cat result.txt | grep "Issues"  |awk -F":" '{print $2}')
 rm -rf result.txt
-issueCount=$(gosec ./... | grep "Issues"  |awk -F":" '{print $2}')
-if [ $? == 0 ]; then
-	if [ $issueCount -le 35 ]; then
-		echo "No GoSecure warnings found"
-		exit 0
-	else
+
+if [ $issueCount -gt 35 ] || [ $? != 0 ]; then
 		echo "GoSecure Warnings found"
-		exit 1	
-	
-else
-	echo "GoSecure Warnings found"
-	exit 1
+		exit 1
 fi
 
+echo "No GoSecure warnings found"
+exit 0
