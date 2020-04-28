@@ -19,7 +19,7 @@ cat result.txt
 issueCount=$(cat result.txt | grep "Issues"  |awk -F":" '{print $2}')
 rm -rf result.txt
 
-if [[ $issueCount -gt 35 ]] || [ $? != 0 ]; then
+if [[ 35 -le $issueCount ]] || [ $? != 0 ]; then
 		echo "GoSecure Warnings found"
 		exit 1
 fi
