@@ -18,7 +18,7 @@
 
 gosec -fmt=json -out=results.json ./...
 cat results.json
-issueCount=$(cat results.json | grep "Issues" | sed 's/[[:space:]]//g' | awk -F":" '{print $2}')
+issueCount=$(cat results.json | grep "found" | sed 's/[[:space:]]//g' | awk -F":" '{print $2}')
 issueCountLo=91
 rm -rf results.json
 if (($? == 0 && 35 > $issueCount)); then
