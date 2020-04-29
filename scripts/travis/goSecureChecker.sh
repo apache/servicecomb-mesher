@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/sh
+
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -14,15 +15,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-gosec ./... > result.txt
-cat result.txt
-rm -rf result.txt
-issueCount=$(gosec ./... | grep "Issues"  |awk -F":" '{print $2}')
-if [ $? == 0 ] && [[ $issueCount -le 35 ]] ; then
+gosec -fmt=json -out=results.json ./...
+cat results.json
+issueCount=$(cat results.json | grep '"found":' | sed 's/[[:space:]]//g' | awk -F":" '{print $2}')
+rm -rf results.json
+if (($? == 0 && 35 > $issueCount)); then
 	echo "No GoSecure warnings found"
 	exit 0
 else
 	echo "GoSecure Warnings found"
 	exit 1
 fi
-
