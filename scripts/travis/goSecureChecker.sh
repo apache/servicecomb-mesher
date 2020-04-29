@@ -15,11 +15,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-gosec ./... > result.txt
-cat result.txt
-issueCount=$(cat result.txt | grep "Issues" | sed 's/[[:space:]]//g' | awk -F":" '{print int($2)}')
+
+gosec -fmt=json -out=results.json ./...
+cat results.json
+issueCount=$(cat results.json | grep "Issues" | sed 's/[[:space:]]//g' | awk -F":" '{print $2}')
 issueCountLo=91
-rm -rf result.txt
+rm -rf results.json
 if (($? == 0 && 35 > $issueCount)); then
 	echo "No GoSecure warnings found"
 	exit 0
