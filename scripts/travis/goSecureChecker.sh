@@ -16,7 +16,7 @@
 
 gosec ./... > result.txt
 cat result.txt
-issueCount=$(cat result.txt | grep "Issues" | sed 's/[[:space:]]//g' | awk -F":" '{print int($2)}')
+issueCount=$(cat result.txt | grep "Issues" | sed 's/[[:space:]]//g' | awk -F":" '{printf "%d",$2}')
 rm -rf result.txt
 if (($? == 0 && 35 > $issueCount)); then
 	echo "No GoSecure warnings found"
