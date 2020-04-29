@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/sh
+
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -16,7 +17,7 @@
 
 gosec ./... > result.txt
 cat result.txt
-issueCount=$(cat result.txt | grep "Issues" | awk -F":" '{print $2}')
+issueCount=$(cat result.txt | grep "Issues" | sed 's/[[:space:]]//g' | awk -F":" '{printf "%d",$2}')
 rm -rf result.txt
 if (($? == 0 && 35 > $issueCount)); then
 	echo "No GoSecure warnings found"
