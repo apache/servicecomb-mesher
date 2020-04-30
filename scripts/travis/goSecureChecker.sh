@@ -17,7 +17,7 @@
 
 gosec -fmt=json -out=results.json ./...
 cat results.json
-issueCount=$(cat results.json | grep '"found":' | sed 's/[[:space:]]//g' | awk -F":" '{print $2}')
+issueCount=$(tail -7 results.json | grep '"found":' | sed 's/[[:space:]]//g' | awk -F":" '{print $2}')
 rm -rf results.json
 if (($? == 0 && 35 > $issueCount)); then
 	echo "No GoSecure warnings found"
