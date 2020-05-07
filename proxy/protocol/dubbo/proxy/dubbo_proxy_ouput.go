@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
+	stringutil "github.com/go-chassis/foundation/string"
 	"net/http"
 	"net/url"
 
@@ -207,7 +208,9 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	inv.Reply = &dubboclient.WrapResponse{nil} //&rest.Response{Resp: &ctx.Response}
 	var err error
 	err = SetLocalServiceAddress(inv) //select local service
-	if err == nil {
+	if err != nil {
+		openlogging.GetLogger().Warn(err.Error())
+	} else {
 		IsProvider = true
 	}
 
