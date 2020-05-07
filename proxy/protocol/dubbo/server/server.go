@@ -177,7 +177,7 @@ func initSchema() {
 	for _, inter := range service.ServiceDescription.Schemas {
 		if len(inter) == 0 {
 			openlogging.GetLogger().Warnf("interfaces is empty")
-			continue
+			break
 		}
 		schemaContent := struct {
 			Swagger string            `yaml:"swagger"`
@@ -193,7 +193,7 @@ func initSchema() {
 
 		b, err := yaml.Marshal(&schemaContent)
 		if err != nil {
-			continue
+			break
 		}
 
 		m[inter] = string(b)
