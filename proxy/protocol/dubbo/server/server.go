@@ -18,6 +18,11 @@
 package server
 
 import (
+	"fmt"
+	"github.com/go-chassis/go-chassis/core/config"
+	"github.com/go-chassis/go-chassis/core/config/schema"
+	"github.com/go-mesh/openlogging"
+	"gopkg.in/yaml.v2"
 	"net"
 	"sync"
 	"time"
@@ -91,6 +96,7 @@ func (d *DubboServer) String() string {
 
 //Init is a method to initialize the server
 func (d *DubboServer) Init() error {
+	initSchema()
 	d.connMgr = NewConnectMgr()
 	lager.Logger.Info("Dubbo server init success.")
 	return nil
@@ -158,4 +164,40 @@ func (d *DubboServer) AcceptLoop(l *net.TCPListener) {
 	}
 
 	defer l.Close()
+}
+
+// initSchema is a method to ini the schema ids
+func initSchema() {
+	m := make(map[string]string, 0)
+	service := config.MicroserviceDefinition
+	if len(service.ServiceDescription.Schemas) == 0 {
+		return
+	}
+
+	for _, inter := range service.ServiceDescription.Schemas {
+		if len(inter) == 0 {
+			openlogging.GetLogger().Warnf("interfaces is empty")
+			break
+		}
+		schemaContent := struct {
+			Swagger string            `yaml:"swagger"`
+			Info    map[string]string `yaml:"info"`
+		}{
+			Swagger: "2.0",
+			Info: map[string]string{
+				"version":          "1.0.0",
+				"title":            fmt.Sprintf("swagger definition for %s", inter),
+				"x-java-interface": inter,
+			},
+		}
+
+		b, err := yaml.Marshal(&schemaContent)
+		if err != nil {
+			break
+		}
+
+		m[inter] = string(b)
+	}
+
+	schema.SetSchemaInfoByMap(m)
 }
