@@ -113,11 +113,13 @@ func GetVersion() string {
 func SetHandlers() {
 	consumerChain := strings.Join([]string{
 		chassisHandler.Router,
+		"ratelimiter-consumer",
 		"bizkeeper-consumer",
 		chassisHandler.Loadbalance,
 		chassisHandler.Transport,
 	}, ",")
 	providerChain := strings.Join([]string{
+		chassisHandler.RateLimiterProvider,
 		chassisHandler.Transport,
 	}, ",")
 	consumerChainMap := map[string]string{
@@ -125,6 +127,7 @@ func SetHandlers() {
 	}
 	providerChainMap := map[string]string{
 		common.ChainProviderIncoming: providerChain,
+		"default":                    chassisHandler.RateLimiterProvider,
 	}
 	chassis.SetDefaultConsumerChains(consumerChainMap)
 	chassis.SetDefaultProviderChains(providerChainMap)
@@ -133,6 +136,7 @@ func SetHandlers() {
 //InitEgressChain init the egress handler chain
 func InitEgressChain() error {
 	egresschain := strings.Join([]string{
+		"ratelimiter-consumer",
 		handler.Transport,
 	}, ",")
 
