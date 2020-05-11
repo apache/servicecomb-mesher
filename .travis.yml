@@ -48,13 +48,11 @@ jobs:
     - stage: Build
       script: 
         - GO111MODULE=on go mod download
-        - GO111MODULE=on go mod vendor
         - go build github.com/apache/servicecomb-mesher/cmd/mesher
     - stage: Unit Test
       script:
         - go get github.com/mattn/goveralls
         - go get golang.org/x/tools/cmd/cover
         - GO111MODULE=on go mod download
-        - GO111MODULE=on go mod vendor
         - bash -x scripts/travis/unit_test.sh && $HOME/gopath/bin/goveralls -coverprofile=coverage.txt -service=travis-ci
 
