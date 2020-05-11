@@ -199,5 +199,8 @@ func initSchema() {
 		m[inter] = string(b)
 	}
 
-	schema.SetSchemaInfoByMap(m)
+	err := schema.SetSchemaInfoByMap(m)
+	if err != nil {
+		openlogging.Error("Set schemaInfo failed: " + err.Error())
+	}
 }

@@ -19,6 +19,7 @@ package v1
 
 import (
 	"fmt"
+	"github.com/go-mesh/openlogging"
 	"net/http"
 
 	"github.com/go-chassis/go-chassis/core/common"
@@ -34,10 +35,16 @@ func (a *RouteResource) RouteRuleByService(context *restful.Context) {
 	serviceName := context.ReadPathParameter("serviceName")
 	routeRule := router.DefaultRouter.FetchRouteRuleByServiceName(serviceName)
 	if routeRule == nil {
-		context.WriteHeaderAndJSON(http.StatusNotFound, fmt.Sprintf("%s routeRule not found", serviceName), common.JSON)
+		err := context.WriteHeaderAndJSON(http.StatusNotFound, fmt.Sprintf("%s routeRule not found", serviceName), common.JSON)
+		if err != nil {
+			openlogging.GetLogger().Errorf("Write HeaderAndJSON error %s: ", err.Error())
+		}
 		return
 	}
-	context.WriteHeaderAndJSON(http.StatusOK, routeRule, "text/vnd.yaml")
+	err := context.WriteHeaderAndJSON(http.StatusOK, routeRule, "text/vnd.yaml")
+	if err != nil {
+		openlogging.GetLogger().Errorf("Write HeaderAndJSON error %s: ", err.Error())
+	}
 }
 
 //URLPatterns helps to respond for  Admin API calls

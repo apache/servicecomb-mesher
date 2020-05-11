@@ -53,7 +53,9 @@ func ConvertDubboRspToRestRsp(dubboRsp *dubbo.DubboRsp, w http.ResponseWriter, c
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 			} else {
-				w.Write([]byte(v))
+				if _, err := w.Write([]byte(v)); err != nil {
+					return err
+				}
 			}
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -202,6 +204,7 @@ func TransparentForwardHandler(w http.ResponseWriter, r *http.Request) {
 
 func handleRequestForDubbo(w http.ResponseWriter, inv *invocation.Invocation, ir *invocation.Response) error {
 	if ir != nil {
+		var err error
 		if ir.Err != nil {
 			switch ir.Err.(type) {
 			case hystrix.FallbackNullError:
@@ -210,27 +213,37 @@ func handleRequestForDubbo(w http.ResponseWriter, inv *invocation.Invocation, ir
 			case hystrix.CircuitError:
 				w.WriteHeader(http.StatusServiceUnavailable)
 				ir.Status = http.StatusServiceUnavailable
-				w.Write([]byte(ir.Err.Error()))
+				_, err = w.Write([]byte(ir.Err.Error()))
 			case loadbalancer.LBError:
 				w.WriteHeader(http.StatusBadGateway)
 				ir.Status = http.StatusBadGateway
-				w.Write([]byte(ir.Err.Error()))
+				_, err = w.Write([]byte(ir.Err.Error()))
 			default:
 				w.WriteHeader(http.StatusInternalServerError)
 				ir.Status = http.StatusInternalServerError
-				w.Write([]byte(ir.Err.Error()))
+				_, err = w.Write([]byte(ir.Err.Error()))
 			}
+			if err != nil {
+				return err
+			}
+
 			return ir.Err
 		}
 		if inv.Endpoint == "" {
 			w.WriteHeader(http.StatusInternalServerError)
 			ir.Status = http.StatusInternalServerError
-			w.Write([]byte(protocol.ErrUnknown.Error()))
+			_, err = w.Write([]byte(protocol.ErrUnknown.Error()))
+			if err != nil {
+				return err
+			}
 			return protocol.ErrUnknown
 		}
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(protocol.ErrUnExpectedHandlerChainResponse.Error()))
+		_, err := w.Write([]byte(protocol.ErrUnExpectedHandlerChainResponse.Error()))
+		if err != nil {
+			return err
+		}
 		return protocol.ErrUnExpectedHandlerChainResponse
 	}
 

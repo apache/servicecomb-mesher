@@ -23,6 +23,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/pkg/metrics"
 	"github.com/go-chassis/go-chassis/server/restful"
+	"github.com/go-mesh/openlogging"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 )
@@ -34,10 +35,16 @@ type StatusResource struct{}
 func (a *StatusResource) Health(context *restful.Context) {
 	healthResp := health.GetMesherHealth()
 	if healthResp.Status == health.Red {
-		context.WriteHeaderAndJSON(http.StatusInternalServerError, healthResp, common.JSON)
+		err := context.WriteHeaderAndJSON(http.StatusInternalServerError, healthResp, common.JSON)
+		if err != nil {
+			openlogging.GetLogger().Errorf("Write HeaderAndJSON error %s: ", err.Error())
+		}
 		return
 	}
-	context.WriteHeaderAndJSON(http.StatusOK, healthResp, common.JSON)
+	err := context.WriteHeaderAndJSON(http.StatusOK, healthResp, common.JSON)
+	if err != nil {
+		openlogging.GetLogger().Errorf("Write HeaderAndJSON error %s: ", err.Error())
+	}
 }
 
 //GetMetrics returns metrics data
@@ -50,7 +57,10 @@ func (a *StatusResource) GetMetrics(context *restful.Context) {
 //GetVersion writes version in response header
 func (a *StatusResource) GetVersion(context *restful.Context) {
 	versions := version.Ver()
-	context.WriteHeaderAndJSON(http.StatusOK, versions, common.JSON)
+	err := context.WriteHeaderAndJSON(http.StatusOK, versions, common.JSON)
+	if err != nil {
+		openlogging.GetLogger().Errorf("Write HeaderAndJSON error %s: ", err.Error())
+	}
 }
 
 //URLPatterns helps to respond for  Admin API calls

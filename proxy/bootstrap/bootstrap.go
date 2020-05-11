@@ -55,7 +55,9 @@ func Start() error {
 	if err := DecideMode(); err != nil {
 		return err
 	}
-	metrics.Init()
+	if err := metrics.Init(); err != nil {
+		lager.Logger.Infof("metrics init error", err)
+	}
 	if err := v1.Init(); err != nil {
 		log.Println("Error occurred in starting admin server", err)
 	}

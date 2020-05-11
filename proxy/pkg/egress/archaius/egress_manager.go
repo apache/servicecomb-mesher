@@ -76,8 +76,13 @@ func (r *egressRuleEventListener) Event(e *event.Event) {
 // initialize the config mgr and add several sources
 func initEgressManager() error {
 	egressListener := &egressRuleEventListener{}
-	archaius.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), archaius.WithFileHandler(util.UseFileNameAsKeyContentAsValue))
-	archaius.RegisterListener(egressListener, ".*")
-
+	err := archaius.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), archaius.WithFileHandler(util.UseFileNameAsKeyContentAsValue))
+	if err != nil {
+		lager.Logger.Infof("Archaius add file failed: ", err)
+	}
+	err = archaius.RegisterListener(egressListener, ".*")
+	if err != nil {
+		lager.Logger.Infof("Archaius add file failed: ", err)
+	}
 	return nil
 }

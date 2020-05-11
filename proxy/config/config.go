@@ -146,7 +146,10 @@ func SetKeyValueByFile(key, f string) string {
 		return ""
 	}
 	contents = string(b)
-	archaius.Set(key, contents)
+	err = archaius.Set(key, contents)
+	if err != nil {
+		lager.Logger.Error("Archaius set error: " + err.Error())
+	}
 	return contents
 }
 

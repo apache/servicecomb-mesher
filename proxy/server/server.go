@@ -64,7 +64,10 @@ func Run() {
 		panic(err)
 	}
 	profile()
-	chassis.Run()
+	if err := chassis.Run(); err != nil {
+		openlogging.Error("Chassis failed: " + err.Error())
+		panic(err)
+	}
 }
 
 func profile() {

@@ -221,7 +221,10 @@ func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	if err != nil {
 		openlogging.Error("can not copy: " + err.Error())
 	}
-	resp.Body.Close()
+	err = resp.Body.Close()
+	if err != nil {
+		openlogging.Error("Http response close error: " + err.Error())
+	}
 }
 func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invocation.Response) (*http.Response, error) {
 	if ir != nil {
