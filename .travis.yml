@@ -35,7 +35,7 @@ jobs:
         - bash -x scripts/travis/goConstChecker.sh
     - stage: GoLint Checker
       script:
-        - go get -u github.com/golang/lint/golint
+        - go get -u golang.org/x/lint/golint
         - bash -x scripts/travis/goLintChecker.sh
     - stage: GoCyclo Checker
       script:
