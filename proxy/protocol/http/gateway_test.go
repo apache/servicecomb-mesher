@@ -6,7 +6,6 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/pkg/metrics"
 	"github.com/go-chassis/go-archaius"
 	"github.com/go-chassis/go-chassis/control"
-	_ "github.com/go-chassis/go-chassis/control/archaius"
 	"github.com/go-chassis/go-chassis/core/common"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/config/model"
