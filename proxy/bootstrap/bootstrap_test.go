@@ -32,6 +32,8 @@ import (
 	"path/filepath"
 	"sync"
 	"testing"
+	// rate limiter handler
+	_ "github.com/go-chassis/go-chassis/middleware/ratelimiter"
 )
 
 var o sync.Once = sync.Once{}
