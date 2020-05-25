@@ -114,7 +114,10 @@ func init() {
 
 //ArrayToQueryString is a function which converts array to a string
 func ArrayToQueryString(key string, inlst interface{}) string {
-	lst := inlst.([]interface{})
+	lst, ok := inlst.([]interface{})
+	if !ok {
+		return ""
+	}
 	var retstr = ""
 	for i := 0; i < len(lst); i++ {
 		tmp := lst[i]
