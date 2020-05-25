@@ -117,6 +117,12 @@ func NewSkyWalkingConsumer() handler.Handler {
 }
 
 func init() {
-	handler.RegisterHandler(skywalking.SkyWalkingProvider, NewSkyWalkingProvier)
-	handler.RegisterHandler(skywalking.SkyWalkingConsumer, NewSkyWalkingConsumer)
+	err := handler.RegisterHandler(skywalking.SkyWalkingProvider, NewSkyWalkingProvier)
+	if err != nil {
+		openlogging.GetLogger().Errorf("Handler [%s] register error: ", skywalking.SkyWalkingProvider, err.Error())
+	}
+	err = handler.RegisterHandler(skywalking.SkyWalkingConsumer, NewSkyWalkingConsumer)
+	if err != nil {
+		openlogging.GetLogger().Errorf("Handler [%s] register error: ", skywalking.SkyWalkingConsumer, err.Error())
+	}
 }

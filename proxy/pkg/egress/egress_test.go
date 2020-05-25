@@ -32,6 +32,7 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress/archaius"
 	"github.com/go-chassis/go-chassis/control"
+	_ "github.com/go-chassis/go-chassis/control/servicecomb"
 	"github.com/go-chassis/go-chassis/core/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"gopkg.in/yaml.v2"

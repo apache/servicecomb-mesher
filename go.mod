@@ -4,8 +4,8 @@ require (
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.1.1-0.20191113114104-2b05871e9ec4
-	github.com/go-chassis/go-archaius v1.2.1-0.20200309104817-8c3d4e87d33c
-	github.com/go-chassis/go-chassis v1.8.2-0.20200317131017-6cbcbc9ae9e6
+	github.com/go-chassis/go-archaius v1.3.0
+	github.com/go-chassis/go-chassis v1.8.2-0.20200505090058-f61a697f667a
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-mesh/openlogging v1.0.1
 	github.com/gogo/googleapis v1.3.1 // indirect

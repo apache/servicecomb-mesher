@@ -77,7 +77,10 @@ type DubboClientConnection struct {
 //NewDubboClientConnetction is a function which create new dubbo client connection
 func NewDubboClientConnetction(conn *net.TCPConn, client *DubboClient, routineMgr *util.RoutineManager) *DubboClientConnection {
 	tmp := new(DubboClientConnection)
-	conn.SetKeepAlive(true)
+	err := conn.SetKeepAlive(true)
+	if err != nil {
+		lager.Logger.Error("TCPConn SetKeepAlive error:" + err.Error())
+	}
 	tmp.conn = conn
 	tmp.codec = dubbo.DubboCodec{}
 	tmp.client = client
@@ -104,7 +107,10 @@ func (this *DubboClientConnection) Close() {
 	}
 	this.closed = true
 	this.msgque.Deavtive()
-	this.conn.Close()
+	err := this.conn.Close()
+	if err != nil {
+		lager.Logger.Error("Dubbo client connection close error:" + err.Error())
+	}
 }
 
 //MsgRecvLoop is a method which receives message
@@ -174,7 +180,10 @@ func (this *DubboClientConnection) HandleMsg(rsp *dubbo.DubboRsp) {
 //SendMsg is a method which send a request
 func (this *DubboClientConnection) SendMsg(req *dubbo.Request) {
 	//这里发送Rest请求以及收发送应答
-	this.msgque.Enqueue(req)
+	err := this.msgque.Enqueue(req)
+	if err != nil {
+		lager.Logger.Error("Msg Enqueue:" + err.Error())
+	}
 }
 
 //MsgSndLoop is a method which send data

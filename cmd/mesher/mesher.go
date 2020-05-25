@@ -38,6 +38,9 @@ import (
 	_ "github.com/apache/servicecomb-mesher/proxy/handler/oauth2"
 
 	_ "github.com/go-chassis/go-chassis/middleware/circuit"
+
+	// rate limiter handler
+	_ "github.com/go-chassis/go-chassis/middleware/ratelimiter"
 )
 
 func main() {

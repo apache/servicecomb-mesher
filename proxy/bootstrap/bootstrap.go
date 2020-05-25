@@ -55,7 +55,9 @@ func Start() error {
 	if err := DecideMode(); err != nil {
 		return err
 	}
-	metrics.Init()
+	if err := metrics.Init(); err != nil {
+		lager.Logger.Infof("metrics init error", err)
+	}
 	if err := v1.Init(); err != nil {
 		log.Println("Error occurred in starting admin server", err)
 	}
@@ -113,7 +115,7 @@ func GetVersion() string {
 func SetHandlers() {
 	consumerChain := strings.Join([]string{
 		chassisHandler.Router,
-		chassisHandler.RateLimiterConsumer,
+		"ratelimiter-consumer",
 		"bizkeeper-consumer",
 		chassisHandler.Loadbalance,
 		chassisHandler.Transport,
@@ -136,7 +138,7 @@ func SetHandlers() {
 //InitEgressChain init the egress handler chain
 func InitEgressChain() error {
 	egresschain := strings.Join([]string{
-		handler.RateLimiterConsumer,
+		"ratelimiter-consumer",
 		handler.Transport,
 	}, ",")
 

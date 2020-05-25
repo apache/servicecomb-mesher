@@ -45,7 +45,10 @@ func (ps *PortSelectionHandler) Handle(chain *handler.Chain, inv *invocation.Inv
 		r := &invocation.Response{
 			Err: err,
 		}
-		cb(r)
+
+		if err := cb(r); err != nil {
+			openlogging.Error("Response callBack error: " + err.Error())
+		}
 		return
 	}
 

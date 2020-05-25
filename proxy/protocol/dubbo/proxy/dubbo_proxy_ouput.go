@@ -22,7 +22,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
-	stringutil "github.com/go-chassis/foundation/string"
 	"net/http"
 	"net/url"
 
@@ -42,7 +41,7 @@ import (
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/loadbalancer"
 	"github.com/go-chassis/go-chassis/pkg/runtime"
-	"github.com/go-chassis/go-chassis/pkg/string"
+	stringutil "github.com/go-chassis/go-chassis/pkg/string"
 	"github.com/go-chassis/go-chassis/pkg/util/httputil"
 	"github.com/go-chassis/go-chassis/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
