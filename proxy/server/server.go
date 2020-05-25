@@ -34,39 +34,35 @@ import (
 func Run() {
 	// server init
 	if err := cmd.Init(); err != nil {
-		panic(err)
+		openlogging.Fatal(err.Error())
 	}
 	if err := cmd.Configs.GeneratePortsMap(); err != nil {
-		panic(err)
+		openlogging.Fatal(err.Error())
 	}
 	bootstrap.RegisterFramework()
 	bootstrap.SetHandlers()
 	if err := chassis.Init(); err != nil {
-		openlogging.Error("Go chassis init failed, Mesher is not available: " + err.Error())
-		panic(err)
+		openlogging.Fatal("Go chassis init failed, Mesher is not available: " + err.Error())
 	}
 	if err := bootstrap.InitEgressChain(); err != nil {
 		openlogging.Error("egress chain int failed: %s", openlogging.WithTags(openlogging.Tags{
 			"err": err.Error(),
 		}))
-		panic(err)
+		openlogging.Fatal(err.Error())
 	}
 
 	if err := bootstrap.Start(); err != nil {
-		openlogging.Error("Bootstrap failed: " + err.Error())
-		panic(err)
+		openlogging.Fatal("Bootstrap failed: " + err.Error())
 	}
 	openlogging.Info("server start complete", openlogging.WithTags(openlogging.Tags{
 		"version": version.Ver().Version,
 	}))
 	if err := health.Run(); err != nil {
-		openlogging.Error("Health manager start failed: " + err.Error())
-		panic(err)
+		openlogging.Fatal("Health manager start failed: " + err.Error())
 	}
 	profile()
 	if err := chassis.Run(); err != nil {
-		openlogging.Error("Chassis failed: " + err.Error())
-		panic(err)
+		openlogging.Fatal("Chassis failed: " + err.Error())
 	}
 }
 

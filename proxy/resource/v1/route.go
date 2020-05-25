@@ -37,13 +37,13 @@ func (a *RouteResource) RouteRuleByService(context *restful.Context) {
 	if routeRule == nil {
 		err := context.WriteHeaderAndJSON(http.StatusNotFound, fmt.Sprintf("%s routeRule not found", serviceName), common.JSON)
 		if err != nil {
-			openlogging.GetLogger().Errorf("Write HeaderAndJSON error %s: ", err.Error())
+			openlogging.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
 		}
 		return
 	}
 	err := context.WriteHeaderAndJSON(http.StatusOK, routeRule, "text/vnd.yaml")
 	if err != nil {
-		openlogging.GetLogger().Errorf("Write HeaderAndJSON error %s: ", err.Error())
+		openlogging.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
 	}
 }
 
