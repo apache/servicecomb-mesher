@@ -18,9 +18,17 @@
 package schema
 
 import (
+	"github.com/go-chassis/go-chassis/core/config"
+	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/go-chassis/core/registry"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 	"testing"
 )
+
+func init() {
+	lager.Init(&lager.Options{LoggerLevel: "DEBUG"})
+}
 
 func Test_GetRspSchema(t *testing.T) {
 	res := make(map[string]*MethRespond, 0)
@@ -115,4 +123,97 @@ func Test_GetParamSchema(t *testing.T) {
 	param = m.GetParamSchema(2)
 	assert.Nil(t, param)
 
+}
+
+// CovertSwaggerMethordToLocalMethord(&schema, &m, &meth)
+func Test_CovertSwaggerMethordToLocalMethord(t *testing.T) {
+	schema := &registry.SchemaContent{
+		Definition: map[string]registry.Definition{
+			"hello": registry.Definition{},
+		},
+	}
+	paras := make([]registry.Parameter, 0)
+	paras = append(paras, registry.Parameter{
+		Name: "Hello",
+		Type: "string",
+		Schema: registry.SchemaValue{
+			Type:      "string",
+			Reference: "hello",
+		},
+	}, registry.Parameter{
+		Name: "Hello1",
+		Type: "",
+		Schema: registry.SchemaValue{
+			Type:      "string",
+			Reference: "hello1",
+		},
+	}, registry.Parameter{
+		Name: "Hello2",
+		Type: "",
+		Schema: registry.SchemaValue{
+			Type:      "",
+			Reference: "hello1",
+		},
+	})
+
+	srcMethod := &registry.MethodInfo{
+		Parameters: paras,
+		Response: map[string]registry.Response{
+			"200": registry.Response{
+				Schema: map[string]string{"type": "string"},
+			},
+			"201": registry.Response{
+				Schema: map[string]string{"$ref": "/v/hello"},
+			},
+		},
+	}
+	distMeth := &DefMethod{}
+	CovertSwaggerMethordToLocalMethord(schema, srcMethod, distMeth)
+}
+
+func Test_GetSvcByInterface(t *testing.T) {
+	config.Init()
+
+	registry.DefaultContractDiscoveryService = new(MockContractDiscoveryService)
+	v := GetSvcByInterface("hello")
+	assert.NotNil(t, v)
+
+	svcToInterfaceCache.Set("hello", &registry.MicroService{}, 0)
+	// case has value
+	v = GetSvcByInterface("hello")
+	assert.NotNil(t, v)
+
+}
+
+func Test_GetMethodByInterface(t *testing.T) {
+	registry.DefaultContractDiscoveryService = new(MockContractDiscoveryService)
+	GetMethodByInterface("hello", "hello")
+}
+
+// ContractDiscoveryService struct for disco mock
+type MockContractDiscoveryService struct {
+	mock.Mock
+}
+
+func (m *MockContractDiscoveryService) GetMicroServicesByInterface(interfaceName string) (microservices []*registry.MicroService) {
+	microservices = append(microservices, &registry.MicroService{})
+	return
+}
+
+func (m *MockContractDiscoveryService) GetSchemaContentByInterface(interfaceName string) registry.SchemaContent {
+	return registry.SchemaContent{}
+}
+
+func (m *MockContractDiscoveryService) GetSchemaContentByServiceName(svcName, version, appID, env string) []*registry.SchemaContent {
+	var sc []*registry.SchemaContent
+	sc = append(sc, &registry.SchemaContent{
+		Paths: map[string]map[string]registry.MethodInfo{
+			"hello": map[string]registry.MethodInfo{},
+		},
+	})
+	return nil
+}
+
+func (m *MockContractDiscoveryService) Close() error {
+	return nil
 }
