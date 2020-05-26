@@ -38,6 +38,8 @@ func init() {
 }
 
 func TestDubboServer_Start(t *testing.T) {
+	//config.Init()
+
 	protoMap := make(map[string]model.Protocol)
 	config.GlobalDefinition = &model.GlobalCfg{
 		Cse: model.CseStruct{
@@ -50,6 +52,7 @@ func TestDubboServer_Start(t *testing.T) {
 
 	config.GlobalDefinition.Cse.Handler.Chain.Provider = defaultChain
 	config.GlobalDefinition.Cse.Handler.Chain.Consumer = defaultChain
+	config.MicroserviceDefinition = &model.MicroserviceCfg{}
 
 	f, err := server.GetServerFunc("dubbo")
 	assert.NoError(t, err)
@@ -92,6 +95,7 @@ func TestDubboServer_Start(t *testing.T) {
 
 func TestDubboServer(t *testing.T) {
 	t.Log("Test dubbo server function")
+	config.Init()
 
 	protoMap := make(map[string]model.Protocol)
 	config.GlobalDefinition = &model.GlobalCfg{
@@ -105,6 +109,7 @@ func TestDubboServer(t *testing.T) {
 
 	config.GlobalDefinition.Cse.Handler.Chain.Provider = defaultChain
 	config.GlobalDefinition.Cse.Handler.Chain.Consumer = defaultChain
+	config.MicroserviceDefinition = &model.MicroserviceCfg{}
 
 	f, err := server.GetServerFunc("dubbo")
 	assert.NoError(t, err)
