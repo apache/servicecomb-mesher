@@ -53,15 +53,16 @@ func Test_GetParamNameAndWhere(t *testing.T) {
 		Status: "200",
 	}
 
-	mParams := []MethParam{MethParam{
+	mParams := []MethParam{{
 		Name:  "para1",
 		Where: "query",
 		Indx:  0,
-	}, MethParam{
+	}, {
 		Name:  "para2",
 		Where: "body",
 		Indx:  1,
-	}}
+	},
+	}
 
 	m := DefMethod{
 		ownerSvc: "svc",
@@ -93,15 +94,16 @@ func Test_GetParamSchema(t *testing.T) {
 		Status: "200",
 	}
 
-	mParams := []MethParam{MethParam{
+	mParams := []MethParam{{
 		Name:  "para1",
 		Where: "query",
 		Indx:  0,
-	}, MethParam{
+	}, {
 		Name:  "para2",
 		Where: "body",
 		Indx:  1,
-	}}
+	},
+	}
 
 	m := DefMethod{
 		ownerSvc: "svc",
@@ -129,7 +131,7 @@ func Test_GetParamSchema(t *testing.T) {
 func Test_CovertSwaggerMethordToLocalMethord(t *testing.T) {
 	schema := &registry.SchemaContent{
 		Definition: map[string]registry.Definition{
-			"hello": registry.Definition{},
+			"hello": {},
 		},
 	}
 	paras := make([]registry.Parameter, 0)
@@ -159,10 +161,10 @@ func Test_CovertSwaggerMethordToLocalMethord(t *testing.T) {
 	srcMethod := &registry.MethodInfo{
 		Parameters: paras,
 		Response: map[string]registry.Response{
-			"200": registry.Response{
+			"200": {
 				Schema: map[string]string{"type": "string"},
 			},
-			"201": registry.Response{
+			"201": {
 				Schema: map[string]string{"$ref": "/v/hello"},
 			},
 		},
@@ -208,7 +210,7 @@ func (m *MockContractDiscoveryService) GetSchemaContentByServiceName(svcName, ve
 	var sc []*registry.SchemaContent
 	sc = append(sc, &registry.SchemaContent{
 		Paths: map[string]map[string]registry.MethodInfo{
-			"hello": map[string]registry.MethodInfo{},
+			"hello": {},
 		},
 	})
 	return nil
