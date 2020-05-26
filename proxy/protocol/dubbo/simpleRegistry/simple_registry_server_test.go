@@ -54,14 +54,14 @@ func TestSimpleDubboRegistryServer_Start(t *testing.T) {
 
 	// case split port error
 	s := f(server.Options{
-		Address:   "0.0.0.130201",
+		Address:   "0.0.0.10201",
 		ChainName: "default",
 	})
 	err = s.Start()
 	assert.Error(t, err)
 	// case invalid host
 	s = f(server.Options{
-		Address:   "2.2.2.1990:30201",
+		Address:   "2.2.2.1990:50201",
 		ChainName: "default",
 	})
 	err = s.Start()
@@ -77,7 +77,7 @@ func TestSimpleDubboRegistryServer_Start(t *testing.T) {
 
 	// case ok
 	s = f(server.Options{
-		Address:   "127.0.0.1:30201",
+		Address:   "127.0.0.1:50201",
 		ChainName: "default",
 	})
 	err = s.Start()
@@ -105,8 +105,9 @@ func TestDubboServer(t *testing.T) {
 
 	f, err := server.GetServerFunc("dubboSimpleRegistry")
 	assert.NoError(t, err)
+	addr := "127.0.0.1:30401"
 	s := f(server.Options{
-		Address:   "127.0.0.1:40201",
+		Address:   addr,
 		ChainName: "default",
 	})
 
@@ -124,7 +125,7 @@ func TestDubboServer(t *testing.T) {
 		defer wg.Done()
 		clientMgr := dubboclient.NewClientMgr()
 		var dubboClient *dubboclient.DubboClient
-		dubboClient, err := clientMgr.GetClient("127.0.0.1:40201", time.Second*5)
+		dubboClient, err := clientMgr.GetClient(addr, time.Second*5)
 		assert.NoError(t, err)
 
 		req := new(dubbo.Request)

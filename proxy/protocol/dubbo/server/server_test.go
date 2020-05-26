@@ -113,8 +113,9 @@ func TestDubboServer(t *testing.T) {
 
 	f, err := server.GetServerFunc("dubbo")
 	assert.NoError(t, err)
+	addr := "127.0.0.1:40201"
 	s := f(server.Options{
-		Address:   "127.0.0.1:40201",
+		Address:   addr,
 		ChainName: "default",
 	})
 
@@ -132,7 +133,7 @@ func TestDubboServer(t *testing.T) {
 		defer wg.Done()
 		clientMgr := dubboclient.NewClientMgr()
 		var dubboClient *dubboclient.DubboClient
-		dubboClient, err := clientMgr.GetClient("127.0.0.1:40201", time.Second*5)
+		dubboClient, err := clientMgr.GetClient(addr, time.Second*5)
 		assert.NoError(t, err)
 
 		req := new(dubbo.Request)
