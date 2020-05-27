@@ -67,11 +67,8 @@ func TestClientMgr_GetClient(t *testing.T) {
 
 	// case net error
 	ts.Close()
-
 	c, err = clientMgr.GetClient(addr, 0)
-	assert.NoError(t, err)
-	assert.NotNil(t, c)
+	assert.Error(t, err)
+	assert.Nil(t, c)
 
-	req = dubbo.NewDubboRequest()
-	c.Send(req)
 }
