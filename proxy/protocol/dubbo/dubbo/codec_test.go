@@ -29,10 +29,13 @@ import (
 func TestDubboCodec_DecodeDubboReqBody(t *testing.T) {
 	t.Log("If returns of rbf.ReadObject() is nil, should not panic")
 	d := &DubboCodec{}
+
+	req := NewDubboRequest()
 	resp := &DubboRsp{}
 	resp.Init()
 	resp.SetStatus(ServerError)
 
+	wbf := &util.WriteBuffer{}
 	rbf := &util.ReadBuffer{}
 	rbf.SetBuffer([]byte{hessian.BC_NULL})
 	c := make([]byte, 10)
@@ -43,5 +46,28 @@ func TestDubboCodec_DecodeDubboReqBody(t *testing.T) {
 	obj, err := rbf.ReadObject()
 	assert.Nil(t, err)
 	assert.Nil(t, obj)
+
+	assert.Equal(t, Hessian2, d.GetContentTypeID())
+	// case EncodeDubboRsp
+	d.EncodeDubboRsp(resp, wbf)
+
+	// case EncodeDubboReq
+	d.EncodeDubboReq(req, wbf)
+
+	// case DecodeDubboRspBody
 	d.DecodeDubboRspBody(rbf, resp)
+
+	// case DecodeDubboReqBodyForRegstry
+	d.DecodeDubboReqBodyForRegstry(req, rbf)
+	headBuf := make([]byte, HeaderLength)
+	bodyLen := 0
+
+	// case DecodeDubboReqHead
+	d.DecodeDubboReqHead(req, headBuf, &bodyLen)
+	bodyLen = 0
+
+	// case DecodeDubboRsqHead
+	d.DecodeDubboRsqHead(resp, headBuf, &bodyLen)
+
+	GCurMSGID = 0
 }

@@ -188,7 +188,10 @@ func (b *ReadBuffer) ReadObject() (interface{}, error) {
 //ReadString is a method to read buffer and return as string
 func (b *ReadBuffer) ReadString() string {
 	gh := hessian.NewGoHessian(nil, nil)
-	obj, _ := gh.ToObject2(b)
+	obj, err := gh.ToObject2(b)
+	if obj == nil || err != nil {
+		return ""
+	}
 	return obj.(string)
 }
 

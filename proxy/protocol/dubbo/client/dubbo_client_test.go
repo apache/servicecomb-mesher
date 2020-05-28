@@ -18,11 +18,13 @@
 package dubboclient
 
 import (
-	"testing"
-	"time"
-
+	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/stretchr/testify/assert"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"testing"
 )
 
 func init() {
@@ -33,8 +35,38 @@ func init() {
 }
 
 func TestClientMgr_GetClient(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	}))
+
+	addr := ts.URL
+	u, _ := url.Parse(ts.URL)
+	addr = u.Host
 	clientMgr := NewClientMgr()
-	c, err := clientMgr.GetClient("127.0.0.1:30101", time.Second*5)
-	assert.Error(t, err)
-	assert.Nil(t, c)
+	// case timeout=0
+	c, err := clientMgr.GetClient(addr, 0)
+	assert.NoError(t, err)
+	assert.NotNil(t, c)
+	c.close()
+
+	c, err = clientMgr.GetClient(addr, 0)
+	assert.NoError(t, err)
+	assert.NotNil(t, c)
+
+	req := dubbo.NewDubboRequest()
+	c.Send(req)
+
+	// case RspCallBack
+	resp := &dubbo.DubboRsp{}
+	resp.Init()
+	resp.SetStatus(dubbo.ServerError)
+	c.RspCallBack(resp)
+
+	// case get addr
+	c.GetAddr()
+
+	// case net error
+	ts.Close()
+	clientMgr.GetClient(addr, 0)
+
 }
