@@ -47,6 +47,7 @@ func TestDubboCodec_DecodeDubboReqBody(t *testing.T) {
 	assert.Nil(t, obj)
 
 	assert.Equal(t, Hessian2, d.GetContentTypeID())
+<<<<<<< HEAD
 
 	// case EncodeDubboRsp status is ERROR
 	t.Run("Test status error", func(t *testing.T) {
@@ -268,6 +269,28 @@ func TestDubboCodec_DecodeDubboReqBody(t *testing.T) {
 		// case DecodeDubboRsqHead
 		d.DecodeDubboRsqHead(resp, headBuf, &bodyLen)
 	})
+=======
+	// case EncodeDubboRsp
+	d.EncodeDubboRsp(resp, wbf)
+
+	// case EncodeDubboReq
+	d.EncodeDubboReq(req, wbf)
+
+	// case DecodeDubboRspBody
+	d.DecodeDubboRspBody(rbf, resp)
+
+	// case DecodeDubboReqBodyForRegstry
+	d.DecodeDubboReqBodyForRegstry(req, rbf)
+	headBuf := make([]byte, HeaderLength)
+	bodyLen := 0
+
+	// case DecodeDubboReqHead
+	d.DecodeDubboReqHead(req, headBuf, &bodyLen)
+	bodyLen = 0
+
+	// case DecodeDubboRsqHead
+	d.DecodeDubboRsqHead(resp, headBuf, &bodyLen)
+>>>>>>> upstream/master
 
 	GCurMSGID = 0
 }
