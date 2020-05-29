@@ -26,7 +26,7 @@ import (
 )
 
 func NewMsgQueueForTest(maxMsgNum int) *MsgQueue {
-	q := new(MsgQueue)
+	q := NewMsgQueue()
 	q.msgList = list.New()
 	q.mtx = new(sync.Mutex)
 	q.msgCount = 0
@@ -39,7 +39,7 @@ func NewMsgQueueForTest(maxMsgNum int) *MsgQueue {
 
 func TestMsgQueue(t *testing.T) {
 	t.Run("case empty", func(t *testing.T) {
-		q := NewMsgQueueForTest(2)
+		q := NewMsgQueueForTest(3)
 
 		// append msg
 		eMSG := "msg to send"
@@ -56,22 +56,33 @@ func TestMsgQueue(t *testing.T) {
 
 		// case empty
 		done := make(chan struct{})
+		go func() {
+			ticker := time.NewTimer(time.Second)
+			for range ticker.C {
+				err = q.Enqueue(eMSG)
+				assert.NoError(t, err)
+			}
+
+		}()
+
 		go func(done chan struct{}) {
-			dMSG, err = q.Dequeue()
-			assert.NoError(t, err)
-
-			// Deavtive
-			q.Deavtive()
-
-			// error
-			_, err = q.Dequeue()
-			assert.Error(t, err)
-
-			if done != nil {
-				close(done)
+			ticker := time.NewTimer(time.Second * 6)
+			for range ticker.C {
+				q.Deavtive()
+				if done != nil {
+					close(done)
+				}
 			}
 
 		}(done)
+
+		go func() {
+			for i := 0; i < 20; i++ {
+				q.Dequeue()
+				time.Sleep(time.Second)
+			}
+
+		}()
 
 		select {
 		case <-time.After(time.Second * 10):
@@ -92,7 +103,6 @@ func TestMsgQueue(t *testing.T) {
 		done1 := make(chan struct{})
 		go func(c chan struct{}) {
 			err = q1.Enqueue(eMSG)
-			t.Log(err)
 			assert.Error(t, err)
 
 			if c != nil {

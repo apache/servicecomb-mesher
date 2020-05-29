@@ -182,7 +182,12 @@ func (p *DubboCodec) DecodeDubboRspBody(buffer *util.ReadBuffer, rsp *DubboRsp) 
 			}
 		} else {
 			//decodeResult
-			var valueType byte = buffer.ReadByte()
+			valueType, err := buffer.ReadByte()
+			if err != nil {
+				rsp.SetStatus(ServerError)
+				rsp.SetErrorMsg(err.Error())
+				return 0
+			}
 			switch valueType {
 			case ResponseNullValue:
 				//do nothing

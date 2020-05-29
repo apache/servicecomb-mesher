@@ -68,13 +68,15 @@ func TestReadBuffe(t *testing.T) {
 	var buffer WriteBuffer
 	buffer.Init(DefaultBufferSize)
 
+	var readBuffer ReadBuffer
+
 	// Write byte
 	err := buffer.WriteByte(byte(12))
 	assert.NoError(t, err)
 
-	var readBuffer ReadBuffer
 	readBuffer.SetBuffer(buffer.GetBuf())
-	b := readBuffer.ReadByte()
+	b, err := readBuffer.ReadByte()
+	assert.NoError(t, err)
 	assert.Equal(t, byte(12), b)
 
 	// Write Object
@@ -97,4 +99,60 @@ func TestReadBuffe(t *testing.T) {
 
 	str := readBuffer.ReadString()
 	assert.Equal(t, "string01", str)
+
+	// case read byte error
+	buffer.WriteIndex(0)
+	readBuffer.SetBuffer(append(buffer.GetBuf()[:buffer.WrittenBytes()], []byte{0x34, 0x02}...))
+
+	b, err = readBuffer.ReadByte()
+	assert.Error(t, err)
+
+	buffer.Init(5)
+	// case test GetValidData()
+	buffer.GetValidData()
+
+	// case buffer.WriteIndex(0)
+	buffer.WriteIndex(buffer.capacity + 1)
+
+	//case  b.capacity < (b.wrInd + size
+	buffer.WriteIndex(0)
+	badBuf := make([]byte, DefaultGrowSize+1)
+	buffer.WriteBytes(badBuf)
+
+	//case  Not enough space to write
+	buffer.Init(0)
+	//buffer.WriteIndex(0)
+	badBuf = make([]byte, 10)
+	buffer.Write(badBuf)
+
+	// case GetBuf
+	readBuffer.GetBuf()
+
+	buffer.WriteIndex(0)
+	readBuffer.SetBuffer(append(buffer.GetBuf()[:buffer.WrittenBytes()], []byte{0x34, 0x02}...))
+
+	str = readBuffer.ReadString()
+	assert.Equal(t, "", str)
+
+	// Read map error
+	buffer.WriteIndex(0)
+	readBuffer.SetBuffer([]byte{0x34, 0x02})
+	_, err = readBuffer.ReadMap()
+	assert.Equal(t, "", str)
+
+	tmpBuf := make([]byte, 5)
+	readBuffer.SetBuffer([]byte{0x34, 0x02})
+	_, err = readBuffer.Read(tmpBuf)
+	assert.Equal(t, "", str)
+
+	tmpBuf = make([]byte, 2)
+	readBuffer.SetBuffer([]byte{0x34, 0x02})
+	readBuffer.rdInd = 2
+	_, err = readBuffer.Read(tmpBuf)
+	assert.Equal(t, "", str)
+
+	// Test Base Error
+	baseErr := BaseError{"BaseError"}
+	assert.Equal(t, "BaseError", baseErr.Error())
+
 }
