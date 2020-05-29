@@ -162,68 +162,61 @@ func (p *DubboCodec) DecodeDubboRspBody(buffer *util.ReadBuffer, rsp *DubboRsp) 
 	if rsp.IsHeartbeat() {
 		rsp.SetValue(HeartBeatEvent)
 	}
-	//获取状态
-	if rsp.GetStatus() == Ok {
-		if rsp.IsHeartbeat() && (HeartBeatEvent == rsp.GetValue()) {
-			//decodeHeartbeatData
-			obj, err = buffer.ReadObject()
-			if err != nil {
-				rsp.SetStatus(ServerError)
-				rsp.SetErrorMsg(err.Error())
-				return 0
-			}
-		} else if rsp.mEvent {
-			//decodeEventData
-			obj, err = buffer.ReadObject()
-			if err != nil {
-				rsp.SetStatus(ServerError)
-				rsp.SetErrorMsg(err.Error())
-				return 0
-			}
-		} else {
-			//decodeResult
-			valueType, err := buffer.ReadByte()
-			if err != nil {
-				rsp.SetStatus(ServerError)
-				rsp.SetErrorMsg(err.Error())
-				return 0
-			}
-			switch valueType {
-			case ResponseNullValue:
-				//do nothing
-				rsp.SetValue(nil)
-				return 0
-			case ResponseValue:
-				obj, err = buffer.ReadObject()
-				if err != nil {
-					rsp.SetStatus(ServerError)
-					rsp.SetErrorMsg(err.Error())
-					return -1
-				}
-			case ResponseWithException:
-				//readObject,设置异常
-				rsp.SetStatus(ServiceError)
-				obj, err = buffer.ReadObject()
-				if err != nil {
-					rsp.SetStatus(ServerError)
-					rsp.SetErrorMsg(err.Error())
-					return 0
-				}
-			}
-		}
-		rsp.SetValue(buffer.GetBuf())
-		//rsp.SetValue(obj)
-	} else {
+
+	if rsp.GetStatus() != Ok {
 		obj, err = buffer.ReadObject()
 		if err != nil {
 			rsp.SetErrorMsg(err.Error())
+			return 0
+		}
+		if s, ok := obj.(string); !ok {
+			rsp.SetErrorMsg("unknown error")
 		} else {
-			if s, ok := obj.(string); !ok {
-				rsp.SetErrorMsg("unknown error")
-			} else {
-				rsp.SetErrorMsg(s)
+			rsp.SetErrorMsg(s)
+		}
+		return 0
+	}
+
+	switch rsp.IsHeartbeat() {
+	case true:
+		//decodeHeartbeatData
+		obj, err = buffer.ReadObject()
+		if err != nil {
+			rsp.SetStatus(ServerError)
+			rsp.SetErrorMsg(err.Error())
+			return 0
+		}
+	case false:
+		//decodeResult
+		valueType, err := buffer.ReadByte()
+		if err != nil {
+			rsp.SetStatus(ServerError)
+			rsp.SetErrorMsg(err.Error())
+			return 0
+		}
+		switch valueType {
+		case ResponseNullValue:
+			//do nothing
+			rsp.SetValue(nil)
+			return 0
+		case ResponseValue:
+			obj, err = buffer.ReadObject()
+			if err != nil {
+				rsp.SetStatus(ServerError)
+				rsp.SetErrorMsg(err.Error())
+				return -1
+			}
+		case ResponseWithException:
+			//readObject,设置异常
+			rsp.SetStatus(ServiceError)
+			obj, err = buffer.ReadObject()
+			if err != nil {
+				rsp.SetStatus(ServerError)
+				rsp.SetErrorMsg(err.Error())
+				return 0
 			}
 		}
+		rsp.SetValue(buffer.GetBuf())
 	}
 
 	return 0
