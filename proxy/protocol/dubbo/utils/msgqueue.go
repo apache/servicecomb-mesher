@@ -19,7 +19,6 @@ package util
 
 import (
 	"container/list"
-	"fmt"
 	"sync"
 )
 
@@ -130,7 +129,6 @@ func (this *MsgQueue) waitNotEmptyCond() int {
 
 	if this.isEmpty() {
 		this.notEmptyCond.Wait()
-		fmt.Println("===", this.state != Actived)
 		if this.state != Actived {
 			result = -1
 			return result
