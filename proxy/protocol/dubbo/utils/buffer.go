@@ -162,13 +162,14 @@ func (b *ReadBuffer) GetBuf() []byte {
 }
 
 //ReadByte is a method to read particular byte from buffer
-func (b *ReadBuffer) ReadByte() byte {
+func (b *ReadBuffer) ReadByte() (byte, error) {
 	var tmp interface{}
 	tmp, err := b.ReadObject()
 	if err != nil {
 		openlogging.Error(err.Error())
+		return byte(0), err
 	}
-	return byte(tmp.(int32))
+	return byte(tmp.(int32)), nil
 }
 
 //ReadBytes is a method to read data from buffer

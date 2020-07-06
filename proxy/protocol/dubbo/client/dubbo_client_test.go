@@ -25,6 +25,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
+	"time"
 )
 
 func init() {
@@ -39,9 +40,8 @@ func TestClientMgr_GetClient(t *testing.T) {
 		w.WriteHeader(http.StatusOK)
 	}))
 
-	addr := ts.URL
 	u, _ := url.Parse(ts.URL)
-	addr = u.Host
+	addr := u.Host
 	clientMgr := NewClientMgr()
 	// case timeout=0
 	c, err := clientMgr.GetClient(addr, 0)
@@ -65,6 +65,17 @@ func TestClientMgr_GetClient(t *testing.T) {
 	// case get addr
 	c.GetAddr()
 
+	go func() {
+		c.Close()
+	}()
+
+	select {
+	case <-time.After(time.Second):
+		c.routeMgr.Done()
+	}
+	// case closed
+	c.conn.conn.Close()
+	c.Send(dubbo.NewDubboRequest())
 	// case net error
 	ts.Close()
 	clientMgr.GetClient(addr, 0)

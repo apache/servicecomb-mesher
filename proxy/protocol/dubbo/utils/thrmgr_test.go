@@ -34,14 +34,47 @@ func TestNewThreadGroupWait(t *testing.T) {
 			defer tgw.Done()
 			count++
 		}(tgw)
+
 		tgw.Wait()
 		close(done)
 	}(done)
 
 	select {
-	case <-time.After(time.Second * 2):
+	case <-time.After(time.Second * 5):
 	case <-done:
 	}
 	assert.Equal(t, 1, count)
+
+	// case done count < 0
+	tgw := NewThreadGroupWait()
+	tgw.Done()
+	tgw.Done()
+}
+
+type Task struct {
+}
+
+func (t *Task) Svc(interface{}) interface{} {
+	return nil
+}
+
+func TestThrmgr(t *testing.T) {
+	nr := NewRoutineManager()
+	var done chan struct{}
+	go func(done chan struct{}) {
+		nr.Wait()
+		close(done)
+	}(done)
+
+	time.AfterFunc(time.Second*2, func() {
+		nr.Done()
+	})
+
+	select {
+	case <-time.After(time.Second * 5):
+	case <-done:
+	}
+
+	nr.Spawn(new(Task), "swap", "routinename")
 
 }
