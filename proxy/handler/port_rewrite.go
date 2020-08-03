@@ -46,14 +46,12 @@ func (ps *PortSelectionHandler) Handle(chain *handler.Chain, inv *invocation.Inv
 			Err: err,
 		}
 
-		if err := cb(r); err != nil {
-			openlogging.Error("Response callBack error: " + err.Error())
-		}
+		cb(r)
 		return
 	}
 
-	chain.Next(inv, func(r *invocation.Response) error {
-		return cb(r)
+	chain.Next(inv, func(r *invocation.Response) {
+		cb(r)
 	})
 }
 

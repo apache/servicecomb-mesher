@@ -79,8 +79,8 @@ func (oa *Handler) Handle(chain *handler.Chain, inv *invocation.Invocation, cb i
 			}
 		}
 	}
-	chain.Next(inv, func(r *invocation.Response) error {
-		return cb(r)
+	chain.Next(inv, func(r *invocation.Response) {
+		cb(r)
 	})
 }
 
@@ -130,9 +130,5 @@ func WriteBackErr(err error, status int, cb invocation.ResponseCallBack) {
 		Err:    err,
 		Status: status,
 	}
-	err = cb(r)
-	if err != nil {
-		openlogging.Error("response error: " + err.Error())
-		return
-	}
+	cb(r)
 }
