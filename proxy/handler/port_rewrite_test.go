@@ -44,9 +44,8 @@ func TestPortRewriteHandler_ValidEndpoint(t *testing.T) {
 		Endpoint:         "127.0.0.1:5555",
 	}
 
-	c.Next(i, func(r *invocation.Response) error {
+	c.Next(i, func(r *invocation.Response) {
 		assert.NoError(t, r.Err)
-		return r.Err
 	})
 }
 
@@ -66,9 +65,8 @@ func TestPortRewriteHandler_InValidEndpoint(t *testing.T) {
 		Endpoint:         "",
 	}
 
-	c.Next(i, func(r *invocation.Response) error {
+	c.Next(i, func(r *invocation.Response) {
 		assert.Error(t, r.Err)
-		return r.Err
 	})
 
 }

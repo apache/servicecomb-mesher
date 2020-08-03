@@ -123,8 +123,8 @@ func Handle(ctx *dubbo.InvokeContext) error {
 				return err
 			}
 		}
-		c.Next(inv, func(ir *invocation.Response) error {
-			return handleDubboRequest(inv, ctx, ir)
+		c.Next(inv, func(ir *invocation.Response) {
+			handleDubboRequest(inv, ctx, ir)
 		})
 	} else { //come from other mesher
 		ctx.Req.SetAttachment(ProxyTag, "")
@@ -133,8 +133,8 @@ func Handle(ctx *dubbo.InvokeContext) error {
 			openlogging.Error("Get Provider Chain failed: " + err.Error())
 			return err
 		}
-		c.Next(inv, func(ir *invocation.Response) error {
-			return handleDubboRequest(inv, ctx, ir)
+		c.Next(inv, func(ir *invocation.Response) {
+			handleDubboRequest(inv, ctx, ir)
 		})
 	}
 

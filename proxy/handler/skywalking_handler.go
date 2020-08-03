@@ -48,8 +48,8 @@ func (sp *SkyWalkingProviderHandler) Handle(chain *handler.Chain, i *invocation.
 	if err != nil {
 		openlogging.GetLogger().Errorf("CreateEntrySpan error:%s", err.Error())
 	}
-	chain.Next(i, func(r *invocation.Response) (err error) {
-		err = cb(r)
+	chain.Next(i, func(r *invocation.Response) {
+		cb(r)
 		span.Tag(go2sky.TagHTTPMethod, i.Protocol)
 		span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPathFormat)
 		span.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
@@ -85,8 +85,8 @@ func (sc *SkyWalkingConsumerHandler) Handle(chain *handler.Chain, i *invocation.
 	if err != nil {
 		openlogging.GetLogger().Errorf("CreateExitSpan error:%s", err.Error())
 	}
-	chain.Next(i, func(r *invocation.Response) (err error) {
-		err = cb(r)
+	chain.Next(i, func(r *invocation.Response) {
+		cb(r)
 		span.Tag(go2sky.TagHTTPMethod, i.Protocol)
 		span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPathFormat)
 		span.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
@@ -102,7 +102,6 @@ func (sc *SkyWalkingConsumerHandler) Handle(chain *handler.Chain, i *invocation.
 		spanExit.End()
 		span.End()
 		openlogging.GetLogger().Debugf("SkyWalkingConsumerHandler end.")
-		return
 	})
 }
 

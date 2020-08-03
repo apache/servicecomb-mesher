@@ -24,6 +24,9 @@ import (
 
 	_ "github.com/apache/servicecomb-mesher/proxy/handler"
 	//protocols
+	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/client/chassis"
+	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/server"
+	_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/simpleRegistry"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/grpc"
 	_ "github.com/apache/servicecomb-mesher/proxy/protocol/http"
 	//ingress rule fetcher
@@ -37,9 +40,8 @@ import (
 
 	_ "github.com/apache/servicecomb-mesher/proxy/handler/oauth2"
 
+	//middle wares
 	_ "github.com/go-chassis/go-chassis/middleware/circuit"
-
-	// rate limiter handler
 	_ "github.com/go-chassis/go-chassis/middleware/ratelimiter"
 )
 

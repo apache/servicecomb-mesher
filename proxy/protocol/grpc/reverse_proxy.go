@@ -129,13 +129,9 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		metrics.RecordLatency(serviceLabelValues, timeTaken)
 	}(time.Now())
 	var invRsp *invocation.Response
-	c.Next(inv, func(ir *invocation.Response) error {
+	c.Next(inv, func(ir *invocation.Response) {
 		//Send the request to the destination
 		invRsp = ir
-		if invRsp != nil {
-			return invRsp.Err
-		}
-		return nil
 	})
 	resp, err := handleRequest(w, r, inv, invRsp)
 	if err != nil {
@@ -178,13 +174,9 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 		r.Header.Set(XForwardedHost, r.Host)
 	}
 	var invRsp *invocation.Response
-	c.Next(inv, func(ir *invocation.Response) error {
+	c.Next(inv, func(ir *invocation.Response) {
 		//Send the request to the destination
 		invRsp = ir
-		if invRsp != nil {
-			return invRsp.Err
-		}
-		return nil
 	})
 	if _, err = handleRequest(w, r, inv, invRsp); err != nil {
 		lager.Logger.Error("Handle request failed: " + err.Error())

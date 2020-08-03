@@ -35,12 +35,8 @@ func handleIncomingTraffic(inv *invocation.Invocation) (*invocation.Response, er
 		return nil, err
 	}
 	var invRsp *invocation.Response
-	c.Next(inv, func(ir *invocation.Response) error {
+	c.Next(inv, func(ir *invocation.Response) {
 		invRsp = ir
-		if invRsp != nil {
-			return invRsp.Err
-		}
-		return nil
 	})
 	return invRsp, nil
 }
@@ -91,13 +87,9 @@ func HandleIngressTraffic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var invRsp *invocation.Response
-	c.Next(inv, func(ir *invocation.Response) error {
+	c.Next(inv, func(ir *invocation.Response) {
 		//Send the request to the destination
 		invRsp = ir
-		if invRsp != nil {
-			return invRsp.Err
-		}
-		return nil
 	})
 	resp, err := handleRequest(w, inv, invRsp)
 	if err != nil {
