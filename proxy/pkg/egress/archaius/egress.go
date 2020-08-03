@@ -52,7 +52,7 @@ func refresh() error {
 	configs := config.GetEgressConfig()
 	ok, _ := egress.ValidateEgressRule(configs.Destinations)
 	if !ok {
-		err := fmt.Errorf("Egress rule type assertion fail, key: %s", configs.Destinations)
+		err := fmt.Errorf("egress rule type assertion fail, key: %v", configs.Destinations)
 		return err
 	}
 

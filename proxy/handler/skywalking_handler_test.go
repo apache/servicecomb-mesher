@@ -82,9 +82,8 @@ func TestProvierHandle(t *testing.T) {
 	gcconfig.GlobalDefinition.Cse.Handler.Chain.Consumer = make(map[string]string)
 	gcconfig.GlobalDefinition.Cse.Handler.Chain.Consumer["skywalking-provider"] = "skywalking-provider"
 
-	c.Next(initInv(), func(r *invocation.Response) error {
+	c.Next(initInv(), func(r *invocation.Response) {
 		assert.Equal(t, r.Err, nil)
-		return r.Err
 	})
 }
 
@@ -113,8 +112,7 @@ func TestConsumerHandle(t *testing.T) {
 	gcconfig.GlobalDefinition.Cse.Handler.Chain.Consumer = make(map[string]string)
 	gcconfig.GlobalDefinition.Cse.Handler.Chain.Consumer["skywalking-consumer"] = "skywalking-consumer"
 
-	c.Next(initInv(), func(r *invocation.Response) error {
+	c.Next(initInv(), func(r *invocation.Response) {
 		assert.Equal(t, r.Err, nil)
-		return r.Err
 	})
 }

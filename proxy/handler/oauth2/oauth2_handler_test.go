@@ -80,9 +80,8 @@ func TestOAuth2_Handle(t *testing.T) {
 		i.Args = req
 
 		i.SetHeader("Authorization", "Basic dGVzdDp0ZXN0")
-		c.Next(i, func(r *invocation.Response) error {
+		c.Next(i, func(r *invocation.Response) {
 			assert.Error(t, r.Err)
-			return r.Err
 		})
 	})
 	t.Run("null grant_type", func(t *testing.T) {
@@ -94,9 +93,8 @@ func TestOAuth2_Handle(t *testing.T) {
 		i.Args = req
 
 		i.SetHeader("Authorization", "Basic dGVzdDp0ZXN0")
-		c.Next(i, func(r *invocation.Response) error {
+		c.Next(i, func(r *invocation.Response) {
 			assert.NoError(t, r.Err)
-			return r.Err
 		})
 	})
 
@@ -108,9 +106,8 @@ func TestOAuth2_Handle(t *testing.T) {
 		}
 		i.Args = req
 
-		c.Next(i, func(r *invocation.Response) error {
+		c.Next(i, func(r *invocation.Response) {
 			assert.NoError(t, r.Err)
-			return r.Err
 		})
 	})
 
@@ -123,9 +120,8 @@ func TestOAuth2_Handle(t *testing.T) {
 		i.Args = req
 
 		i.SetHeader("Authorization", "Basic dGVzdDp0ZXN0")
-		c.Next(i, func(r *invocation.Response) error {
+		c.Next(i, func(r *invocation.Response) {
 			assert.NoError(t, r.Err)
-			return r.Err
 		})
 	})
 }
