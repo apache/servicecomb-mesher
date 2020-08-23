@@ -1,0 +1,153 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+# svccomb-mesher-injector configmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: svccomb-system
+  name: svccomb-mesher-injector-configmap
+data:
+  injectorconfig.yaml: |
+    mesher:
+      image: servicecomb/mesher-sidecar
+      tag: 1.6.3
+    serviceCenter:
+      name: servicecenter
+      namespace: servicecomb
+  injectortemplate.yaml: |
+    apiVersion: v1
+    kind: Pod
+    spec:
+      containers:
+      - env:
+        - name: http_proxy
+          value: http://127.0.0.1:{{.Mesher.HTTPPort}}
+        name: {{.App.Name}}
+      - env:
+        - name: SPECIFIC_ADDR
+          value: 127.0.0.1:{{.App.Port}}
+        - name: SERVICE_NAME
+          value: {{.App.Name}}
+        - name: VERSION
+          value: {{.App.Version}}
+        - name: CSE_REGISTRY_ADDR
+          value: {{.ServiceCenter.Address}}
+        image: {{.Mesher.Image}}:{{.Mesher.Tag}}
+        imagePullPolicy: IfNotPresent
+        name: {{.Mesher.Name}}
+        ports:
+        - containerport: {{.Mesher.GRPCPort}}
+          name: grpc
+          protocol: TCP
+        - containerport: {{.Mesher.HTTPPort}}
+          name: http
+          protocol: TCP
+        - containerport: {{.Mesher.AdminPort}}
+          name: rest-admin
+          protocol: TCP
+---
+# svccomb-mesher-injector webhook
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: svccomb-mesher-injector
+  labels:
+    app: mesherInjectorWebhook
+    chart: mesherInjectorWebhook
+webhooks:
+  - name: servicecomb.apache.org
+    clientConfig:
+      service:
+        name: svccomb-mesher-injector
+        namespace: svccomb-system
+        path: "/v1/mesher/inject"
+      caBundle: ${CA_BUNDLE}
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    failurePolicy: Fail
+    namespaceSelector:
+      matchLabels:
+        svccomb-injection: enabled
+---
+# svccomb-mesher-injector service
+apiVersion: v1
+kind: Service
+metadata:
+  name: svccomb-mesher-injector
+  namespace: svccomb-system
+  labels:
+    app: mesherInjectorWebhook
+    chart: mesherInjectorWebhook
+    svccomb: mesher-injector
+spec:
+  ports:
+    - port: 443
+      name: https
+  selector:
+    svccomb: mesher-injector
+---
+# svccomb-mesher-injector deployment
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: svccomb-mesher-injector
+  namespace: svccomb-system
+  labels:
+    app: mesherInjectorWebhook
+    chart: mesherInjectorWebhook
+    svccomb: mesher-injector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      svccomb: mesher-injector
+  template:
+    metadata:
+      labels:
+        app: mesherInjectorWebhook
+        chart: mesherInjectorWebhook
+        svccomb: mesher-injector
+    spec:
+      containers:
+        - name: mesher-injector-webhook
+          image: servicecomb/mesher-injector
+          args:
+            - --tlsCertPath=/etc/certs/cert.pem
+            - --tlsKeyPath=/etc/certs/key.pem
+            - --configPath=/etc/configs/injectorconfig.yaml
+            - --templatePath=/etc/configs/injectortemplate.yaml
+          imagePullPolicy: IfNotPresent #Always
+          ports:
+            - containerPort: 443
+          volumeMounts:
+            - name: certs
+              mountPath: /etc/certs
+              readOnly: true
+            - name: configs
+              mountPath: /etc/configs
+              readOnly: true
+      volumes:
+        - name: certs
+          secret:
+            secretName: svccomb-mesher-injector-service-account
+        - name: configs
+          configMap:
+            name: svccomb-mesher-injector-configmap
+
