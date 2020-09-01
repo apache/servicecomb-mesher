@@ -76,7 +76,7 @@ func TestBootstrap(t *testing.T) {
 		Listen: "127.0.0.1:90909",
 	}
 	config.GlobalDefinition = &model.GlobalCfg{
-		Cse: model.CseStruct{
+		ServiceComb: model.ServiceComb{
 			Protocols: protoMap,
 		},
 	}
@@ -112,7 +112,7 @@ func TestBootstrap(t *testing.T) {
 
 	t.Run("Test Start", func(t *testing.T) {
 		// case Protocols is empty
-		config.GlobalDefinition.Cse.Protocols = map[string]model.Protocol{}
+		config.GlobalDefinition.ServiceComb.Protocols = map[string]model.Protocol{}
 		err := Start()
 		assert.Error(t, err)
 

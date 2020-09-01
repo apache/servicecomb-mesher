@@ -42,7 +42,7 @@ func TestDubboServer_Start(t *testing.T) {
 
 	protoMap := make(map[string]model.Protocol)
 	config.GlobalDefinition = &model.GlobalCfg{
-		Cse: model.CseStruct{
+		ServiceComb: model.ServiceComb{
 			Protocols: protoMap,
 		},
 	}
@@ -50,9 +50,9 @@ func TestDubboServer_Start(t *testing.T) {
 	defaultChain := make(map[string]string)
 	defaultChain["default"] = ""
 
-	config.GlobalDefinition.Cse.Handler.Chain.Provider = defaultChain
-	config.GlobalDefinition.Cse.Handler.Chain.Consumer = defaultChain
-	config.MicroserviceDefinition = &model.MicroserviceCfg{}
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Provider = defaultChain
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Consumer = defaultChain
+	config.MicroserviceDefinition = &model.ServiceSpec{}
 
 	f, err := server.GetServerFunc("dubbo")
 	assert.NoError(t, err)
@@ -99,7 +99,7 @@ func TestDubboServer(t *testing.T) {
 
 	protoMap := make(map[string]model.Protocol)
 	config.GlobalDefinition = &model.GlobalCfg{
-		Cse: model.CseStruct{
+		ServiceComb: model.ServiceComb{
 			Protocols: protoMap,
 		},
 	}
@@ -107,9 +107,9 @@ func TestDubboServer(t *testing.T) {
 	defaultChain := make(map[string]string)
 	defaultChain["default"] = ""
 
-	config.GlobalDefinition.Cse.Handler.Chain.Provider = defaultChain
-	config.GlobalDefinition.Cse.Handler.Chain.Consumer = defaultChain
-	config.MicroserviceDefinition = &model.MicroserviceCfg{}
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Provider = defaultChain
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Consumer = defaultChain
+	config.MicroserviceDefinition = &model.ServiceSpec{}
 
 	f, err := server.GetServerFunc("dubbo")
 	assert.NoError(t, err)

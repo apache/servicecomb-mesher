@@ -1,3 +1,4 @@
-service_description:
-  name: mesher-edge
-  version: 1.7.0
+servicecomb:
+  service:
+    name: mesher-edge
+    version: 1.7.0

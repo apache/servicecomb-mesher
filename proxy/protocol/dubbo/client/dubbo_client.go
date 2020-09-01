@@ -22,6 +22,7 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
 	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/openlog"
 	"net"
 	"sync"
 	"time"
@@ -144,7 +145,10 @@ func (this *DubboClient) Open() error {
 func (this *DubboClient) open() error {
 	c, errDial := net.DialTimeout("tcp", this.addr, this.Timeout)
 	if errDial != nil {
-		lager.Logger.Errorf("the addr: %s %s ", this.addr, errDial)
+		lager.Logger.Error("tcp dial failed", openlog.WithTags(openlog.Tags{
+			"addr": this.addr,
+			"err":  errDial,
+		}))
 		return errDial
 	}
 	conn, ok := c.(*net.TCPConn)

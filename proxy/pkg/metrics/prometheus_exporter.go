@@ -18,6 +18,7 @@
 package metrics
 
 import (
+	"fmt"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/pkg/metrics"
 	"github.com/prometheus/client_golang/prometheus"
@@ -127,6 +128,6 @@ func recoverPanic(metricName string) {
 	if r := recover(); r != nil {
 		pc := make([]uintptr, 10)
 		runtime.Callers(1, pc)
-		lager.Logger.Warnf("panics while registering metric [%s] to prometheus %s", metricName, r)
+		lager.Logger.Warn(fmt.Sprintf("panics while registering metric [%s] to prometheus %s", metricName, r))
 	}
 }

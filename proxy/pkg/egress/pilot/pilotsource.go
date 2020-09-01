@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"github.com/go-chassis/go-archaius/event"
 	"github.com/go-chassis/go-archaius/source"
+	"github.com/go-chassis/openlog"
 	"os"
 	"reflect"
 	"strconv"
@@ -79,7 +80,7 @@ func addEgressPilotSource(o egress.Options) error {
 	if err != nil {
 		return err
 	}
-	lager.Logger.Infof("New [%s] source success", s.GetSourceName())
+	lager.Logger.Info(fmt.Sprintf("New [%s] source success", s.GetSourceName()))
 	return pilotfetcher.AddSource(s)
 }
 
@@ -173,7 +174,7 @@ func (r *pilotSource) getEgressConfigFromPilot() ([]*config.EgressRule, error) {
 	var egressRules []*config.EgressRule
 	for _, cluster := range clusters {
 
-		if cluster.Type == clusteroriginaldst {
+		if cluster.GetType() == clusteroriginaldst {
 			data := strings.Split(cluster.Name, "|")
 			if len(data) > 1 && data[0] == OUTBOUND {
 				intport, err := strconv.Atoi(data[1])
@@ -229,11 +230,11 @@ func (r *pilotSource) Watch(callback source.EventHandler) error {
 			}
 			events, err := r.populateEvents(data)
 			if err != nil {
-				lager.Logger.Warnf("populate event error", err)
+				lager.Logger.Warn("populate event error", openlog.WithTags(openlog.Tags{"err": err}))
 				return err
 			}
 			//Generate OnEvent Callback based on the events created
-			lager.Logger.Debugf("event On receive %+v", events)
+			lager.Logger.Debug(fmt.Sprintf("event On receive %+v", events))
 			for _, event := range events {
 				callback.OnEvent(event)
 			}
@@ -321,6 +322,6 @@ func (r *pilotEventListener) Event(e *event.Event) {
 	ok, _ = egress.ValidateEgressRule(map[string][]*config.EgressRule{e.Key: egressRules})
 	if ok {
 		istio.SaveToEgressCache(map[string][]*config.EgressRule{e.Key: egressRules})
-		lager.Logger.Infof("Update [%s] egress rule of pilot success", e.Key)
+		lager.Logger.Info(fmt.Sprintf("Update [%s] egress rule of pilot success", e.Key))
 	}
 }

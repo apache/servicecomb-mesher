@@ -35,8 +35,8 @@ const (
 
 //initConfig
 func initConfig() {
-	var micCfg model.MicroserviceCfg
-	micCfg.ServiceDescription.Name = "TEST"
+	var micCfg model.ServiceSpec
+	micCfg.Name = "TEST"
 	gcconfig.MicroserviceDefinition = &micCfg
 }
 

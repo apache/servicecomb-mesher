@@ -70,7 +70,7 @@ func Init() {
 	if err != nil {
 		openlogging.GetLogger().Errorf("NewGRPCReporter error:%s ", err.Error())
 	}
-	tracer, err = go2sky.NewTracer(gcconfig.MicroserviceDefinition.ServiceDescription.Name, go2sky.WithReporter(r))
+	tracer, err = go2sky.NewTracer(gcconfig.MicroserviceDefinition.Name, go2sky.WithReporter(r))
 	if err != nil {
 		openlogging.GetLogger().Errorf("NewTracer error " + err.Error())
 	}

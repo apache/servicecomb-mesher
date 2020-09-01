@@ -3,24 +3,25 @@ module github.com/apache/servicecomb-mesher
 require (
 	github.com/envoyproxy/go-control-plane v0.6.0
 	github.com/ghodss/yaml v1.0.0
-	github.com/go-chassis/foundation v0.1.1-0.20191113114104-2b05871e9ec4
-	github.com/go-chassis/go-archaius v1.3.2
-	github.com/go-chassis/go-chassis v1.8.2-0.20200728122719-5c6c673368c5
+	github.com/go-chassis/foundation v0.1.1-0.20200825060850-b16bf420f7b3
+	github.com/go-chassis/go-archaius v1.3.3
+	github.com/go-chassis/go-chassis v1.8.2-0.20200831084354-7ac56be1a686
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
+	github.com/go-chassis/openlog v1.1.1
 	github.com/go-mesh/openlogging v1.0.1
 	github.com/gogo/googleapis v1.3.1 // indirect
 	github.com/gogo/protobuf v1.3.0
 	github.com/lyft/protoc-gen-validate v0.1.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/prometheus/client_golang v0.9.1
-	github.com/prometheus/client_model v0.0.0-20190115171406-56726106282f
-	github.com/stretchr/testify v1.4.0
+	github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4
+	github.com/stretchr/testify v1.5.1
 	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a
-	golang.org/x/net v0.0.0-20191004110552-13f9640d40b9
+	golang.org/x/net v0.0.0-20200520004742-59133d7f0dd7
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	google.golang.org/grpc v1.19.1
-	gopkg.in/yaml.v2 v2.2.4
+	google.golang.org/grpc v1.27.0
+	gopkg.in/yaml.v2 v2.3.0
 	k8s.io/apimachinery v0.17.0
 	k8s.io/client-go v0.17.0
 )

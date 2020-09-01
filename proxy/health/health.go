@@ -19,6 +19,7 @@ package health
 
 import (
 	"errors"
+	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/registry"
@@ -101,7 +102,7 @@ func runCheckers(c *config.HealthCheck, l7check L7Check, address string, deal De
 		for range ticker.C {
 			err := CheckService(c, l7check, address)
 			if err != nil {
-				lager.Logger.Errorf("health check failed for service port[%s]: %s", c.Port, err)
+				lager.Logger.Error(fmt.Sprintf("health check failed for service port[%s]: %s", c.Port, err))
 			}
 			deal(err)
 		}
@@ -111,7 +112,7 @@ func runCheckers(c *config.HealthCheck, l7check L7Check, address string, deal De
 
 //CheckService check service health based on config
 func CheckService(c *config.HealthCheck, l7check L7Check, address string) error {
-	lager.Logger.Debugf("check port [%s]", c.Port)
+	lager.Logger.Debug(fmt.Sprintf("check port [%s]", c.Port))
 	if l7check != nil {
 		if err := l7check(c, address); err != nil {
 			return err
@@ -141,7 +142,7 @@ func L4Check(address string) error {
 func Run() error {
 	openlogging.Info("local health manager start")
 	for _, v := range config.GetConfig().HealthCheck {
-		lager.Logger.Debugf("check local health [%s],protocol [%s]", v.Port, v.Protocol)
+		lager.Logger.Debug(fmt.Sprintf("check local health [%s],protocol [%s]", v.Port, v.Protocol))
 		address, check, err := ParseConfig(v)
 		if err != nil {
 			lager.Logger.Warn("Health keeper can not check health")

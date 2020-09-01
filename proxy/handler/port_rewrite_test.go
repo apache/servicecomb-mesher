@@ -35,8 +35,8 @@ func TestPortRewriteHandler_ValidEndpoint(t *testing.T) {
 	c.AddHandler(&PortSelectionHandler{})
 
 	config.GlobalDefinition = &model.GlobalCfg{}
-	config.GlobalDefinition.Cse.Handler.Chain.Consumer = make(map[string]string)
-	config.GlobalDefinition.Cse.Handler.Chain.Consumer["outgoing"] = PortMapForPilot
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Consumer = make(map[string]string)
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Consumer["outgoing"] = PortMapForPilot
 	i := &invocation.Invocation{
 		MicroServiceName: "service1",
 		SchemaID:         "schema1",
@@ -56,8 +56,8 @@ func TestPortRewriteHandler_InValidEndpoint(t *testing.T) {
 	c.AddHandler(&PortSelectionHandler{})
 
 	config.GlobalDefinition = &model.GlobalCfg{}
-	config.GlobalDefinition.Cse.Handler.Chain.Consumer = make(map[string]string)
-	config.GlobalDefinition.Cse.Handler.Chain.Consumer["outgoing"] = PortMapForPilot
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Consumer = make(map[string]string)
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Consumer["outgoing"] = PortMapForPilot
 	i := &invocation.Invocation{
 		MicroServiceName: "service1",
 		SchemaID:         "schema1",

@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-service_description:
-  name: mesher-edge
-  version: 1.7.0
+servicecomb:
+  service:
+    name: mesher-edge
+    version: 1.7.0

@@ -37,8 +37,8 @@ func initHandler() handler.Chain {
 func initInv() *invocation.Invocation {
 
 	config.GlobalDefinition = &model.GlobalCfg{}
-	config.GlobalDefinition.Cse.Handler.Chain.Provider = make(map[string]string)
-	config.GlobalDefinition.Cse.Handler.Chain.Provider["outgoing"] = AuthName
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Provider = make(map[string]string)
+	config.GlobalDefinition.ServiceComb.Handler.Chain.Provider["outgoing"] = AuthName
 
 	var i *invocation.Invocation
 
