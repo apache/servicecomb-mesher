@@ -94,8 +94,8 @@ func (hs *httpServer) startSidecar(host, port string) error {
 		}
 	} else {
 		sslTag := genTag(common.ComponentName, chassisCom.Provider)
-		lager.Logger.Warnf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
-			sslTag, mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin)
+		lager.Logger.Warn(fmt.Sprintf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
+			sslTag, mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin))
 	}
 
 	err := hs.listenAndServe("127.0.0.1"+":"+port, mesherTLSConfig, http.HandlerFunc(LocalRequestHandler))
@@ -108,7 +108,7 @@ func (hs *httpServer) startSidecar(host, port string) error {
 	case "0.0.0.0":
 		return errors.New("in sidecar mode, forbidden to listen on 0.0.0.0")
 	case "127.0.0.1":
-		lager.Logger.Warnf("Mesher listen on 127.0.0.1, it can only proxy for consumer. " +
+		lager.Logger.Warn("Mesher listen on 127.0.0.1, it can only proxy for consumer. " +
 			"for provider, mesher must listen on external ip.")
 		return nil
 	default:
@@ -120,8 +120,8 @@ func (hs *httpServer) startSidecar(host, port string) error {
 			}
 		} else {
 			sslTag := genTag(chassisRuntime.ServiceName, chassisCom.ProtocolRest, chassisCom.Provider)
-			lager.Logger.Warnf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
-				sslTag, serverSSLConfig.VerifyPeer, serverSSLConfig.CipherPlugin)
+			lager.Logger.Warn(fmt.Sprintf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
+				sslTag, serverSSLConfig.VerifyPeer, serverSSLConfig.CipherPlugin))
 		}
 
 		err = hs.listenAndServe(hs.opts.Address, serverTLSConfig, http.HandlerFunc(RemoteRequestHandler))
@@ -142,8 +142,8 @@ func (hs *httpServer) startPerHost() error {
 			return err
 		}
 	} else {
-		lager.Logger.Warnf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
-			sslTag, mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin)
+		lager.Logger.Warn(fmt.Sprintf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
+			sslTag, mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin))
 	}
 
 	err = hs.listenAndServe(hs.opts.Address, mesherTLSConfig, http.HandlerFunc(LocalRequestHandler))

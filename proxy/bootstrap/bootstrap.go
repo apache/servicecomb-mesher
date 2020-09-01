@@ -18,6 +18,7 @@
 package bootstrap
 
 import (
+	"fmt"
 	"log"
 	"strings"
 
@@ -38,6 +39,7 @@ import (
 	chassisHandler "github.com/go-chassis/go-chassis/core/handler"
 	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/go-chassis/core/metadata"
+	"github.com/go-chassis/openlog"
 	"github.com/go-mesh/openlogging"
 )
 
@@ -56,7 +58,7 @@ func Start() error {
 		return err
 	}
 	if err := metrics.Init(); err != nil {
-		lager.Logger.Infof("metrics init error", err)
+		lager.Logger.Info("metrics init error", openlog.WithTags(openlog.Tags{"err": err}))
 	}
 	if err := v1.Init(); err != nil {
 		log.Println("Error occurred in starting admin server", err)
@@ -65,9 +67,9 @@ func Start() error {
 		return err
 	}
 	if cmd.Configs.LocalServicePorts == "" {
-		lager.Logger.Warnf("local service ports is missing, service can not be called by mesher")
+		lager.Logger.Warn("local service ports is missing, service can not be called by mesher")
 	} else {
-		lager.Logger.Infof("local service ports is [%v]", cmd.Configs.PortsMap)
+		lager.Logger.Info(fmt.Sprintf("local service ports is [%v]", cmd.Configs.PortsMap))
 	}
 	err := egress.Init()
 	if err != nil {

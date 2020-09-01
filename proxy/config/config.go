@@ -76,8 +76,8 @@ func GetConfigFilePath(key string) (string, error) {
 //InitProtocols initiates protocols
 func InitProtocols() error {
 	// todo if sdk init failed, do not call the data
-	if len(config.GlobalDefinition.Cse.Protocols) == 0 {
-		config.GlobalDefinition.Cse.Protocols = map[string]model.Protocol{
+	if len(config.GlobalDefinition.ServiceComb.Protocols) == 0 {
+		config.GlobalDefinition.ServiceComb.Protocols = map[string]model.Protocol{
 			common.HTTPProtocol: {Listen: "127.0.0.1:30101"},
 		}
 

@@ -1,5 +1,5 @@
 ---
-cse:
+servicecomb:
   protocols:
     grpc:
       listenAddress: 192.168.88.64:40102

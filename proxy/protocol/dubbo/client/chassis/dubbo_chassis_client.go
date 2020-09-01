@@ -79,7 +79,7 @@ func (c *dubboChassisClient) Call(ctx context.Context, addr string, inv *invocat
 	dubboCli, err := dubboClient.CachedClients.GetClient(endPoint, c.opts.Timeout)
 	if err != nil {
 		resp.Resp.DubboRPCResult.SetException(fmt.Sprintf("Invalid Request addr %s %s", endPoint, err))
-		lager.Logger.Errorf("Invalid Request addr %s %s", endPoint, err)
+		lager.Logger.Error(fmt.Sprintf("Invalid Request addr %s %s", endPoint, err))
 		return err
 	}
 

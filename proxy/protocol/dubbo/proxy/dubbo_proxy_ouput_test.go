@@ -84,7 +84,7 @@ func TestHandle(t *testing.T) {
 
 		protoMap := make(map[string]model.Protocol)
 		config.GlobalDefinition = &model.GlobalCfg{
-			Cse: model.CseStruct{
+			ServiceComb: model.ServiceComb{
 				Protocols: protoMap,
 			},
 		}
@@ -141,7 +141,7 @@ func TestHandle(t *testing.T) {
 
 		protoMap := make(map[string]model.Protocol)
 		config.GlobalDefinition = &model.GlobalCfg{
-			Cse: model.CseStruct{
+			ServiceComb: model.ServiceComb{
 				Protocols: protoMap,
 			},
 		}

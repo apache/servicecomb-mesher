@@ -18,6 +18,7 @@
 package archaius
 
 import (
+	"fmt"
 	"github.com/go-chassis/go-archaius/event"
 	"github.com/go-chassis/go-archaius/source/util"
 	"gopkg.in/yaml.v2"
@@ -47,7 +48,7 @@ func (r *egressRuleEventListener) Event(e *event.Event) {
 	}
 	v := archaius.Get(e.Key)
 	if v == nil {
-		lager.Logger.Infof("[%s] Error getting egress key", e.Key)
+		lager.Logger.Info(fmt.Sprintf("[%s] Error getting egress key", e.Key))
 		return
 	}
 
@@ -70,7 +71,7 @@ func (r *egressRuleEventListener) Event(e *event.Event) {
 	}
 
 	SetEgressRule(map[string][]*config.EgressRule{e.Key: egressRules})
-	lager.Logger.Infof("Update [%s] egress rule SUCCESS", e.Key)
+	lager.Logger.Info(fmt.Sprintf("Update [%s] egress rule SUCCESS", e.Key))
 }
 
 // initialize the config mgr and add several sources
@@ -78,11 +79,11 @@ func initEgressManager() error {
 	egressListener := &egressRuleEventListener{}
 	err := archaius.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), archaius.WithFileHandler(util.UseFileNameAsKeyContentAsValue))
 	if err != nil {
-		lager.Logger.Infof("Archaius add file failed: ", err)
+		lager.Logger.Info(fmt.Sprint("Archaius add file failed: ", err))
 	}
 	err = archaius.RegisterListener(egressListener, ".*")
 	if err != nil {
-		lager.Logger.Infof("Archaius add file failed: ", err)
+		lager.Logger.Info(fmt.Sprint("Archaius add file failed: ", err))
 	}
 	return nil
 }

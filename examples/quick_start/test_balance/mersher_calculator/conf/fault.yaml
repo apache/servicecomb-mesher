@@ -1,4 +1,4 @@
-#cse:
+#servicecomb:
 #  governance:
 #    Consumer:
 #      _global: #最低优先级配置

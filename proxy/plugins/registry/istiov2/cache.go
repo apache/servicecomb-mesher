@@ -18,6 +18,7 @@
 package istiov2
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 	"sync"
@@ -61,7 +62,7 @@ func (cm *CacheManager) AutoSync() {
 	} else {
 		timeValue, err := time.ParseDuration(refreshInterval)
 		if err != nil {
-			lager.Logger.Errorf("refeshInterval is invalid. So use Default value: %s", err.Error())
+			lager.Logger.Error(fmt.Sprintf("refeshInterval is invalid. So use Default value: %s", err.Error()))
 			timeValue = DefaultRefreshInterval
 		}
 
@@ -77,22 +78,22 @@ func (cm *CacheManager) AutoSync() {
 func (cm *CacheManager) refreshCache() {
 	// TODO What is the design of autodiscovery
 	if archaius.GetBool("cse.service.registry.autodiscovery", false) {
-		lager.Logger.Errorf("SyncPilotEndpoints failed: not supported")
+		lager.Logger.Error("SyncPilotEndpoints failed: not supported")
 	}
 
 	err := cm.pullMicroserviceInstance()
 	if err != nil {
-		lager.Logger.Errorf("AutoUpdateMicroserviceInstance failed: %s", err.Error())
+		lager.Logger.Error(fmt.Sprintf("AutoUpdateMicroserviceInstance failed: %s", err.Error()))
 	}
 
 	if archaius.GetBool("cse.service.registry.autoSchemaIndex", false) {
-		lager.Logger.Errorf("MakeSchemaIndex failed: Not support operation")
+		lager.Logger.Error("MakeSchemaIndex failed: Not support operation")
 	}
 
 	if archaius.GetBool("cse.service.registry.autoIPIndex", false) {
 		err = cm.MakeIPIndex()
 		if err != nil {
-			lager.Logger.Errorf("Auto Update IP index failed: %s", err.Error())
+			lager.Logger.Error(fmt.Sprintf("Auto Update IP index failed: %s", err.Error()))
 		}
 	}
 }

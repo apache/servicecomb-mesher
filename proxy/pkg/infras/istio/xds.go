@@ -30,7 +30,7 @@ import (
 	apiv2endpoint "github.com/envoyproxy/go-control-plane/envoy/api/v2/endpoint"
 	apiv2route "github.com/envoyproxy/go-control-plane/envoy/api/v2/route"
 
-	"github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
+	v2 "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v2"
 	"github.com/go-mesh/openlogging"
 	"github.com/gogo/protobuf/proto"
 	"google.golang.org/grpc"
@@ -303,13 +303,13 @@ func (client *XdsClient) EDS(clusterName string) (*apiv2.ClusterLoadAssignment, 
 }
 
 //GetEndpointsByTags fetches the cluster's endpoints with tags. The tags is usually specified in a DestinationRule.
-func (client *XdsClient) GetEndpointsByTags(serviceName string, tags map[string]string) ([]apiv2endpoint.LbEndpoint, string, error) {
+func (client *XdsClient) GetEndpointsByTags(serviceName string, tags map[string]string) ([]*apiv2endpoint.LbEndpoint, string, error) {
 	clusters, err := client.CDS()
 	if err != nil {
 		return nil, "", err
 	}
 
-	lbendpoints := []apiv2endpoint.LbEndpoint{}
+	lbendpoints := []*apiv2endpoint.LbEndpoint{}
 	clusterName := ""
 	for _, cluster := range clusters {
 		clusterInfo := ParseClusterName(cluster.Name)
@@ -347,7 +347,7 @@ func (client *XdsClient) GetEndpointsByTags(serviceName string, tags map[string]
 }
 
 //RDS is the Router Discovery Service API, it returns the virtual hosts which contains Routes
-func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, error) {
+func (client *XdsClient) RDS(clusterName string) ([]*apiv2route.VirtualHost, error) {
 	clusterInfo := ParseClusterName(clusterName)
 	if clusterInfo == nil {
 		return nil, fmt.Errorf("Invalid clusterName for routers: %s", clusterName)
@@ -384,7 +384,7 @@ func (client *XdsClient) RDS(clusterName string) ([]apiv2route.VirtualHost, erro
 	client.setVersionInfo(TypeRds, resp.GetVersionInfo())
 
 	var route apiv2.RouteConfiguration
-	virtualHosts := []apiv2route.VirtualHost{}
+	virtualHosts := []*apiv2route.VirtualHost{}
 
 	for _, res := range resources {
 		if err := proto.Unmarshal(res.GetValue(), &route); err != nil {

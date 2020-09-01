@@ -33,7 +33,7 @@ func AdaptEndpoints() error {
 	var err error
 	// To be called by services based on CSE SDK,
 	// mesher has to register endpoint with rest://ip:port
-	oldProtoMap := config.GlobalDefinition.Cse.Protocols
+	oldProtoMap := config.GlobalDefinition.ServiceComb.Protocols
 	if _, ok := oldProtoMap[common.HTTPProtocol]; !ok {
 		return nil
 	}

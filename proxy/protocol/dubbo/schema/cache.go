@@ -18,6 +18,7 @@
 package schema
 
 import (
+	"fmt"
 	"strings"
 	"sync"
 	"time"
@@ -51,7 +52,7 @@ func newInterfaceJob(interfaceName string) Job {
 		svc := registry.DefaultContractDiscoveryService.GetMicroServicesByInterface(interfaceName)
 		if svc != nil {
 			svcKey := strings.Join([]string{svc[0].ServiceName, svc[0].Version, svc[0].AppID}, "/")
-			lager.Logger.Infof("refresh cache svc [%s] for interface %s", svcKey, interfaceName)
+			lager.Logger.Info(fmt.Sprintf("refresh cache svc [%s] for interface %s", svcKey, interfaceName))
 			svcToInterfaceCache.Set(interfaceName, svc[0], 0)
 		}
 	}}

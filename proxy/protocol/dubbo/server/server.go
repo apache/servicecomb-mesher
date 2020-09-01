@@ -170,11 +170,11 @@ func (d *DubboServer) AcceptLoop(l *net.TCPListener) {
 func initSchema() {
 	m := make(map[string]string, 0)
 	service := config.MicroserviceDefinition
-	if len(service.ServiceDescription.Schemas) == 0 {
+	if len(service.Schemas) == 0 {
 		return
 	}
 
-	for _, inter := range service.ServiceDescription.Schemas {
+	for _, inter := range service.Schemas {
 		if len(inter) == 0 {
 			openlogging.GetLogger().Warnf("interfaces is empty")
 			break

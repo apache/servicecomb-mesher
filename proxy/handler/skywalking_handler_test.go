@@ -37,8 +37,8 @@ const (
 
 //initGcConfig
 func initGcConfig() {
-	var micCfg model.MicroserviceCfg
-	micCfg.ServiceDescription.Name = "TEST"
+	var micCfg model.ServiceSpec
+	micCfg.Name = "TEST"
 	gcconfig.MicroserviceDefinition = &micCfg
 }
 
@@ -79,8 +79,8 @@ func TestProvierHandle(t *testing.T) {
 	c.AddHandler(mhandler.NewSkyWalkingProvier())
 
 	gcconfig.GlobalDefinition = &model.GlobalCfg{}
-	gcconfig.GlobalDefinition.Cse.Handler.Chain.Consumer = make(map[string]string)
-	gcconfig.GlobalDefinition.Cse.Handler.Chain.Consumer["skywalking-provider"] = "skywalking-provider"
+	gcconfig.GlobalDefinition.ServiceComb.Handler.Chain.Consumer = make(map[string]string)
+	gcconfig.GlobalDefinition.ServiceComb.Handler.Chain.Consumer["skywalking-provider"] = "skywalking-provider"
 
 	c.Next(initInv(), func(r *invocation.Response) {
 		assert.Equal(t, r.Err, nil)
@@ -109,8 +109,8 @@ func TestConsumerHandle(t *testing.T) {
 	c.AddHandler(mhandler.NewSkyWalkingConsumer())
 
 	gcconfig.GlobalDefinition = &model.GlobalCfg{}
-	gcconfig.GlobalDefinition.Cse.Handler.Chain.Consumer = make(map[string]string)
-	gcconfig.GlobalDefinition.Cse.Handler.Chain.Consumer["skywalking-consumer"] = "skywalking-consumer"
+	gcconfig.GlobalDefinition.ServiceComb.Handler.Chain.Consumer = make(map[string]string)
+	gcconfig.GlobalDefinition.ServiceComb.Handler.Chain.Consumer["skywalking-consumer"] = "skywalking-consumer"
 
 	c.Next(initInv(), func(r *invocation.Response) {
 		assert.Equal(t, r.Err, nil)
