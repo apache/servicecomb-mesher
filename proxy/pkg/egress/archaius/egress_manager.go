@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"github.com/go-chassis/go-archaius/event"
 	"github.com/go-chassis/go-archaius/source/util"
+	"github.com/go-chassis/openlog"
 	"gopkg.in/yaml.v2"
 	"path/filepath"
 	"strings"
@@ -28,8 +29,7 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"github.com/go-chassis/go-archaius"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
+	"github.com/go-chassis/go-chassis/v2/pkg/util/fileutil"
 )
 
 //EgressYaml egress yaml file name
@@ -40,7 +40,7 @@ type egressRuleEventListener struct{}
 // update egress rule of a service
 func (r *egressRuleEventListener) Event(e *event.Event) {
 	if e == nil {
-		lager.Logger.Warn("Event pointer is nil", nil)
+		openlog.Warn("Event pointer is nil", nil)
 		return
 	}
 	if !strings.Contains(e.Key, EgressYaml) {
@@ -48,14 +48,14 @@ func (r *egressRuleEventListener) Event(e *event.Event) {
 	}
 	v := archaius.Get(e.Key)
 	if v == nil {
-		lager.Logger.Info(fmt.Sprintf("[%s] Error getting egress key", e.Key))
+		openlog.Info(fmt.Sprintf("[%s] Error getting egress key", e.Key))
 		return
 	}
 
 	var egressconfig config.EgressConfig
 
 	if err := yaml.Unmarshal([]byte(v.([]byte)), &egressconfig); err != nil {
-		lager.Logger.Error("yaml unmarshal failed", nil)
+		openlog.Error("yaml unmarshal failed", nil)
 		return
 	}
 	var egressRules []*config.EgressRule
@@ -63,7 +63,7 @@ func (r *egressRuleEventListener) Event(e *event.Event) {
 	for key, value := range egressconfig.Destinations {
 		ok, _ := egress.ValidateEgressRule(map[string][]*config.EgressRule{key: value})
 		if !ok {
-			lager.Logger.Warn("Validating Egress Rule Failed")
+			openlog.Warn("Validating Egress Rule Failed")
 			return
 
 		}
@@ -71,7 +71,7 @@ func (r *egressRuleEventListener) Event(e *event.Event) {
 	}
 
 	SetEgressRule(map[string][]*config.EgressRule{e.Key: egressRules})
-	lager.Logger.Info(fmt.Sprintf("Update [%s] egress rule SUCCESS", e.Key))
+	openlog.Info(fmt.Sprintf("Update [%s] egress rule SUCCESS", e.Key))
 }
 
 // initialize the config mgr and add several sources
@@ -79,11 +79,11 @@ func initEgressManager() error {
 	egressListener := &egressRuleEventListener{}
 	err := archaius.AddFile(filepath.Join(fileutil.GetConfDir(), EgressYaml), archaius.WithFileHandler(util.UseFileNameAsKeyContentAsValue))
 	if err != nil {
-		lager.Logger.Info(fmt.Sprint("Archaius add file failed: ", err))
+		openlog.Info(fmt.Sprint("Archaius add file failed: ", err))
 	}
 	err = archaius.RegisterListener(egressListener, ".*")
 	if err != nil {
-		lager.Logger.Info(fmt.Sprint("Archaius add file failed: ", err))
+		openlog.Info(fmt.Sprint("Archaius add file failed: ", err))
 	}
 	return nil
 }

@@ -19,7 +19,7 @@ package resolver
 
 import (
 	"errors"
-	"github.com/go-chassis/go-chassis/core/registry"
+	"github.com/go-chassis/go-chassis/v2/core/registry"
 )
 
 var (

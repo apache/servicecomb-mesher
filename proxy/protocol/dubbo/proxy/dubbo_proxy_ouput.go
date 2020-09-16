@@ -29,16 +29,15 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/schema"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
-	"github.com/go-chassis/go-chassis/core/common"
-	chassisCommon "github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/handler"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/loadbalancer"
-	"github.com/go-chassis/go-chassis/pkg/runtime"
-	"github.com/go-chassis/go-chassis/pkg/util/tags"
-	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/core/common"
+	chassisCommon "github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/go-chassis/v2/core/loadbalancer"
+	"github.com/go-chassis/go-chassis/v2/pkg/runtime"
+	"github.com/go-chassis/go-chassis/v2/pkg/util/tags"
+	"github.com/go-chassis/go-chassis/v2/third_party/forked/afex/hystrix-go/hystrix"
+	"github.com/go-chassis/openlog"
 )
 
 var dr = resolver.GetDestinationResolver("http")
@@ -103,7 +102,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	var err error
 	err = SetLocalServiceAddress(inv) //select local service
 	if err != nil {
-		openlogging.GetLogger().Warn(err.Error())
+		openlog.Warn(err.Error())
 		IsProvider = false
 	} else {
 		IsProvider = true
@@ -119,7 +118,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 		if mesherRuntime.Role == mesherCommon.RoleSidecar {
 			c, err = handler.GetChain(common.Consumer, mesherCommon.ChainConsumerOutgoing)
 			if err != nil {
-				openlogging.Error("Get Consumer chain failed: " + err.Error())
+				openlog.Error("Get Consumer chain failed: " + err.Error())
 				return err
 			}
 		}
@@ -130,7 +129,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 		ctx.Req.SetAttachment(ProxyTag, "")
 		c, err = handler.GetChain(common.Provider, mesherCommon.ChainProviderIncoming)
 		if err != nil {
-			openlogging.Error("Get Provider Chain failed: " + err.Error())
+			openlog.Error("Get Provider Chain failed: " + err.Error())
 			return err
 		}
 		c.Next(inv, func(ir *invocation.Response) {
@@ -171,7 +170,7 @@ func handleDubboRequest(inv *invocation.Invocation, ctx *dubbo.InvokeContext, ir
 		ctx.Rsp = ir.Result.(*dubboclient.WrapResponse).Resp
 	} else {
 		err := protocol.ErrNilResult
-		lager.Logger.Error("CAll Chain  failed: " + err.Error())
+		openlog.Error("CAll Chain  failed: " + err.Error())
 		return err
 	}
 

@@ -20,6 +20,7 @@ package chassisclient
 import (
 	"context"
 	"fmt"
+	"github.com/go-chassis/openlog"
 	"os"
 	"sync"
 
@@ -29,9 +30,8 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/proxy"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
 
-	"github.com/go-chassis/go-chassis/core/client"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/go-chassis/v2/core/client"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
 )
 
 //Name is a constant
@@ -79,14 +79,14 @@ func (c *dubboChassisClient) Call(ctx context.Context, addr string, inv *invocat
 	dubboCli, err := dubboClient.CachedClients.GetClient(endPoint, c.opts.Timeout)
 	if err != nil {
 		resp.Resp.DubboRPCResult.SetException(fmt.Sprintf("Invalid Request addr %s %s", endPoint, err))
-		lager.Logger.Error(fmt.Sprintf("Invalid Request addr %s %s", endPoint, err))
+		openlog.Error(fmt.Sprintf("Invalid Request addr %s %s", endPoint, err))
 		return err
 	}
 
 	dubboRsp, err := dubboCli.Send(dubboReq)
 	if err != nil {
 		resp.Resp.DubboRPCResult.SetException(fmt.Sprintf("Dubbo server exception: " + err.Error()))
-		lager.Logger.Error("Dubbo server exception: " + err.Error())
+		openlog.Error("Dubbo server exception: " + err.Error())
 		return err
 	}
 

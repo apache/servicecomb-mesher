@@ -18,6 +18,7 @@
 package config
 
 import (
+	"github.com/go-chassis/openlog"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -25,12 +26,10 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
 	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/go-chassis/go-archaius"
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/config/model"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/server"
-	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/core/config"
+	"github.com/go-chassis/go-chassis/v2/core/config/model"
+	"github.com/go-chassis/go-chassis/v2/core/server"
+	"github.com/go-chassis/go-chassis/v2/pkg/util/fileutil"
 	"gopkg.in/yaml.v2"
 )
 
@@ -137,18 +136,18 @@ func GetConfigContents(key string) (string, error) {
 func SetKeyValueByFile(key, f string) string {
 	var contents string
 	if _, err := os.Stat(f); err != nil {
-		openlogging.GetLogger().Warn(err.Error())
+		openlog.Warn(err.Error())
 		return ""
 	}
 	b, err := ioutil.ReadFile(f)
 	if err != nil {
-		lager.Logger.Error("Can not read yaml file" + err.Error())
+		openlog.Error("Can not read yaml file" + err.Error())
 		return ""
 	}
 	contents = string(b)
 	err = archaius.Set(key, contents)
 	if err != nil {
-		lager.Logger.Error("Archaius set error: " + err.Error())
+		openlog.Error("Archaius set error: " + err.Error())
 	}
 	return contents
 }

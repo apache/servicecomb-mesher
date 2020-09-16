@@ -20,16 +20,16 @@ package resolver
 import (
 	"testing"
 
-	//	"github.com/go-chassis/go-chassis/core/archaius"
-	//	cConfig "github.com/go-chassis/go-chassis/core/config"
-	//	"github.com/go-chassis/go-chassis/core/lager"
-	//	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
+	//	"github.com/go-chassis/go-chassis/v2/core/archaius"
+	//	cConfig "github.com/go-chassis/go-chassis/v2/core/config"
+	//	"github.com/go-chassis/go-chassis/v2/core/lager"
+	//	"github.com/go-chassis/go-chassis/v2/pkg/util/fileutil"
 	//	"github.com/apache/servicecomb-mesher/cmd"
 	//	"github.com/apache/servicecomb-mesher/config"
 	"net/http"
 	//	"os"
 	//	"path/filepath"
-	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
 	"github.com/stretchr/testify/assert"
 )
 

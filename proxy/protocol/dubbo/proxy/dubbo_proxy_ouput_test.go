@@ -26,16 +26,16 @@ import (
 	mesherRuntime "github.com/apache/servicecomb-mesher/proxy/pkg/runtime"
 	dubboclient "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/client"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
-	"github.com/go-chassis/go-chassis"
-	chassisCommon "github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/config/model"
-	"github.com/go-chassis/go-chassis/core/handler"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/loadbalancer"
-	"github.com/go-chassis/go-chassis/core/registry"
-	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
+	"github.com/go-chassis/go-chassis/v2"
+	chassisCommon "github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/config"
+	"github.com/go-chassis/go-chassis/v2/core/config/model"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
+	"github.com/go-chassis/go-chassis/v2/core/loadbalancer"
+	"github.com/go-chassis/go-chassis/v2/core/registry"
+	"github.com/go-chassis/go-chassis/v2/third_party/forked/afex/hystrix-go/hystrix"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"os"
@@ -43,7 +43,7 @@ import (
 	"testing"
 
 	// rate limiter handler
-	_ "github.com/go-chassis/go-chassis/middleware/ratelimiter"
+	_ "github.com/go-chassis/go-chassis/v2/middleware/ratelimiter"
 )
 
 func init() {

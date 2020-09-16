@@ -21,7 +21,7 @@ import (
 	"context"
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/apache/servicecomb-mesher/proxy/health"
-	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
 	"github.com/stretchr/testify/assert"
 	"net"
 	"net/http"

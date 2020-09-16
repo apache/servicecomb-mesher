@@ -30,12 +30,11 @@ import (
 
 	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
-	chassisCom "github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/server"
-	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
-	chassisRuntime "github.com/go-chassis/go-chassis/pkg/runtime"
-	"github.com/go-mesh/openlogging"
+	chassisCom "github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/server"
+	chassisTLS "github.com/go-chassis/go-chassis/v2/core/tls"
+	chassisRuntime "github.com/go-chassis/go-chassis/v2/pkg/runtime"
+	"github.com/go-chassis/openlog"
 )
 
 const (
@@ -95,7 +94,7 @@ func (hs *httpServer) startSidecar(host, port string) error {
 		}
 	} else {
 		sslTag := genTag(common.ComponentName, chassisCom.Provider)
-		lager.Logger.Warn(fmt.Sprintf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
+		openlog.Warn(fmt.Sprintf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
 			sslTag, mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin))
 	}
 
@@ -109,7 +108,7 @@ func (hs *httpServer) startSidecar(host, port string) error {
 	case "0.0.0.0":
 		return errors.New("in sidecar mode, forbidden to listen on 0.0.0.0")
 	case "127.0.0.1":
-		lager.Logger.Warn("Mesher listen on 127.0.0.1, it can only proxy for consumer. " +
+		openlog.Warn("Mesher listen on 127.0.0.1, it can only proxy for consumer. " +
 			"for provider, mesher must listen on external ip.")
 		return nil
 	default:
@@ -121,7 +120,7 @@ func (hs *httpServer) startSidecar(host, port string) error {
 			}
 		} else {
 			sslTag := genTag(chassisRuntime.ServiceName, chassisCom.ProtocolRest, chassisCom.Provider)
-			lager.Logger.Warn(fmt.Sprintf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
+			openlog.Warn(fmt.Sprintf("%s TLS mode, verify peer: %t, cipher plugin: %s.",
 				sslTag, serverSSLConfig.VerifyPeer, serverSSLConfig.CipherPlugin))
 		}
 
@@ -145,7 +144,7 @@ func (hs *httpServer) startCommonProxy() error {
 			return err
 		}
 	} else {
-		lager.Logger.Warn(fmt.Sprintf("TLS mode, verify peer: %t, cipher plugin: %s.",
+		openlog.Warn(fmt.Sprintf("TLS mode, verify peer: %t, cipher plugin: %s.",
 			mesherSSLConfig.VerifyPeer, mesherSSLConfig.CipherPlugin))
 	}
 
@@ -162,7 +161,7 @@ func (hs *httpServer) listenAndServe(addr string, t *tls.Config, h http.Handler)
 		return err
 	}
 	if t != nil {
-		openlogging.Info("run as https")
+		openlog.Info("run as https")
 		lnTLS := tls.NewListener(ln, t)
 		ln = lnTLS
 	}
@@ -181,13 +180,13 @@ func (hs *httpServer) listenAndServe(addr string, t *tls.Config, h http.Handler)
 func (hs *httpServer) Stop() error {
 	//go 1.8+ drain connections handleIncomingTraffic stop server
 	if hs.server == nil {
-		openlogging.Info("http server don't need to be stopped")
+		openlog.Info("http server don't need to be stopped")
 		return nil
 	}
 	if err := hs.server.Shutdown(context.TODO()); err != nil {
 		panic(err)
 	}
-	openlogging.Info("Mesher gracefully stopped")
+	openlog.Info("Mesher gracefully stopped")
 	return nil
 }
 

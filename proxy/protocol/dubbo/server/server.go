@@ -19,9 +19,9 @@ package server
 
 import (
 	"fmt"
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/config/schema"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/core/config"
+	"github.com/go-chassis/go-chassis/v2/core/config/schema"
+	"github.com/go-chassis/openlog"
 	"gopkg.in/yaml.v2"
 	"net"
 	"sync"
@@ -29,8 +29,7 @@ import (
 
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/proxy"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/server"
+	"github.com/go-chassis/go-chassis/v2/core/server"
 )
 
 const (
@@ -98,7 +97,7 @@ func (d *DubboServer) String() string {
 func (d *DubboServer) Init() error {
 	initSchema()
 	d.connMgr = NewConnectMgr()
-	lager.Logger.Info("Dubbo server init success.")
+	openlog.Info("Dubbo server init success.")
 	return nil
 }
 
@@ -131,12 +130,12 @@ func (d *DubboServer) Start() error {
 	}
 	tcpAddr, err := net.ResolveTCPAddr("tcp", d.opts.Address)
 	if err != nil {
-		lager.Logger.Error("ResolveTCPAddr err: " + err.Error())
+		openlog.Error("ResolveTCPAddr err: " + err.Error())
 		return err
 	}
 	l, err := net.ListenTCP("tcp", tcpAddr)
 	if err != nil {
-		lager.Logger.Error("listening failed, reason: " + err.Error())
+		openlog.Error("listening failed, reason: " + err.Error())
 		return err
 	}
 	d.routineMgr.Spawn(d, l, "Acceptloop")
@@ -156,7 +155,7 @@ func (d *DubboServer) AcceptLoop(l *net.TCPListener) {
 		if err != nil {
 			select {
 			case <-time.After(time.Second * 3):
-				lager.Logger.Info("Sleep three second")
+				openlog.Info("Sleep three second")
 			}
 		}
 		dubbConn := d.connMgr.GetConnection(conn)
@@ -176,7 +175,7 @@ func initSchema() {
 
 	for _, inter := range service.Schemas {
 		if len(inter) == 0 {
-			openlogging.GetLogger().Warnf("interfaces is empty")
+			openlog.Warn("interfaces is empty")
 			break
 		}
 		schemaContent := struct {
@@ -201,6 +200,6 @@ func initSchema() {
 
 	err := schema.SetSchemaInfoByMap(m)
 	if err != nil {
-		openlogging.Error("Set schemaInfo failed: " + err.Error())
+		openlog.Error("Set schemaInfo failed: " + err.Error())
 	}
 }

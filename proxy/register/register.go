@@ -19,12 +19,12 @@ package register
 
 import (
 	"github.com/apache/servicecomb-mesher/proxy/common"
-	chassisCommon "github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/config"
-	chassisModel "github.com/go-chassis/go-chassis/core/config/model"
-	"github.com/go-chassis/go-chassis/core/registry"
-	"github.com/go-chassis/go-chassis/pkg/util/iputil"
-	"github.com/go-mesh/openlogging"
+	chassisCommon "github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/config"
+	chassisModel "github.com/go-chassis/go-chassis/v2/core/config/model"
+	"github.com/go-chassis/go-chassis/v2/core/registry"
+	"github.com/go-chassis/go-chassis/v2/pkg/util/iputil"
+	"github.com/go-chassis/openlog"
 	"strings"
 )
 
@@ -64,6 +64,6 @@ func AdaptEndpoints() error {
 		}
 	}
 
-	openlogging.Debug("adapt endpoints success")
+	openlog.Debug("adapt endpoints success")
 	return nil
 }

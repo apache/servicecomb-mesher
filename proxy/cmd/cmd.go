@@ -20,7 +20,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/common"
-	chassiscommon "github.com/go-chassis/go-chassis/core/common"
+	chassiscommon "github.com/go-chassis/go-chassis/v2/core/common"
 	"github.com/urfave/cli"
 	"log"
 	"os"

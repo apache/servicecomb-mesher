@@ -21,9 +21,9 @@ import (
 	"context"
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/skywalking"
-	gcconfig "github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/config/model"
-	"github.com/go-chassis/go-chassis/core/invocation"
+	gcconfig "github.com/go-chassis/go-chassis/v2/core/config"
+	"github.com/go-chassis/go-chassis/v2/core/config/model"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

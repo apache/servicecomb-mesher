@@ -19,10 +19,11 @@ package skywalking
 
 import (
 	"context"
+	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/config"
-	gcconfig "github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-mesh/openlogging"
+	gcconfig "github.com/go-chassis/go-chassis/v2/core/config"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/openlog"
 	"github.com/tetratelabs/go2sky"
 	"github.com/tetratelabs/go2sky/reporter"
 )
@@ -60,7 +61,7 @@ func CreateLocalSpan(ctx context.Context, opts ...go2sky.SpanOption) (go2sky.Spa
 
 //Init skywalking manager
 func Init() {
-	openlogging.GetLogger().Debugf("SkyWalking manager Init begin config:%#v", config.GetConfig().ServiceComb.APM)
+	openlog.Debug(fmt.Sprintf("SkyWalking manager Init begin config:%#v", config.GetConfig().ServiceComb.APM))
 	var err error
 	serverURI := DeafaultSWServerURI
 	if config.GetConfig().ServiceComb.APM.Tracing.ServerURI != "" && config.GetConfig().ServiceComb.APM.Tracing.Enable {
@@ -68,12 +69,12 @@ func Init() {
 	}
 	r, err = reporter.NewGRPCReporter(serverURI)
 	if err != nil {
-		openlogging.GetLogger().Errorf("NewGRPCReporter error:%s ", err.Error())
+		openlog.Error(fmt.Sprintf("NewGRPCReporter error:%s ", err.Error()))
 	}
 	tracer, err = go2sky.NewTracer(gcconfig.MicroserviceDefinition.Name, go2sky.WithReporter(r))
 	if err != nil {
-		openlogging.GetLogger().Errorf("NewTracer error " + err.Error())
+		openlog.Error(fmt.Sprintf("NewTracer error " + err.Error()))
 	}
 	//tracer.WaitUntilRegister()
-	openlogging.GetLogger().Debugf("SkyWalking manager Init end")
+	openlog.Debug(fmt.Sprintf("SkyWalking manager Init end"))
 }

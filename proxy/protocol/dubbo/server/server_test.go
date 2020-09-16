@@ -24,11 +24,11 @@ import (
 	"time"
 
 	//_ "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/client"
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/config/model"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/server"
-	//"github.com/go-chassis/go-chassis/core/client
+	"github.com/go-chassis/go-chassis/v2/core/config"
+	"github.com/go-chassis/go-chassis/v2/core/config/model"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
+	"github.com/go-chassis/go-chassis/v2/core/server"
+	//"github.com/go-chassis/go-chassis/v2/core/client
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

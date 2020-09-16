@@ -24,7 +24,7 @@ import (
 
 	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/openlog"
 )
 
 var drMap = make(map[string]DestinationResolver)
@@ -56,7 +56,7 @@ type DefaultDestinationResolver struct {
 func (dr *DefaultDestinationResolver) Resolve(remoteIP, host, rawURI string, header map[string]string) (string, string, error) {
 	u, err := url.Parse(rawURI)
 	if err != nil {
-		openlogging.Error("Can not parse url: " + err.Error())
+		openlog.Error("Can not parse url: " + err.Error())
 		return "", "", err
 	}
 

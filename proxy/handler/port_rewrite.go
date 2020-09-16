@@ -22,9 +22,9 @@ import (
 	"strings"
 
 	"github.com/apache/servicecomb-mesher/proxy/pkg/ports"
-	"github.com/go-chassis/go-chassis/core/handler"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/openlog"
 )
 
 //PortMapForPilot is a constant
@@ -39,7 +39,7 @@ func (ps *PortSelectionHandler) Handle(chain *handler.Chain, inv *invocation.Inv
 	var err error
 	inv.Endpoint, err = replacePort(inv.Protocol, inv.Endpoint)
 	if err != nil {
-		openlogging.Error("can not replace port: " + err.Error())
+		openlog.Error("can not replace port: " + err.Error())
 	}
 	if inv.Endpoint == "" {
 		r := &invocation.Response{

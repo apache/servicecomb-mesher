@@ -21,8 +21,8 @@ import (
 	"testing"
 
 	mesherconfig "github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/go-chassis/go-chassis/core/lager"
-	_ "github.com/go-chassis/go-chassis/core/router/servicecomb"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
+	_ "github.com/go-chassis/go-chassis/v2/core/router/servicecomb"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v2"
 )

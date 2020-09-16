@@ -21,7 +21,7 @@ When you need to use ServiceComb Engine, you must replace this line.
 Import config center in cmd/mesher/mesher.go.
 
 ```go
-_ "github.com/go-chassis/go-chassis-config/configcenter"
+_ "github.com/go-chassis/go-chassis/v2-config/configcenter"
 ```
 Set the config center in chassis.yaml
 ```yaml

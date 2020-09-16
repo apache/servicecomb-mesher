@@ -20,7 +20,7 @@ package util_test
 import (
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
 	"github.com/apache/servicecomb-mesher/proxy/util"
-	"github.com/go-chassis/go-chassis/core/invocation"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

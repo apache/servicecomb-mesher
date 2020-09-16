@@ -19,7 +19,7 @@ package istio
 
 import (
 	"github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/go-chassis/go-chassis/control"
+	"github.com/go-chassis/go-chassis/v2/control"
 )
 
 //SaveToEgressCache save the egress rules in the cache

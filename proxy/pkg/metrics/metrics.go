@@ -23,7 +23,7 @@
 package metrics
 
 import (
-	"github.com/go-chassis/go-chassis/pkg/runtime"
+	"github.com/go-chassis/go-chassis/v2/pkg/runtime"
 	"sync"
 	"time"
 )

@@ -19,8 +19,8 @@ package v1
 
 import (
 	"github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/go-chassis/go-chassis"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2"
+	"github.com/go-chassis/openlog"
 )
 
 //RegisterWebService creates route and returns all admin APIs
@@ -32,10 +32,10 @@ func RegisterWebService() {
 //Init function initiates admin API
 func Init() (err error) {
 	if !config.GetConfig().Admin.Enable {
-		openlogging.Info("admin API is disabled")
+		openlog.Info("admin API is disabled")
 		return nil
 	}
-	openlogging.Info("admin API is enabled")
+	openlog.Info("admin API is enabled")
 	RegisterWebService()
 	return
 }

@@ -21,10 +21,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/config"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/registry"
-	"github.com/go-chassis/go-chassis/pkg/runtime"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/core/registry"
+	"github.com/go-chassis/go-chassis/v2/pkg/runtime"
+	"github.com/go-chassis/openlog"
 	"net"
 	"regexp"
 	"strconv"
@@ -60,18 +59,18 @@ func InstallChecker(n string, c L7Check) {
 //UpdateInstanceStatus update status in registrator, it just works in client side discovery
 func UpdateInstanceStatus(err error) {
 	if registry.DefaultRegistrator == nil {
-		lager.Logger.Warn("Registrator is nil, can not update instance status")
+		openlog.Warn("Registrator is nil, can not update instance status")
 		return
 	}
 	if err != nil {
 		if runtime.InstanceStatus == runtime.StatusRunning {
-			lager.Logger.Info("service is not healthy, update status")
+			openlog.Info("service is not healthy, update status")
 			ChangeStatus(runtime.StatusDown)
 		}
 
 	} else {
 		if runtime.InstanceStatus == runtime.StatusDown {
-			lager.Logger.Info("service is healthy, update status")
+			openlog.Info("service is healthy, update status")
 			ChangeStatus(runtime.StatusRunning)
 		}
 	}
@@ -81,11 +80,11 @@ func UpdateInstanceStatus(err error) {
 //ChangeStatus change status in local and remote
 func ChangeStatus(status string) {
 	if err := registry.DefaultRegistrator.UpdateMicroServiceInstanceStatus(runtime.ServiceID, runtime.InstanceID, status); err != nil {
-		lager.Logger.Error("update instance status failed:" + err.Error())
+		openlog.Error("update instance status failed:" + err.Error())
 		return
 	}
 	runtime.InstanceStatus = status
-	lager.Logger.Info("update instance status to: " + runtime.InstanceStatus)
+	openlog.Info("update instance status to: " + runtime.InstanceStatus)
 }
 
 //runCheckers run check routines
@@ -102,7 +101,7 @@ func runCheckers(c *config.HealthCheck, l7check L7Check, address string, deal De
 		for range ticker.C {
 			err := CheckService(c, l7check, address)
 			if err != nil {
-				lager.Logger.Error(fmt.Sprintf("health check failed for service port[%s]: %s", c.Port, err))
+				openlog.Error(fmt.Sprintf("health check failed for service port[%s]: %s", c.Port, err))
 			}
 			deal(err)
 		}
@@ -112,7 +111,7 @@ func runCheckers(c *config.HealthCheck, l7check L7Check, address string, deal De
 
 //CheckService check service health based on config
 func CheckService(c *config.HealthCheck, l7check L7Check, address string) error {
-	lager.Logger.Debug(fmt.Sprintf("check port [%s]", c.Port))
+	openlog.Debug(fmt.Sprintf("check port [%s]", c.Port))
 	if l7check != nil {
 		if err := l7check(c, address); err != nil {
 			return err
@@ -122,7 +121,7 @@ func CheckService(c *config.HealthCheck, l7check L7Check, address string) error 
 			return err
 		}
 	}
-	lager.Logger.Debug("service is healthy: " + address)
+	openlog.Debug("service is healthy: " + address)
 	return nil
 }
 
@@ -140,12 +139,12 @@ func L4Check(address string) error {
 
 //Run Launch go routines to check service health
 func Run() error {
-	openlogging.Info("local health manager start")
+	openlog.Info("local health manager start")
 	for _, v := range config.GetConfig().HealthCheck {
-		lager.Logger.Debug(fmt.Sprintf("check local health [%s],protocol [%s]", v.Port, v.Protocol))
+		openlog.Debug(fmt.Sprintf("check local health [%s],protocol [%s]", v.Port, v.Protocol))
 		address, check, err := ParseConfig(v)
 		if err != nil {
-			lager.Logger.Warn("Health keeper can not check health")
+			openlog.Warn("Health keeper can not check health")
 			return err
 		}
 		//TODO make pluggable Deal

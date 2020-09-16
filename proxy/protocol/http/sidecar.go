@@ -32,18 +32,17 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol"
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	"github.com/apache/servicecomb-mesher/proxy/util"
-	"github.com/go-chassis/go-chassis/client/rest"
-	chassisCommon "github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/fault"
-	"github.com/go-chassis/go-chassis/core/handler"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/loadbalancer"
-	"github.com/go-chassis/go-chassis/pkg/runtime"
-	"github.com/go-chassis/go-chassis/pkg/string"
-	"github.com/go-chassis/go-chassis/pkg/util/tags"
-	"github.com/go-chassis/go-chassis/third_party/forked/afex/hystrix-go/hystrix"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/client/rest"
+	chassisCommon "github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/fault"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/go-chassis/v2/core/loadbalancer"
+	"github.com/go-chassis/go-chassis/v2/pkg/runtime"
+	"github.com/go-chassis/go-chassis/v2/pkg/string"
+	"github.com/go-chassis/go-chassis/v2/pkg/util/tags"
+	"github.com/go-chassis/go-chassis/v2/third_party/forked/afex/hystrix-go/hystrix"
+	"github.com/go-chassis/openlog"
 )
 
 var dr = resolver.GetDestinationResolver("http")
@@ -129,7 +128,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		c, err = handler.GetChain(common.ConsumerEgress, common.ChainConsumerEgress)
 		if err != nil {
 			handleErrorResponse(inv, w, http.StatusBadGateway, err)
-			openlogging.Error("Get chain failed" + err.Error())
+			openlog.Error("Get chain failed" + err.Error())
 			return
 		}
 
@@ -137,7 +136,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 		c, err = handler.GetChain(chassisCommon.Consumer, common.ChainConsumerOutgoing)
 		if err != nil {
 			handleErrorResponse(inv, w, http.StatusBadGateway, err)
-			openlogging.Error("Get chain failed: " + err.Error())
+			openlog.Error("Get chain failed: " + err.Error())
 			return
 		}
 	}
@@ -153,7 +152,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	resp, err := handleRequest(w, inv, invRsp)
 	if err != nil {
-		openlogging.Error("handle request failed: " + err.Error())
+		openlog.Error("handle request failed: " + err.Error())
 		return
 	}
 	RecordStatus(inv, resp.StatusCode)
@@ -181,7 +180,7 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := handler.GetChain(chassisCommon.Provider, common.ChainProviderIncoming)
 	if err != nil {
 		handleErrorResponse(inv, w, http.StatusBadGateway, err)
-		lager.Logger.Error("Get chain failed: " + err.Error())
+		openlog.Error("Get chain failed: " + err.Error())
 		return
 	}
 	if err = util.SetLocalServiceAddress(inv, r.Header.Get("X-Forwarded-Port")); err != nil {
@@ -197,7 +196,7 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 		invRsp = ir
 	})
 	if _, err = handleRequest(w, inv, invRsp); err != nil {
-		lager.Logger.Error("Handle request failed: " + err.Error())
+		openlog.Error("Handle request failed: " + err.Error())
 	}
 }
 
@@ -206,16 +205,16 @@ func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	copyHeader(w.Header(), resp.Header)
 	w.WriteHeader(resp.StatusCode)
 	if resp == nil {
-		openlogging.GetLogger().Warn("response is nil because of unknown reason")
+		openlog.Warn("response is nil because of unknown reason")
 		return
 	}
 	_, err := io.Copy(w, resp.Body)
 	if err != nil {
-		openlogging.Error("can not copy: " + err.Error())
+		openlog.Error("can not copy: " + err.Error())
 	}
 	err = resp.Body.Close()
 	if err != nil {
-		openlogging.Error("Http response close error: " + err.Error())
+		openlog.Error("Http response close error: " + err.Error())
 	}
 }
 func handleRequest(w http.ResponseWriter, inv *invocation.Invocation, ir *invocation.Response) (*http.Response, error) {
@@ -288,7 +287,7 @@ func handleErrorResponse(inv *invocation.Invocation, w http.ResponseWriter, stat
 	if err != nil {
 		_, err := w.Write([]byte(err.Error()))
 		if err != nil {
-			openlogging.Error("can not write err to client: " + err.Error())
+			openlog.Error("can not write err to client: " + err.Error())
 		}
 	}
 	RecordStatus(inv, statusCode)

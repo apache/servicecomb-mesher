@@ -21,7 +21,7 @@ import (
 	"errors"
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	meshercontrol "github.com/apache/servicecomb-mesher/proxy/control"
-	"github.com/go-chassis/go-chassis/control"
+	"github.com/go-chassis/go-chassis/v2/control"
 	"regexp"
 	"sync"
 )

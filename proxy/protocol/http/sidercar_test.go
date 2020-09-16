@@ -20,9 +20,9 @@ package http
 import (
 	"bytes"
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
-	"github.com/go-chassis/go-chassis/client/rest"
-	"github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/handler"
+	"github.com/go-chassis/go-chassis/v2/client/rest"
+	"github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
@@ -30,13 +30,12 @@ import (
 	"testing"
 
 	"github.com/apache/servicecomb-mesher/proxy/pkg/metrics"
-	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
 )
 
 func init() {
 	lager.Init(&lager.Options{
-		LoggerLevel:   "INFO",
-		RollingPolicy: "size",
+		LoggerLevel: "INFO",
 	})
 
 	cmd.Init()

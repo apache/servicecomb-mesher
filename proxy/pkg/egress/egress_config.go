@@ -25,10 +25,10 @@ import (
 	"strings"
 
 	"github.com/apache/servicecomb-mesher/proxy/config"
-	gochassisconfig "github.com/go-chassis/go-chassis/core/config"
-	chassisTLS "github.com/go-chassis/go-chassis/core/tls"
-	"github.com/go-chassis/go-chassis/pkg/util/iputil"
-	"github.com/go-mesh/openlogging"
+	gochassisconfig "github.com/go-chassis/go-chassis/v2/core/config"
+	chassisTLS "github.com/go-chassis/go-chassis/v2/core/tls"
+	"github.com/go-chassis/go-chassis/v2/pkg/util/iputil"
+	"github.com/go-chassis/openlog"
 )
 
 const (
@@ -61,7 +61,7 @@ func Init() error {
 	if err != nil {
 		return err
 	}
-	openlogging.Info("Egress init success")
+	openlog.Info("Egress init success")
 	return nil
 }
 

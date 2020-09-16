@@ -21,8 +21,8 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/proxy"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/server"
+	"github.com/go-chassis/go-chassis/v2/core/server"
+	"github.com/go-chassis/openlog"
 	"net"
 	"sync"
 )
@@ -56,7 +56,7 @@ func (d *SimDubboRegistryServer) String() string {
 
 //Init is a method which initialized server config
 func (d *SimDubboRegistryServer) Init(opts ...server.Options) error {
-	lager.Logger.Info("Dubbo Simple Registry server init.")
+	openlog.Info("Dubbo Simple Registry server init.")
 	return nil
 }
 
@@ -86,12 +86,12 @@ func (d *SimDubboRegistryServer) Start() error {
 	}
 	tcpAddr, err := net.ResolveTCPAddr("tcp", d.opts.Address)
 	if err != nil {
-		lager.Logger.Error("ResolveTCPAddr err: " + err.Error())
+		openlog.Error("ResolveTCPAddr err: " + err.Error())
 		return err
 	}
 	l, err := net.ListenTCP("tcp", tcpAddr)
 	if err != nil {
-		lager.Logger.Error("listening falied, reason: " + err.Error())
+		openlog.Error("listening falied, reason: " + err.Error())
 		return err
 	}
 	go d.AcceptLoop(l)
@@ -104,11 +104,11 @@ func (d *SimDubboRegistryServer) AcceptLoop(l *net.TCPListener) {
 		for {
 			conn, err := l.Accept()
 			if err != nil {
-				lager.Logger.Error("tcp conn error: " + err.Error())
+				openlog.Error("tcp conn error: " + err.Error())
 				continue
 			}
 
-			lager.Logger.Debug("Received message")
+			openlog.Debug("Received message")
 
 			go handleConn(conn)
 		}
