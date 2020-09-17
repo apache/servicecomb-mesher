@@ -19,6 +19,7 @@ package http
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
@@ -32,6 +33,7 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol"
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	"github.com/apache/servicecomb-mesher/proxy/util"
+
 	"github.com/go-chassis/go-chassis/v2/client/rest"
 	chassisCommon "github.com/go-chassis/go-chassis/v2/core/common"
 	"github.com/go-chassis/go-chassis/v2/core/fault"
@@ -40,7 +42,7 @@ import (
 	"github.com/go-chassis/go-chassis/v2/core/loadbalancer"
 	"github.com/go-chassis/go-chassis/v2/pkg/runtime"
 	"github.com/go-chassis/go-chassis/v2/pkg/string"
-	"github.com/go-chassis/go-chassis/v2/pkg/util/tags"
+	utiltags "github.com/go-chassis/go-chassis/v2/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/v2/third_party/forked/afex/hystrix-go/hystrix"
 	"github.com/go-chassis/openlog"
 )
@@ -75,8 +77,21 @@ func preHandler(req *http.Request) *invocation.Invocation {
 func consumerPreHandler(req *http.Request) *invocation.Invocation {
 	inv := preHandler(req)
 	inv.SourceServiceID = runtime.ServiceID
-	req.Header.Set(chassisCommon.HeaderSourceName, runtime.ServiceName)
 	inv.Ctx = context.TODO()
+
+	var m map[string]string
+	cseContextStr := req.Header.Get(chassisCommon.HeaderXCseContent)
+	if cseContextStr == "" {
+		m = map[string]string{chassisCommon.HeaderSourceName: runtime.ServiceName}
+		chassisCommon.SetXCSEContext(m, req)
+		return inv
+	}
+	if err := json.Unmarshal([]byte(cseContextStr), &m); err != nil {
+		openlog.Debug("unmarshal " + chassisCommon.HeaderXCseContent + " header content failed: " + err.Error())
+		m = make(map[string]string, 0)
+	}
+	m[chassisCommon.HeaderSourceName] = runtime.ServiceName
+	chassisCommon.SetXCSEContext(m, req)
 	return inv
 }
 
@@ -84,7 +99,7 @@ func providerPreHandler(req *http.Request) *invocation.Invocation {
 	inv := preHandler(req)
 	inv.MicroServiceName = runtime.ServiceName
 	inv.RouteTags = utiltags.NewDefaultTag(runtime.Version, runtime.App)
-	inv.SourceMicroService = req.Header.Get(chassisCommon.HeaderSourceName)
+	inv.SourceMicroService = chassisCommon.GetXCSEContext(chassisCommon.HeaderSourceName, req)
 	inv.Ctx = context.TODO()
 	return inv
 }
