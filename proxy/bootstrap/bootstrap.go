@@ -34,13 +34,11 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/pkg/runtime"
 	"github.com/apache/servicecomb-mesher/proxy/resource/v1"
 	"github.com/apache/servicecomb-mesher/proxy/resource/v1/version"
-	"github.com/go-chassis/go-chassis"
-	"github.com/go-chassis/go-chassis/core/handler"
-	chassisHandler "github.com/go-chassis/go-chassis/core/handler"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/metadata"
+	"github.com/go-chassis/go-chassis/v2"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
+	chassisHandler "github.com/go-chassis/go-chassis/v2/core/handler"
+	"github.com/go-chassis/go-chassis/v2/core/metadata"
 	"github.com/go-chassis/openlog"
-	"github.com/go-mesh/openlogging"
 )
 
 // Start initialize configs and components
@@ -58,7 +56,7 @@ func Start() error {
 		return err
 	}
 	if err := metrics.Init(); err != nil {
-		lager.Logger.Info("metrics init error", openlog.WithTags(openlog.Tags{"err": err}))
+		openlog.Info("metrics init error", openlog.WithTags(openlog.Tags{"err": err}))
 	}
 	if err := v1.Init(); err != nil {
 		log.Println("Error occurred in starting admin server", err)
@@ -67,9 +65,9 @@ func Start() error {
 		return err
 	}
 	if cmd.Configs.LocalServicePorts == "" {
-		lager.Logger.Warn("local service ports is missing, service can not be called by mesher")
+		openlog.Warn("local service ports is missing, service can not be called by mesher")
 	} else {
-		lager.Logger.Info(fmt.Sprintf("local service ports is [%v]", cmd.Configs.PortsMap))
+		openlog.Info(fmt.Sprintf("local service ports is [%v]", cmd.Configs.PortsMap))
 	}
 	err := egress.Init()
 	if err != nil {
@@ -87,7 +85,7 @@ func Start() error {
 //DecideMode get config mode
 func DecideMode() error {
 	runtime.Role = cmd.Configs.Role
-	openlogging.GetLogger().Info("Running as " + runtime.Role)
+	openlog.Info("Running as " + runtime.Role)
 	return nil
 }
 

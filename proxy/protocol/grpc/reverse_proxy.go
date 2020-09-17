@@ -30,15 +30,14 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol"
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	"github.com/apache/servicecomb-mesher/proxy/util"
-	"github.com/go-chassis/go-chassis/client/rest"
-	chassisCommon "github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/handler"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/pkg/runtime"
-	"github.com/go-chassis/go-chassis/pkg/string"
-	"github.com/go-chassis/go-chassis/pkg/util/tags"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/client/rest"
+	chassisCommon "github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/go-chassis/v2/pkg/runtime"
+	"github.com/go-chassis/go-chassis/v2/pkg/string"
+	"github.com/go-chassis/go-chassis/v2/pkg/util/tags"
+	"github.com/go-chassis/openlog"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -120,7 +119,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := handler.GetChain(chassisCommon.Consumer, common.ChainConsumerOutgoing)
 	if err != nil {
 		WriteErrorResponse(inv, w, r, http.StatusBadGateway, err)
-		lager.Logger.Error("Get chain failed: " + err.Error())
+		openlog.Error("Get chain failed: " + err.Error())
 		return
 	}
 	defer func(begin time.Time) {
@@ -135,7 +134,7 @@ func LocalRequestHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	resp, err := handleRequest(w, r, inv, invRsp)
 	if err != nil {
-		lager.Logger.Error("Handle request failed: " + err.Error())
+		openlog.Error("Handle request failed: " + err.Error())
 		return
 	}
 	RecordStatus(inv, resp.StatusCode)
@@ -163,7 +162,7 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 	c, err := handler.GetChain(chassisCommon.Provider, common.ChainProviderIncoming)
 	if err != nil {
 		WriteErrorResponse(inv, w, r, http.StatusBadGateway, err)
-		lager.Logger.Error("Get chain failed: " + err.Error())
+		openlog.Error("Get chain failed: " + err.Error())
 		return
 	}
 	if err = util.SetLocalServiceAddress(inv, r.Header.Get("X-Forwarded-Port")); err != nil {
@@ -179,20 +178,20 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 		invRsp = ir
 	})
 	if _, err = handleRequest(w, r, inv, invRsp); err != nil {
-		lager.Logger.Error("Handle request failed: " + err.Error())
+		openlog.Error("Handle request failed: " + err.Error())
 	}
 }
 
 func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	if resp == nil || resp.StatusCode == 0 {
-		lager.Logger.Warn("response is nil or empty because of unknown reason, plz report issue")
+		openlog.Warn("response is nil or empty because of unknown reason, plz report issue")
 		return
 	}
 	copyHeader(w.Header(), resp.Header)
 	w.WriteHeader(resp.StatusCode)
 	_, err := io.Copy(w, resp.Body)
 	if err != nil {
-		openlogging.Error("can not copy resp: " + err.Error())
+		openlog.Error("can not copy resp: " + err.Error())
 	}
 	resp.Body.Close()
 }
@@ -237,7 +236,7 @@ func WriteErrorResponse(inv *invocation.Invocation, w http.ResponseWriter, r *ht
 	if !ok {
 		stat = status.New(codes.Unknown, err.Error())
 	}
-	openlogging.GetLogger().Errorf("grpc error: [%s]: [%s]", stat.Code().String(), stat.Message())
+	openlog.Error(fmt.Sprintf("grpc error: [%s]: [%s]", stat.Code().String(), stat.Message()))
 	w.Header().Set("Content-Type", r.Header.Get("content-type"))
 	w.Header().Set("User-Agent", r.Header.Get("User-Agent"))
 	w.Header().Set("Grpc-Status", fmt.Sprintf("%d", stat.Code()))

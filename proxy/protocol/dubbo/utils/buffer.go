@@ -22,7 +22,7 @@ import (
 	"reflect"
 
 	"fmt"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/openlog"
 )
 
 //BaseError is a struct
@@ -166,7 +166,7 @@ func (b *ReadBuffer) ReadByte() (byte, error) {
 	var tmp interface{}
 	tmp, err := b.ReadObject()
 	if err != nil {
-		openlogging.Error(err.Error())
+		openlog.Error(err.Error())
 		return byte(0), err
 	}
 	return byte(tmp.(int32)), nil

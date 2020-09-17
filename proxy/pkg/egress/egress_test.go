@@ -19,7 +19,7 @@ package egress_test
 
 import (
 	"fmt"
-	"github.com/go-chassis/go-chassis/pkg/util/fileutil"
+	"github.com/go-chassis/go-chassis/v2/pkg/util/fileutil"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"os"
@@ -31,10 +31,10 @@ import (
 	_ "github.com/apache/servicecomb-mesher/proxy/control/istio"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress/archaius"
-	"github.com/go-chassis/go-chassis/control"
-	_ "github.com/go-chassis/go-chassis/control/servicecomb"
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/go-chassis/v2/control"
+	_ "github.com/go-chassis/go-chassis/v2/control/servicecomb"
+	"github.com/go-chassis/go-chassis/v2/core/config"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
 	"gopkg.in/yaml.v2"
 )
 

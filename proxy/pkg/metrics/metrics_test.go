@@ -25,7 +25,7 @@ import (
 	"testing"
 
 	"github.com/apache/servicecomb-mesher/proxy/pkg/metrics"
-	"github.com/go-chassis/go-chassis/pkg/runtime"
+	"github.com/go-chassis/go-chassis/v2/pkg/runtime"
 )
 
 func TestInit(t *testing.T) {

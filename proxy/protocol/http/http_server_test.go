@@ -21,10 +21,10 @@ import (
 	"errors"
 	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/runtime"
-	"github.com/go-chassis/go-chassis/core/config"
-	"github.com/go-chassis/go-chassis/core/config/model"
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/server"
+	"github.com/go-chassis/go-chassis/v2/core/config"
+	"github.com/go-chassis/go-chassis/v2/core/config/model"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
+	"github.com/go-chassis/go-chassis/v2/core/server"
 	"github.com/stretchr/testify/assert"
 	"net"
 	"net/http"
@@ -34,7 +34,7 @@ import (
 )
 
 func init() {
-	lager.Init(&lager.Options{LoggerLevel: "INFO", RollingPolicy: "size"})
+	lager.Init(&lager.Options{LoggerLevel: "INFO"})
 }
 
 func externalIP() (net.IP, error) {

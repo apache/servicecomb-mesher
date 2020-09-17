@@ -34,15 +34,14 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/server"
 
 	_ "github.com/apache/servicecomb-mesher/proxy/pkg/egress/archaius"
-	_ "github.com/apache/servicecomb-mesher/proxy/pkg/egress/pilot"
 
 	_ "github.com/apache/servicecomb-mesher/proxy/control/istio"
 
 	_ "github.com/apache/servicecomb-mesher/proxy/handler/oauth2"
 
 	//middle wares
-	_ "github.com/go-chassis/go-chassis/middleware/circuit"
-	_ "github.com/go-chassis/go-chassis/middleware/ratelimiter"
+	_ "github.com/go-chassis/go-chassis/v2/middleware/circuit"
+	_ "github.com/go-chassis/go-chassis/v2/middleware/ratelimiter"
 )
 
 func main() {

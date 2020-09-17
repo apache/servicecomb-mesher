@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
-	"github.com/go-chassis/go-chassis/core/lager"
 	"github.com/go-chassis/openlog"
 	"net"
 	"sync"
@@ -84,11 +83,11 @@ func (this *ClientMgr) GetClient(addr string, timeout time.Duration) (*DubboClie
 			this.clients[addr] = tmp
 		}
 		if !tmp.Closed() {
-			lager.Logger.Info("GetClient from cached addr:" + addr)
+			openlog.Info("GetClient from cached addr:" + addr)
 			return tmp, nil
 		} else {
 			err := tmp.ReOpen()
-			lager.Logger.Info("GetClient repopen addr:" + addr)
+			openlog.Info("GetClient repopen addr:" + addr)
 			if err != nil {
 				delete(this.clients, addr)
 				return nil, err
@@ -97,7 +96,7 @@ func (this *ClientMgr) GetClient(addr string, timeout time.Duration) (*DubboClie
 			}
 		}
 	}
-	lager.Logger.Info("GetClient from new open addr:" + addr)
+	openlog.Info("GetClient from new open addr:" + addr)
 	tmp := NewDubboClient(addr, nil, timeout)
 	err := tmp.Open()
 	if err != nil {
@@ -145,7 +144,7 @@ func (this *DubboClient) Open() error {
 func (this *DubboClient) open() error {
 	c, errDial := net.DialTimeout("tcp", this.addr, this.Timeout)
 	if errDial != nil {
-		lager.Logger.Error("tcp dial failed", openlog.WithTags(openlog.Tags{
+		openlog.Error("tcp dial failed", openlog.WithTags(openlog.Tags{
 			"addr": this.addr,
 			"err":  errDial,
 		}))
@@ -231,13 +230,13 @@ func (this *DubboClient) Send(dubboReq *dubbo.Request) (*dubbo.DubboRsp, error) 
 		timeout = true
 	}
 	if this.closed {
-		lager.Logger.Info("Client been closed.")
+		openlog.Info("Client been closed.")
 		return nil, &util.BaseError{"Client been closed."}
 	}
 	this.RemoveWaitMsg(msgID)
 	if timeout {
 		dubboReq.SetBroken(true)
-		lager.Logger.Info("Client send timeout.")
+		openlog.Info("Client send timeout.")
 		return nil, &util.BaseError{"timeout"}
 	} else {
 		return result.Rsp, nil

@@ -20,7 +20,7 @@ package authority
 import (
 	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/openlog"
 	"strings"
 )
 
@@ -33,7 +33,7 @@ func (dr *GRPCDefaultDestinationResolver) Resolve(sourceAddr, host, rawURI strin
 	s := strings.Split(rawURI, ":")
 	if len(s) != 2 {
 		err := fmt.Errorf("can not parse [%s]", rawURI)
-		openlogging.Error(err.Error())
+		openlog.Error(err.Error())
 		return "", "", err
 	}
 

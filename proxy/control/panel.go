@@ -19,8 +19,8 @@ package control
 
 import (
 	"fmt"
-	"github.com/go-chassis/go-chassis/control"
-	"github.com/go-chassis/go-chassis/core/config"
+	"github.com/go-chassis/go-chassis/v2/control"
+	"github.com/go-chassis/go-chassis/v2/core/config"
 )
 
 var panelPlugin = make(map[string]func(options Options) control.Panel)

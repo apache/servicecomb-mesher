@@ -22,7 +22,7 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/proxy"
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
-	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/openlog"
 	"net"
 	"sync"
 )
@@ -115,22 +115,22 @@ func (this *DubboConnection) MsgRecvLoop() {
 		size, err := this.conn.Read(buf)
 		if err != nil {
 			if nerr, ok := err.(net.Error); ok && nerr.Timeout() {
-				lager.Logger.Error("Dubbo server Recv head: " + err.Error())
+				openlog.Error("Dubbo server Recv head: " + err.Error())
 				continue
 			}
-			lager.Logger.Error("Dubbo server Recv head: " + err.Error())
+			openlog.Error("Dubbo server Recv head: " + err.Error())
 			break
 		}
 
 		if size < dubbo.HeaderLength {
-			lager.Logger.Info("Invalid msg head")
+			openlog.Info("Invalid msg head")
 			continue
 		}
 		req := new(dubbo.Request)
 		bodyLen := 0
 		ret := this.codec.DecodeDubboReqHead(req, buf, &bodyLen)
 		if ret != dubbo.Success {
-			lager.Logger.Info("Invalid msg head")
+			openlog.Info("Invalid msg head")
 			continue
 		}
 		body := make([]byte, bodyLen)
@@ -141,7 +141,7 @@ func (this *DubboConnection) MsgRecvLoop() {
 
 			if err != nil {
 				//通知关闭连接
-				lager.Logger.Error("Recv: " + err.Error())
+				openlog.Error("Recv: " + err.Error())
 				goto exitloop
 			}
 			count += size
@@ -177,12 +177,12 @@ func (this *DubboConnection) HandleMsg(req *dubbo.Request) {
 		//这里重新分配MSGID
 		srcMsgID := ctx.Req.GetMsgID()
 		dstMsgID := dubbo.GenerateMsgID()
-		//lager.Logger.Info(fmt.Sprintf("dubbo2dubbo srcMsgID=%d, newMsgID=%d", srcMsgID, dstMsgID))
+		//openlog.Info(fmt.Sprintf("dubbo2dubbo srcMsgID=%d, newMsgID=%d", srcMsgID, dstMsgID))
 		ctx.Req.SetMsgID(dstMsgID)
 		err := dubboproxy.Handle(ctx)
 		if err != nil {
 			ctx.Rsp.SetErrorMsg(err.Error())
-			lager.Logger.Error("request: " + err.Error())
+			openlog.Error("request: " + err.Error())
 			ctx.Rsp.SetStatus(dubbo.ServerError)
 		}
 		ctx.Req.SetMsgID(srcMsgID)
@@ -199,7 +199,7 @@ func (this *DubboConnection) MsgSndLoop() {
 	for {
 		msg, err := this.msgque.Dequeue()
 		if err != nil {
-			lager.Logger.Error("MsgSndLoop Dequeue: " + err.Error())
+			openlog.Error("MsgSndLoop Dequeue: " + err.Error())
 			break
 		}
 		var buffer util.WriteBuffer
@@ -208,7 +208,7 @@ func (this *DubboConnection) MsgSndLoop() {
 		bs := buffer.GetValidData()
 		_, err = this.conn.Write(bs /*buffer.GetValidData()*/)
 		if err != nil {
-			lager.Logger.Error("Send exception: " + err.Error())
+			openlog.Error("Send exception: " + err.Error())
 			break
 		}
 	}

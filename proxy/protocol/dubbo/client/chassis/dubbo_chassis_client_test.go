@@ -25,9 +25,9 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/dubbo"
 	dubboproxy "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/proxy"
 	util "github.com/apache/servicecomb-mesher/proxy/protocol/dubbo/utils"
-	"github.com/go-chassis/go-chassis/core/client"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/go-chassis/v2/core/client"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
 	"github.com/stretchr/testify/assert"
 	"net"
 	"net/http"
@@ -39,7 +39,7 @@ import (
 )
 
 func init() {
-	lager.Init(&lager.Options{LoggerLevel: "INFO", RollingPolicy: "size"})
+	lager.Init(&lager.Options{LoggerLevel: "INFO"})
 }
 
 func TestDubboChassisClient(t *testing.T) {

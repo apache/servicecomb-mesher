@@ -24,10 +24,10 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/go-chassis/go-chassis/core/client"
-	"github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-chassis/go-chassis/pkg/util/httputil"
+	"github.com/go-chassis/go-chassis/v2/core/client"
+	"github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/go-chassis/v2/pkg/util/httputil"
 	"golang.org/x/net/http2"
 )
 

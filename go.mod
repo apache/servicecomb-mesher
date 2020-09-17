@@ -1,13 +1,13 @@
 module github.com/apache/servicecomb-mesher
 
 require (
-	github.com/envoyproxy/go-control-plane v0.6.0
+	github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473
 	github.com/ghodss/yaml v1.0.0
 	github.com/go-chassis/foundation v0.1.1-0.20200825060850-b16bf420f7b3
 	github.com/go-chassis/go-archaius v1.3.3
-	github.com/go-chassis/go-chassis v1.8.2-0.20200831084354-7ac56be1a686
+	github.com/go-chassis/go-chassis/v2 v2.0.3-0.20200916043058-7a753c9f1471
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
-	github.com/go-chassis/openlog v1.1.1
+	github.com/go-chassis/openlog v1.1.2
 	github.com/go-mesh/openlogging v1.0.1
 	github.com/gogo/googleapis v1.3.1 // indirect
 	github.com/gogo/protobuf v1.3.0

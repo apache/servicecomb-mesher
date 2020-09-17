@@ -22,7 +22,7 @@ import (
 	"errors"
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/foundation/httpclient"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/openlog"
 	"io/ioutil"
 	"regexp"
 	"strconv"
@@ -32,7 +32,7 @@ import (
 func HTTPCheck(check *config.HealthCheck, address string) error {
 	c, err := httpclient.New(&httpclient.DefaultOptions)
 	if err != nil {
-		openlogging.Error("can not get http client: " + err.Error())
+		openlog.Error("can not get http client: " + err.Error())
 		//must not return error, because it is mesher error
 		return nil
 	}
@@ -42,7 +42,7 @@ func HTTPCheck(check *config.HealthCheck, address string) error {
 	}
 	resp, err := c.Get(context.Background(), url, nil)
 	if err != nil {
-		openlogging.Error("server can not be connected: " + err.Error())
+		openlog.Error("server can not be connected: " + err.Error())
 		return err
 	}
 	body, err := ioutil.ReadAll(resp.Body)

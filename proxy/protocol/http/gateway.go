@@ -20,18 +20,18 @@ package http
 import (
 	"github.com/apache/servicecomb-mesher/proxy/common"
 	"github.com/apache/servicecomb-mesher/proxy/ingress"
-	"github.com/go-chassis/go-chassis/client/rest"
-	chassiscommon "github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/handler"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/client/rest"
+	chassiscommon "github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/openlog"
 	"net/http"
 )
 
 func handleIncomingTraffic(inv *invocation.Invocation) (*invocation.Response, error) {
 	c, err := handler.GetChain(chassiscommon.Provider, common.ChainProviderIncoming)
 	if err != nil {
-		openlogging.Error("Get chain failed: " + err.Error())
+		openlog.Error("Get chain failed: " + err.Error())
 		return nil, err
 	}
 	var invRsp *invocation.Response
@@ -83,7 +83,7 @@ func HandleIngressTraffic(w http.ResponseWriter, r *http.Request) {
 	c, err := handler.GetChain(chassiscommon.Consumer, common.ChainConsumerOutgoing)
 	if err != nil {
 		handleErrorResponse(inv, w, http.StatusBadGateway, err)
-		openlogging.Error("Get chain failed: " + err.Error())
+		openlog.Error("Get chain failed: " + err.Error())
 		return
 	}
 	var invRsp *invocation.Response
@@ -93,7 +93,7 @@ func HandleIngressTraffic(w http.ResponseWriter, r *http.Request) {
 	})
 	resp, err := handleRequest(w, inv, invRsp)
 	if err != nil {
-		openlogging.Error("Handle request failed: " + err.Error())
+		openlog.Error("Handle request failed: " + err.Error())
 		return
 	}
 	RecordStatus(inv, resp.StatusCode)

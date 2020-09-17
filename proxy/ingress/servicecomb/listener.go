@@ -20,8 +20,8 @@ package servicecomb
 import (
 	"github.com/apache/servicecomb-mesher/proxy/config"
 	"github.com/go-chassis/go-archaius/event"
-	"github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/openlog"
 )
 
 type ingressRuleEventListener struct{}
@@ -29,17 +29,17 @@ type ingressRuleEventListener struct{}
 //Event update ingress rule
 func (r *ingressRuleEventListener) Event(e *event.Event) {
 	if e == nil {
-		openlogging.Warn("Event pointer is nil")
+		openlog.Warn("Event pointer is nil")
 		return
 	}
-	openlogging.Info("dark launch event", openlogging.WithTags(openlogging.Tags{
+	openlog.Info("dark launch event", openlog.WithTags(openlog.Tags{
 		"key":   e.Key,
 		"event": e.EventType,
 		"rule":  e.Value,
 	}))
 	raw, ok := e.Value.(string)
 	if !ok {
-		openlogging.Error("invalid ingress rule", openlogging.WithTags(openlogging.Tags{
+		openlog.Error("invalid ingress rule", openlog.WithTags(openlog.Tags{
 			"value": raw,
 		}))
 	}
@@ -50,8 +50,8 @@ func (r *ingressRuleEventListener) Event(e *event.Event) {
 		saveRules(raw)
 	case common.Delete:
 		rulesData = nil
-		openlogging.Info("ingress rule is removed", openlogging.WithTags(
-			openlogging.Tags{
+		openlog.Info("ingress rule is removed", openlog.WithTags(
+			openlog.Tags{
 				"key": e.Key,
 			}))
 	}
@@ -61,12 +61,12 @@ func (r *ingressRuleEventListener) Event(e *event.Event) {
 func saveRules(raw string) {
 	rules, err := config.NewRules(raw)
 	if err != nil {
-		openlogging.Error("invalid ingress rule", openlogging.WithTags(openlogging.Tags{
+		openlog.Error("invalid ingress rule", openlog.WithTags(openlog.Tags{
 			"value": raw,
 		}))
 	}
 	rulesData = rules.Value()
-	openlogging.Info("update ingress rule", openlogging.WithTags(openlogging.Tags{
+	openlog.Info("update ingress rule", openlog.WithTags(openlog.Tags{
 		"value": raw,
 	}))
 }

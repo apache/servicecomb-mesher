@@ -20,9 +20,9 @@ package oauth2
 import (
 	"context"
 	"errors"
-	"github.com/go-chassis/go-chassis/core/handler"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/openlog"
 	"net/http"
 	"time"
 )
@@ -64,7 +64,7 @@ func (oa *Handler) Handle(chain *handler.Chain, inv *invocation.Invocation, cb i
 
 			accessToken, err := getToken(code, cb)
 			if err != nil {
-				openlogging.Error("authorization error: " + err.Error())
+				openlog.Error("authorization error: " + err.Error())
 				WriteBackErr(ErrInvalidToken, http.StatusUnauthorized, cb)
 				return
 			}
@@ -72,7 +72,7 @@ func (oa *Handler) Handle(chain *handler.Chain, inv *invocation.Invocation, cb i
 			if auth.Authenticate != nil {
 				err = auth.Authenticate(accessToken, req)
 				if err != nil {
-					openlogging.Error("authentication error: " + err.Error())
+					openlog.Error("authentication error: " + err.Error())
 					WriteBackErr(ErrInvalidAuth, http.StatusUnauthorized, cb)
 					return
 				}
@@ -90,7 +90,7 @@ func getToken(code string, cb invocation.ResponseCallBack) (accessToken string, 
 		config := auth.UseConfig
 		token, err := config.Exchange(context.Background(), code)
 		if err != nil {
-			openlogging.Error("get token failed, errors: " + err.Error())
+			openlog.Error("get token failed, errors: " + err.Error())
 			WriteBackErr(ErrInvalidCode, http.StatusUnauthorized, cb)
 			return "", err
 		}
@@ -119,7 +119,7 @@ func NewOAuth2() handler.Handler {
 func init() {
 	err := handler.RegisterHandler(AuthName, NewOAuth2)
 	if err != nil {
-		openlogging.Error("register handler error: " + err.Error())
+		openlog.Error("register handler error: " + err.Error())
 		return
 	}
 }

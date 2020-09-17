@@ -17,7 +17,7 @@
 
 package ports
 
-import "github.com/go-chassis/go-chassis/core/common"
+import "github.com/go-chassis/go-chassis/v2/core/common"
 
 var defaultProtocolPort = map[string]string{
 	common.ProtocolRest: "30101",

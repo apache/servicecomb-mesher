@@ -19,10 +19,10 @@ package schema
 
 import (
 	"fmt"
+	"github.com/go-chassis/openlog"
 	"strings"
 
-	"github.com/go-chassis/go-chassis/core/lager"
-	"github.com/go-chassis/go-chassis/core/registry"
+	"github.com/go-chassis/go-chassis/v2/core/registry"
 )
 
 const (
@@ -179,11 +179,11 @@ func CovertSwaggerMethordToLocalMethord(schema *registry.SchemaContent, src *reg
 func GetSvcByInterface(interfaceName string) *registry.MicroService {
 	value, ok := svcToInterfaceCache.Get(interfaceName)
 	if !ok || value == nil {
-		lager.Logger.Info(fmt.Sprintf("Get svc from remote, interface: %s", interfaceName))
+		openlog.Info(fmt.Sprintf("Get svc from remote, interface: %s", interfaceName))
 		svc := registry.DefaultContractDiscoveryService.GetMicroServicesByInterface(interfaceName)
 		if svc != nil {
 			svcKey := strings.Join([]string{svc[0].ServiceName, svc[0].Version, svc[0].AppID}, "/")
-			lager.Logger.Info(fmt.Sprintf("Cached svc [%s] for interface %s", svcKey, interfaceName))
+			openlog.Info(fmt.Sprintf("Cached svc [%s] for interface %s", svcKey, interfaceName))
 			svcToInterfaceCache.Set(interfaceName, svc[0], 0)
 			refresher.Add(newInterfaceJob(interfaceName))
 		} else {

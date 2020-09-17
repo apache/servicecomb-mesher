@@ -18,10 +18,11 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/skywalking"
-	"github.com/go-chassis/go-chassis/core/handler"
-	"github.com/go-chassis/go-chassis/core/invocation"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/core/handler"
+	"github.com/go-chassis/go-chassis/v2/core/invocation"
+	"github.com/go-chassis/openlog"
 	"github.com/tetratelabs/go2sky"
 	skycom "github.com/tetratelabs/go2sky/reporter/grpc/common"
 	"strconv"
@@ -43,10 +44,10 @@ type SkyWalkingProviderHandler struct {
 
 //Handle is for provider
 func (sp *SkyWalkingProviderHandler) Handle(chain *handler.Chain, i *invocation.Invocation, cb invocation.ResponseCallBack) {
-	openlogging.GetLogger().Debugf("SkyWalkingProviderHandler begin. inv:%#v", *i)
+	openlog.Debug(fmt.Sprintf("SkyWalkingProviderHandler begin. inv:%#v", *i))
 	span, _, err := skywalking.CreateEntrySpan(i)
 	if err != nil {
-		openlogging.GetLogger().Errorf("CreateEntrySpan error:%s", err.Error())
+		openlog.Error(fmt.Sprintf("CreateEntrySpan error:%s", err.Error()))
 	}
 	chain.Next(i, func(r *invocation.Response) {
 		cb(r)
@@ -76,14 +77,14 @@ type SkyWalkingConsumerHandler struct {
 
 //Handle is for consumer
 func (sc *SkyWalkingConsumerHandler) Handle(chain *handler.Chain, i *invocation.Invocation, cb invocation.ResponseCallBack) {
-	openlogging.GetLogger().Debugf("SkyWalkingConsumerHandler begin:%#v", *i)
+	openlog.Debug(fmt.Sprintf("SkyWalkingConsumerHandler begin:%#v", *i))
 	span, ctx, err := skywalking.CreateEntrySpan(i)
 	if err != nil {
-		openlogging.GetLogger().Errorf("CreateEntrySpan error:%s", err.Error())
+		openlog.Error(fmt.Sprintf("CreateEntrySpan error:%s", err.Error()))
 	}
 	spanExit, err := skywalking.CreateExitSpan(ctx, i)
 	if err != nil {
-		openlogging.GetLogger().Errorf("CreateExitSpan error:%s", err.Error())
+		openlog.Error(fmt.Sprintf("CreateExitSpan error:%s", err.Error()))
 	}
 	chain.Next(i, func(r *invocation.Response) {
 		cb(r)
@@ -101,7 +102,7 @@ func (sc *SkyWalkingConsumerHandler) Handle(chain *handler.Chain, i *invocation.
 
 		spanExit.End()
 		span.End()
-		openlogging.GetLogger().Debugf("SkyWalkingConsumerHandler end.")
+		openlog.Debug("SkyWalkingConsumerHandler end.")
 	})
 }
 
@@ -118,10 +119,10 @@ func NewSkyWalkingConsumer() handler.Handler {
 func init() {
 	err := handler.RegisterHandler(skywalking.SkyWalkingProvider, NewSkyWalkingProvier)
 	if err != nil {
-		openlogging.GetLogger().Errorf("Handler [%s] register error: ", skywalking.SkyWalkingProvider, err.Error())
+		openlog.Error(fmt.Sprintf("Handler [%s] register error: %s", skywalking.SkyWalkingProvider, err.Error()))
 	}
 	err = handler.RegisterHandler(skywalking.SkyWalkingConsumer, NewSkyWalkingConsumer)
 	if err != nil {
-		openlogging.GetLogger().Errorf("Handler [%s] register error: ", skywalking.SkyWalkingConsumer, err.Error())
+		openlog.Error(fmt.Sprintf("Handler [%s] register error: %s", skywalking.SkyWalkingConsumer, err.Error()))
 	}
 }

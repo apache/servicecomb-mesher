@@ -19,12 +19,12 @@ package v1
 
 import (
 	"fmt"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/openlog"
 	"net/http"
 
-	"github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/core/router"
-	"github.com/go-chassis/go-chassis/server/restful"
+	"github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/core/router"
+	"github.com/go-chassis/go-chassis/v2/server/restful"
 )
 
 // RouteResource is rest api to manage route rule
@@ -37,13 +37,13 @@ func (a *RouteResource) RouteRuleByService(context *restful.Context) {
 	if routeRule == nil {
 		err := context.WriteHeaderAndJSON(http.StatusNotFound, fmt.Sprintf("%s routeRule not found", serviceName), common.JSON)
 		if err != nil {
-			openlogging.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
+			openlog.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
 		}
 		return
 	}
 	err := context.WriteHeaderAndJSON(http.StatusOK, routeRule, "text/vnd.yaml")
 	if err != nil {
-		openlogging.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
+		openlog.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
 	}
 }
 

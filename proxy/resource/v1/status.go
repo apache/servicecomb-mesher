@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"github.com/apache/servicecomb-mesher/proxy/resource/v1/health"
 	"github.com/apache/servicecomb-mesher/proxy/resource/v1/version"
-	"github.com/go-chassis/go-chassis/core/common"
-	"github.com/go-chassis/go-chassis/pkg/metrics"
-	"github.com/go-chassis/go-chassis/server/restful"
-	"github.com/go-mesh/openlogging"
+	"github.com/go-chassis/go-chassis/v2/core/common"
+	"github.com/go-chassis/go-chassis/v2/pkg/metrics"
+	"github.com/go-chassis/go-chassis/v2/server/restful"
+	"github.com/go-chassis/openlog"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
 )
@@ -38,13 +38,13 @@ func (a *StatusResource) Health(context *restful.Context) {
 	if healthResp.Status == health.Red {
 		err := context.WriteHeaderAndJSON(http.StatusInternalServerError, healthResp, common.JSON)
 		if err != nil {
-			openlogging.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
+			openlog.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
 		}
 		return
 	}
 	err := context.WriteHeaderAndJSON(http.StatusOK, healthResp, common.JSON)
 	if err != nil {
-		openlogging.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
+		openlog.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
 	}
 }
 
@@ -60,7 +60,7 @@ func (a *StatusResource) GetVersion(context *restful.Context) {
 	versions := version.Ver()
 	err := context.WriteHeaderAndJSON(http.StatusOK, versions, common.JSON)
 	if err != nil {
-		openlogging.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
+		openlog.Error(fmt.Sprintf("Write HeaderAndJSON error %s: ", err.Error()))
 	}
 }
 

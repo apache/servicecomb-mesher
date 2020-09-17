@@ -22,7 +22,7 @@ import (
 
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	"github.com/apache/servicecomb-mesher/proxy/resolver/authority"
-	"github.com/go-chassis/go-chassis/core/lager"
+	"github.com/go-chassis/go-chassis/v2/core/lager"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 )
