@@ -29,9 +29,10 @@ servicecomb:
         #ex: router, ratelimiter-consumer, bizkeeper-consumer, loadbalance, port-selector, transport
       Provider:
         incoming:   #provider handlers
-#  loadbalance:
-#    strategy:
-#      name: RoundRobin  # Random|RoundRobin|SessionStickiness
+cse:
+  loadbalance:
+    strategy:
+      name: RoundRobin  # Random|RoundRobin|SessionStickiness
 #    retryEnabled: false # if there is error, retry request or not
 #    retryOnNext: 2      # times to switch to another instance based on strategy
 #    retryOnSame: 3      # times to retry on the same instance
@@ -61,21 +62,14 @@ servicecomb:
 #  fallbackpolicy:
 #    Consumer:
 #      policy: throwexception
-#  flowcontrol:
-#    Consumer: # for consumer
-#      qps:
-#        enabled: true  # enable rate limiting or not
-#        global:
-#          limit: 100   # default limit of consumer
-#        limit:
-#          Server: 100  # rate limit for request to a provider,it represents 100 request per second
-#    Provider:
-#      qps:
-#        enabled: true  # enable rate limiting or not
-#        global:
-#          limit: 100   # default limit of provider
-#        limit:
-#          Server: 100  # rate limit for request from a provider, it represents 100 request per second
+  flowcontrol:
+    Provider:
+      qps:
+        enabled: true  # enable rate limiting or not
+        global:
+          limit: 100   # default limit of provider
+        limit:
+          Server: 100  # rate limit for request from a provider, it represents 100 request per second
 
 #ssl:
 ## Set those config to make mesher as https service
