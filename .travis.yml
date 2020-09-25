@@ -21,7 +21,13 @@ jobs:
   include:
     - stage: Format Checker
       script: bash -x scripts/travis/formatChecker.sh
+    - arch: arm64
+      script: bash -x scripts/travis/formatChecker.sh
     - stage: DeadCode Checker
+      script:
+        - go get -u github.com/tsenart/deadcode
+        - bash -x scripts/travis/deadCodeChecker.sh
+    - arch: arm64
       script:
         - go get -u github.com/tsenart/deadcode
         - bash -x scripts/travis/deadCodeChecker.sh
@@ -29,7 +35,15 @@ jobs:
       script:
         - go get -u github.com/client9/misspell
         - bash -x scripts/travis/misspellChecker.sh
+    - arch: arm64
+      script:
+        - go get -u github.com/client9/misspell
+        - bash -x scripts/travis/misspellChecker.sh
     - stage: GoConst Checker
+      script:
+        - go get -u github.com/jgautheron/goconst/cmd/goconst
+        - bash -x scripts/travis/goConstChecker.sh
+    - arch: arm64
       script:
         - go get -u github.com/jgautheron/goconst/cmd/goconst
         - bash -x scripts/travis/goConstChecker.sh
@@ -37,7 +51,15 @@ jobs:
       script:
         - go get -u golang.org/x/lint/golint
         - bash -x scripts/travis/goLintChecker.sh
+    - arch: arm64
+      script:
+        - go get -u golang.org/x/lint/golint
+        - bash -x scripts/travis/goLintChecker.sh
     - stage: GoCyclo Checker
+      script:
+        - go get github.com/fzipp/gocyclo
+        - bash -x scripts/travis/goCycloChecker.sh
+    - arch: arm64
       script:
         - go get github.com/fzipp/gocyclo
         - bash -x scripts/travis/goCycloChecker.sh
@@ -45,8 +67,16 @@ jobs:
       script:
         - go get github.com/securego/gosec/cmd/gosec
         - bash -x scripts/travis/goSecureChecker.sh
+    - arch: arm64
+      script:
+        - go get github.com/securego/gosec/cmd/gosec
+        - bash -x scripts/travis/goSecureChecker.sh
     - stage: Build
       script: 
+        - GO111MODULE=on go mod download
+        - go build github.com/apache/servicecomb-mesher/cmd/mesher
+    - arch: arm64
+      script:
         - GO111MODULE=on go mod download
         - go build github.com/apache/servicecomb-mesher/cmd/mesher
     - stage: Unit Test
@@ -55,4 +85,9 @@ jobs:
         - go get golang.org/x/tools/cmd/cover
         - GO111MODULE=on go mod download
         - bash -x scripts/travis/unit_test.sh && $HOME/gopath/bin/goveralls -coverprofile=coverage.txt -service=travis-ci
-
+    - arch: arm64
+      script:
+        - go get github.com/mattn/goveralls
+        - go get golang.org/x/tools/cmd/cover
+        - GO111MODULE=on go mod download
+        - bash -x scripts/travis/unit_test.sh && $HOME/gopath/bin/goveralls -coverprofile=coverage.txt -service=travis-ci
