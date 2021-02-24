@@ -20,11 +20,8 @@ package metrics
 import (
 	"errors"
 	"net/http"
-	"sync"
 	"time"
 )
-
-var onceEnable sync.Once
 
 //PromRecorder record metrics
 type PromRecorder struct {

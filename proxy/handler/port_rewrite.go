@@ -78,5 +78,8 @@ func New() handler.Handler {
 }
 
 func init() {
-	handler.RegisterHandler(PortMapForPilot, New)
+	err := handler.RegisterHandler(PortMapForPilot, New)
+	if err != nil {
+		openlog.Error(err.Error())
+	}
 }

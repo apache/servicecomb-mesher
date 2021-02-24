@@ -41,14 +41,14 @@ var tracer *go2sky.Tracer
 
 //CreateEntrySpan use tracer to create and start an entry span for incoming request
 func CreateEntrySpan(i *invocation.Invocation) (go2sky.Span, context.Context, error) {
-	return tracer.CreateEntrySpan(i.Ctx, i.MicroServiceName+i.URLPathFormat, func() (string, error) {
+	return tracer.CreateEntrySpan(i.Ctx, i.MicroServiceName+i.URLPath, func() (string, error) {
 		return i.Headers()[CrossProcessProtocolV2], nil
 	})
 }
 
 //CreateExitSpan use tracer to create and start an exit span for client
 func CreateExitSpan(ctx context.Context, i *invocation.Invocation) (go2sky.Span, error) {
-	return tracer.CreateExitSpan(ctx, i.MicroServiceName+i.URLPathFormat, i.Endpoint+i.URLPathFormat, func(header string) error {
+	return tracer.CreateExitSpan(ctx, i.MicroServiceName+i.URLPath, i.Endpoint+i.URLPath, func(header string) error {
 		i.SetHeader(CrossProcessProtocolV2, header)
 		return nil
 	})
@@ -76,5 +76,5 @@ func Init() {
 		openlog.Error(fmt.Sprintf("NewTracer error " + err.Error()))
 	}
 	//tracer.WaitUntilRegister()
-	openlog.Debug(fmt.Sprintf("SkyWalking manager Init end"))
+	openlog.Debug("SkyWalking manager Init end")
 }

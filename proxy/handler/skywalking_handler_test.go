@@ -53,7 +53,7 @@ func initInv() *invocation.Invocation {
 	i.MicroServiceName = "test"
 	i.Ctx = context.Background()
 	i.Endpoint = "calculator"
-	i.URLPathFormat = "/bmi"
+	i.URLPath = "/bmi"
 	return &i
 }
 

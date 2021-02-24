@@ -24,7 +24,6 @@ package metrics
 
 import (
 	"github.com/go-chassis/go-chassis/v2/pkg/runtime"
-	"sync"
 	"time"
 )
 
@@ -46,7 +45,6 @@ const (
 var (
 	//LabelNames is a fixed list with service name, appID, version
 	LabelNames = []string{LServiceName, LApp, LVersion}
-	mutex      = sync.Mutex{}
 )
 
 //Options define recorder options

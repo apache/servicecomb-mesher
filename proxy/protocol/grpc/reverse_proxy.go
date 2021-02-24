@@ -65,7 +65,7 @@ func preHandler(req *http.Request) *invocation.Invocation {
 	inv.Args = req
 	inv.Protocol = "grpc"
 	inv.Reply = rest.NewResponse()
-	inv.URLPathFormat = req.URL.Path
+	inv.URLPath = req.URL.Path
 	return inv
 }
 

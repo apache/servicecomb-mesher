@@ -45,7 +45,6 @@ type PrometheusMesherSinker struct {
 var (
 	//DefaultPrometheusExporter stores value of default prometheus exporter type
 	DefaultPrometheusExporter = GetPrometheusExporter()
-	onceInit                  sync.Once
 	//DefaultPrometheusSinker stores value of default prometheus exporter type
 	DefaultPrometheusSinker *PrometheusMesherSinker
 )

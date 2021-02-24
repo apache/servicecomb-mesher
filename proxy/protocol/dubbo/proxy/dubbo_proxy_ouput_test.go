@@ -60,7 +60,7 @@ func TestSetLocalServiceAddress(t *testing.T) {
 		assert.Error(t, err)
 
 		// case port
-		inv.Port = "8080"
+		inv.PortName = "8080"
 		err = SetLocalServiceAddress(inv)
 		assert.NoError(t, err)
 	})
