@@ -25,7 +25,6 @@ import (
 	"net/http"
 
 	"github.com/go-chassis/go-chassis/v2/core/client"
-	"github.com/go-chassis/go-chassis/v2/core/common"
 	"github.com/go-chassis/go-chassis/v2/core/invocation"
 	"github.com/go-chassis/go-chassis/v2/pkg/util/httputil"
 	"golang.org/x/net/http2"
@@ -75,12 +74,6 @@ func NewClient(opts client.Options) (client.ProtocolClient, error) {
 		c:    client,
 		opts: opts,
 	}, nil
-}
-
-func (c *Client) contextToHeader(ctx context.Context, req *http.Request) {
-	for k, v := range common.FromContext(ctx) {
-		req.Header.Set(k, v)
-	}
 }
 
 //Call is a method which uses grpc protocol to transfer invocation

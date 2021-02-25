@@ -52,12 +52,11 @@ func (sp *SkyWalkingProviderHandler) Handle(chain *handler.Chain, i *invocation.
 	chain.Next(i, func(r *invocation.Response) {
 		cb(r)
 		span.Tag(go2sky.TagHTTPMethod, i.Protocol)
-		span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPathFormat)
+		span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPath)
 		span.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
 		span.SetSpanLayer(skycom.SpanLayer_Http)
 		span.SetComponent(HTTPServerComponentID)
 		span.End()
-		return
 	})
 }
 
@@ -89,13 +88,13 @@ func (sc *SkyWalkingConsumerHandler) Handle(chain *handler.Chain, i *invocation.
 	chain.Next(i, func(r *invocation.Response) {
 		cb(r)
 		span.Tag(go2sky.TagHTTPMethod, i.Protocol)
-		span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPathFormat)
+		span.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPath)
 		span.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
 		span.SetSpanLayer(skycom.SpanLayer_Http)
 		span.SetComponent(HTTPServerComponentID)
 
 		spanExit.Tag(go2sky.TagHTTPMethod, i.Protocol)
-		spanExit.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPathFormat)
+		spanExit.Tag(go2sky.TagURL, HTTPPrefix+i.MicroServiceName+i.URLPath)
 		spanExit.Tag(go2sky.TagStatusCode, strconv.Itoa(r.Status))
 		spanExit.SetSpanLayer(skycom.SpanLayer_Http)
 		spanExit.SetComponent(HTTPClientComponentID)

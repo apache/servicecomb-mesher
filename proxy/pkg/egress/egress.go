@@ -23,13 +23,7 @@ import (
 	meshercontrol "github.com/apache/servicecomb-mesher/proxy/control"
 	"github.com/go-chassis/go-chassis/v2/control"
 	"regexp"
-	"sync"
 )
-
-var lock sync.RWMutex
-
-var plainHosts = make(map[string]*config.EgressRule)
-var regexHosts = make(map[string]*config.EgressRule)
 
 //Egress return egress rule, you can also set custom egress rule
 type Egress interface {
@@ -102,7 +96,7 @@ func Match(hostname string) (bool, *control.EgressConfig) {
 			} else if string(host[0]) == "*" {
 				substring := host[1:]
 				match, _ := regexp.MatchString(substring+"$", hostname)
-				if match == true {
+				if match {
 					return true, &egress
 				}
 			}

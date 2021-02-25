@@ -70,7 +70,7 @@ func preHandler(req *http.Request) *invocation.Invocation {
 	inv.Args = req
 	inv.Reply = rest.NewResponse()
 	inv.Protocol = "rest"
-	inv.URLPathFormat = req.URL.Path
+	inv.URLPath = req.URL.Path
 	return inv
 }
 
@@ -88,7 +88,7 @@ func consumerPreHandler(req *http.Request) *invocation.Invocation {
 	}
 	if err := json.Unmarshal([]byte(cseContextStr), &m); err != nil {
 		openlog.Debug("unmarshal " + chassisCommon.HeaderXCseContent + " header content failed: " + err.Error())
-		m = make(map[string]string, 0)
+		m = make(map[string]string)
 	}
 	m[chassisCommon.HeaderSourceName] = runtime.ServiceName
 	chassisCommon.SetXCSEContext(m, req)
@@ -216,13 +216,14 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
-	postProcessResponse(resp)
-	copyHeader(w.Header(), resp.Header)
-	w.WriteHeader(resp.StatusCode)
 	if resp == nil {
 		openlog.Warn("response is nil because of unknown reason")
 		return
 	}
+	postProcessResponse(resp)
+	copyHeader(w.Header(), resp.Header)
+	w.WriteHeader(resp.StatusCode)
+
 	_, err := io.Copy(w, resp.Body)
 	if err != nil {
 		openlog.Error("can not copy: " + err.Error())
@@ -313,14 +314,6 @@ func RecordStatus(inv *invocation.Invocation, statusCode int) {
 	LabelValues := map[string]string{metrics.LServiceName: inv.MicroServiceName, metrics.LApp: inv.RouteTags.AppID(), metrics.LVersion: inv.RouteTags.Version()}
 	metrics.RecordStatus(LabelValues, statusCode)
 }
-func copyHeader(dst, src http.Header) {
-	for k, vs := range src {
-		for _, v := range vs {
-			dst.Add(k, v)
-		}
-	}
-}
-
 func prepareRequest(req *http.Request) {
 	if req.ContentLength == 0 {
 		req.Body = nil
@@ -330,6 +323,14 @@ func prepareRequest(req *http.Request) {
 
 	req.Header.Del("Connection")
 
+}
+
+func copyHeader(dst, src http.Header) {
+	for k, vs := range src {
+		for _, v := range vs {
+			dst.Add(k, v)
+		}
+	}
 }
 
 func postProcessResponse(rsp *http.Response) {

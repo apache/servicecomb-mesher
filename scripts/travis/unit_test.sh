@@ -17,15 +17,4 @@
 
 set -e
 
-echo "mode: atomic" > coverage.txt
-
-for d in $(go list ./... | grep -v vendor); do
-    echo $d
-    cd $GOPATH/src/$d
-    if [ $(ls | grep _test.go | wc -l) -gt 0 ]; then
-        go test -cover -covermode atomic -coverprofile coverage.out
-        if [ -f coverage.out ]; then
-            sed '1d;$d' coverage.out >> $GOPATH/src/github.com/apache/servicecomb-mesher/coverage.txt
-        fi
-    fi
-done
+go test $(go list ./... |  grep -v proxy/pkg/egress | grep -v examples) -cover -covermode atomic -coverprofile coverage.out

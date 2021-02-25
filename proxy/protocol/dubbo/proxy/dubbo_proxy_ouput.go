@@ -69,8 +69,8 @@ func (e ProxyError) Error() string {
 func SetLocalServiceAddress(inv *invocation.Invocation) error {
 	inv.Endpoint = cmd.Configs.PortsMap[inv.Protocol]
 	if inv.Endpoint == "" {
-		if inv.Port != "" {
-			inv.Endpoint = "127.0.0.1:" + inv.Port
+		if inv.PortName != "" {
+			inv.Endpoint = "127.0.0.1:" + inv.PortName
 			cmd.Configs.PortsMap[inv.Protocol] = inv.Endpoint
 			return nil
 		} else {
@@ -97,7 +97,7 @@ func Handle(ctx *dubbo.InvokeContext) error {
 	inv.MicroServiceName = svc.ServiceName
 	inv.RouteTags = utiltags.NewDefaultTag(svc.Version, svc.AppID)
 	inv.Protocol = "dubbo"
-	inv.URLPathFormat = ""
+	inv.URLPath = ""
 	inv.Reply = &dubboclient.WrapResponse{nil} //&rest.Response{Resp: &ctx.Response}
 	var err error
 	err = SetLocalServiceAddress(inv) //select local service

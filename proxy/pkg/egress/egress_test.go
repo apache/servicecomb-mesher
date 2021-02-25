@@ -28,7 +28,6 @@ import (
 
 	"github.com/apache/servicecomb-mesher/proxy/cmd"
 	mesherconfig "github.com/apache/servicecomb-mesher/proxy/config"
-	_ "github.com/apache/servicecomb-mesher/proxy/control/istio"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress"
 	"github.com/apache/servicecomb-mesher/proxy/pkg/egress/archaius"
 	"github.com/go-chassis/go-chassis/v2/control"
@@ -44,7 +43,6 @@ func init() {
 func BenchmarkMatch(b *testing.B) {
 	chassis := []byte(`
 cse:
-  service:
     registry:
       #disabled: false           optional:禁用注册发现选项，默认开始注册发现
       type: servicecenter           #optional:可选zookeeper/servicecenter，zookeeper供中软使用，不配置的情况下默认为servicecenter
@@ -101,8 +99,7 @@ egressRule:
 func TestMatch(t *testing.T) {
 
 	b := []byte(`
-cse:
-  service:
+servicecomb:
     registry:
       #disabled: false           optional:禁用注册发现选项，默认开始注册发现
       type: servicecenter           #optional:可选zookeeper/servicecenter，zookeeper供中软使用，不配置的情况下默认为servicecenter
@@ -118,11 +115,9 @@ cse:
 	_, err = f1.Write(b)
 	b = []byte(`
 ---
-#微服务的私有属性
-#APPLICATION_ID: CSE #optional
-service_description:
-  name: Client
-  #version: 0.1 #optional
+servicecomb
+  service:
+    name: Client
 
 `)
 	d, _ = os.Getwd()
