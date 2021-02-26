@@ -76,6 +76,12 @@ func NewClient(opts client.Options) (client.ProtocolClient, error) {
 	}, nil
 }
 
+// if your protocol has response status(such as http return 200, 500 status code),
+// you need to return it according to response
+func (c *Client) Status(rsp interface{}) (status int, err error) {
+	return 0, nil
+}
+
 //Call is a method which uses grpc protocol to transfer invocation
 func (c *Client) Call(ctx context.Context, addr string, inv *invocation.Invocation, rsp interface{}) error {
 	var err error
