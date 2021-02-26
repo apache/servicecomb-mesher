@@ -109,7 +109,7 @@ func TestHandle(t *testing.T) {
 		}
 		providerChainMap := map[string]string{
 			common.ChainProviderIncoming: providerChain,
-			"default":                    handler.RateLimiterProvider,
+			"default":                    "ratelimiter-provider",
 		}
 
 		registry.DefaultContractDiscoveryService = new(MockContractDiscoveryService)
@@ -166,7 +166,7 @@ func TestHandle(t *testing.T) {
 		}
 		providerChainMap := map[string]string{
 			common.ChainProviderIncoming: providerChain,
-			"default":                    handler.RateLimiterProvider,
+			"default":                    "ratelimiter-provider",
 		}
 
 		registry.DefaultContractDiscoveryService = new(MockContractDiscoveryService)

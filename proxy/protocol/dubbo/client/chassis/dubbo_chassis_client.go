@@ -62,6 +62,12 @@ func (c *dubboChassisClient) String() string {
 func (c *dubboChassisClient) Close() error {
 	return nil
 }
+
+// if your protocol has response status(such as http return 200, 500 status code),
+// you need to return it according to response
+func (c *dubboChassisClient) Status(rsp interface{}) (status int, err error) {
+	return 0, nil
+}
 func (c *dubboChassisClient) Call(ctx context.Context, addr string, inv *invocation.Invocation, rsp interface{}) error {
 	resp := rsp.(*dubboClient.WrapResponse)
 	resp.Resp = &dubbo.DubboRsp{}

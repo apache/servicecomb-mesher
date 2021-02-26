@@ -33,6 +33,7 @@ import (
 	"github.com/apache/servicecomb-mesher/proxy/protocol"
 	"github.com/apache/servicecomb-mesher/proxy/resolver"
 	"github.com/apache/servicecomb-mesher/proxy/util"
+	"github.com/go-chassis/foundation/stringutil"
 
 	"github.com/go-chassis/go-chassis/v2/client/rest"
 	chassisCommon "github.com/go-chassis/go-chassis/v2/core/common"
@@ -41,7 +42,6 @@ import (
 	"github.com/go-chassis/go-chassis/v2/core/invocation"
 	"github.com/go-chassis/go-chassis/v2/core/loadbalancer"
 	"github.com/go-chassis/go-chassis/v2/pkg/runtime"
-	"github.com/go-chassis/go-chassis/v2/pkg/string"
 	utiltags "github.com/go-chassis/go-chassis/v2/pkg/util/tags"
 	"github.com/go-chassis/go-chassis/v2/third_party/forked/afex/hystrix-go/hystrix"
 	"github.com/go-chassis/openlog"

@@ -117,11 +117,11 @@ func SetHandlers() {
 		chassisHandler.Router,
 		"ratelimiter-consumer",
 		"bizkeeper-consumer",
-		chassisHandler.Loadbalance,
+		chassisHandler.LoadBalancing,
 		chassisHandler.Transport,
 	}, ",")
 	providerChain := strings.Join([]string{
-		chassisHandler.RateLimiterProvider,
+		"ratelimiter-provider",
 		chassisHandler.Transport,
 	}, ",")
 	consumerChainMap := map[string]string{
@@ -129,7 +129,7 @@ func SetHandlers() {
 	}
 	providerChainMap := map[string]string{
 		common.ChainProviderIncoming: providerChain,
-		"default":                    chassisHandler.RateLimiterProvider,
+		"default":                    "ratelimiter-provider",
 	}
 	chassis.SetDefaultConsumerChains(consumerChainMap)
 	chassis.SetDefaultProviderChains(providerChainMap)
