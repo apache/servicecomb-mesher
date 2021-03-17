@@ -2,9 +2,9 @@ module github.com/apache/servicecomb-mesher
 
 require (
 	github.com/ghodss/yaml v1.0.0
-	github.com/go-chassis/foundation v0.2.2
-	github.com/go-chassis/go-archaius v1.3.6-0.20201210061741-7450779aaeb8
-	github.com/go-chassis/go-chassis/v2 v2.1.1
+	github.com/go-chassis/foundation v0.3.0
+	github.com/go-chassis/go-archaius v1.5.1
+	github.com/go-chassis/go-chassis/v2 v2.1.2-0.20210317023623-06e16afaa04f
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-chassis/openlog v1.1.2
 	github.com/patrickmn/go-cache v2.1.0+incompatible
