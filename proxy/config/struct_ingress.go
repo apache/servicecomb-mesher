@@ -18,7 +18,7 @@
 package config
 
 import (
-	"github.com/go-chassis/foundation/string"
+	"github.com/go-chassis/foundation/stringutil"
 	"gopkg.in/yaml.v2"
 )
 
