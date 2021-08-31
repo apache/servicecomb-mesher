@@ -101,20 +101,16 @@ func (d *SimDubboRegistryServer) Start() error {
 //AcceptLoop is a method to receive data in loop
 func (d *SimDubboRegistryServer) AcceptLoop(l *net.TCPListener) {
 	for {
-		for {
-			conn, err := l.Accept()
-			if err != nil {
-				openlog.Error("tcp conn error: " + err.Error())
-				continue
-			}
-
-			openlog.Debug("Received message")
-
-			go handleConn(conn)
+		conn, err := l.Accept()
+		if err != nil {
+			openlog.Error("tcp conn error: " + err.Error())
+			continue
 		}
 
+		openlog.Debug("Received message")
+
+		go handleConn(conn)
 	}
-	defer l.Close()
 }
 
 func handleConn(conn net.Conn) {

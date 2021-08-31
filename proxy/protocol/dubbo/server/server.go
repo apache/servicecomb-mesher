@@ -150,19 +150,20 @@ func (d *DubboServer) Svc(arg interface{}) interface{} {
 
 //AcceptLoop is a method
 func (d *DubboServer) AcceptLoop(l *net.TCPListener) {
+	timer := time.NewTimer(time.Second * 3)
+	defer timer.Stop()
 	for {
 		conn, err := l.AcceptTCP()
 		if err != nil {
 			select {
-			case <-time.After(time.Second * 3):
+			case <-timer.C:
 				openlog.Info("Sleep three second")
 			}
+			timer.Reset(time.Second * 3)
 		}
 		dubbConn := d.connMgr.GetConnection(conn)
 		dubbConn.Open()
 	}
-
-	defer l.Close()
 }
 
 // initSchema is a method to ini the schema ids
