@@ -10,4 +10,4 @@ jobs:
         uses: golangci/golangci-lint-action@v2
         with:
           version: v1.37.1
-          args: --skip-dirs=examples,proxy/protocol/dubbo --out-format=colored-line-number --skip-files=.*_test.go$
+          args: --skip-dirs=examples,proxy/protocol/dubbo  --skip-files=.*_test.go$
