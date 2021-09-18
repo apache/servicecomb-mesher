@@ -10,7 +10,6 @@ logFile: log/mesher.log
 # if set logger_file and log_format_text to true, turns out log4j format log
 logFormatText: false
 
-
 # MaxDaily of a log file before rotate. By D Days.
 logRotateAge: 1
 
@@ -19,3 +18,10 @@ logRotateSize: 10
 
 # Max counts to keep of a log's backup files.
 logBackupCount: 7
+
+# Log color mode
+# auto: only print colorful log when writer is stdout;
+# never: never print colorful log;
+# always: always print colorful log;
+# default: auto
+logColorMode: auto
