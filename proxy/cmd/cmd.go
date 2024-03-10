@@ -61,7 +61,7 @@ func parseConfigFromCmd(args []string) (err error) {
 		},
 		cli.StringFlag{
 			Name:        "service-ports",
-			EnvVar:      common.EnvServicePorts,
+			EnvVar:      os.Getenv(common.EnvServicePorts),
 			Usage:       "service protocol and port,examples: --service-ports=http:3000,grpc:8000",
 			Destination: &Configs.LocalServicePorts,
 		},
