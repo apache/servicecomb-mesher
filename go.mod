@@ -8,8 +8,8 @@ require (
 	github.com/go-chassis/gohessian v0.0.0-20180702061429-e5130c25af55
 	github.com/go-chassis/openlog v1.1.2
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/prometheus/client_golang v0.9.1
-	github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4
+	github.com/prometheus/client_golang v1.11.1
+	github.com/prometheus/client_model v0.2.0
 	github.com/stretchr/testify v1.6.1
 	github.com/tetratelabs/go2sky v0.1.1-0.20190703154722-1eaab8035277
 	github.com/urfave/cli v1.20.1-0.20181029213200-b67dcf995b6a

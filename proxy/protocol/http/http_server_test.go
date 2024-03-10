@@ -128,7 +128,7 @@ func TestHttpServer(t *testing.T) {
 
 	// case listen on 127.0.0.1
 	s = f(server.Options{
-		Address:   "127.0.0.1:30201",
+		Address:   "127.0.0.1:30301",
 		ChainName: "default",
 	})
 	err = s.Start()
