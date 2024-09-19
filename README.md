@@ -7,6 +7,11 @@
 
 A service mesh implementation based on [go chassis](https://github.com/go-chassis/go-chassis).
 
+
+> Notice to contributors: this project is not active due to lack of maintainers. If you are interested in this project, please cantact us and we will help you to be a committer. 
+
+> Notice to users: this project is not active due to lack of maintainers. Before we find enough resources, do not use this project if possible. 
+
 # Why use mesher
 - any infrastructure: if you use ServiceComb as control plane, you can run on any infrastructure(docker, kubernetes,VM, bare metal). 
 - service mesh and frameworks: 
