@@ -215,6 +215,33 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func copySSEChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
+    defer func() {
+        if err := resp.Body.Close(); err != null {
+            openlog.Error("Http sse response close error: " + err.Error())
+        }
+    }()
+
+    reader := bufio.NewReader(resp.Body)
+    for {
+        line, err := reader.ReadString('\n')
+        if err != nil {
+            if err == io.EOF {
+                break
+            }
+            openlog.Error("Error reading response line: " + err.Error())
+            return
+        }
+
+        if _, err = w.Write([]byte(line)); err != nil {
+            openlog.Error("Error reading response line: " + err.Error())
+            return
+        }
+
+        w.(http.Flusher).Flush()
+    }
+}
+
 func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	if resp == nil {
 		openlog.Warn("response is nil because of unknown reason")
