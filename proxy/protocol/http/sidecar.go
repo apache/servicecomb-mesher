@@ -18,6 +18,7 @@
 package http
 
 import (
+    "bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -54,6 +55,8 @@ var sr = resolver.GetSourceResolver()
 const (
 	XForwardedPort = "X-Forwarded-Port"
 	XForwardedHost = "X-Forwarded-Host"
+	SSEHeaderKey   = "Content-Type"
+	SSEHeaderValue = "text/event-stream"
 )
 
 var (
@@ -251,6 +254,11 @@ func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	copyHeader(w.Header(), resp.Header)
 	w.WriteHeader(resp.StatusCode)
 
+	if isSSEResponse(resp.Header) {
+	    copySSEChassisResp2HttpResp(w, resp)
+	    return
+	}
+
 	_, err := io.Copy(w, resp.Body)
 	if err != nil {
 		openlog.Error("can not copy: " + err.Error())
@@ -355,11 +363,22 @@ func prepareRequest(req *http.Request) {
 func copyHeader(dst, src http.Header) {
 	for k, vs := range src {
 		for _, v := range vs {
-			dst.Add(k, v)
+		    if SSEHeaderKey == k && strings.Contains(v, SSEHeaderValue) {
+		        dts.Add(SSEHeaderKey, SSEHeaderValue)
+		    } else {
+		        dst.Add(k, v)
+		    }
 		}
 	}
 }
 
 func postProcessResponse(rsp *http.Response) {
 	rsp.Header.Del("Connection")
+}
+
+func isSSEResponse(header http.Header) bool {
+    if header == nil {
+        return false
+    }
+    return SSEHeaderValue == header.Get(SSEHeaderKey)
 }
