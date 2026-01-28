@@ -220,7 +220,7 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 
 func copySSEChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
     defer func() {
-        if err := resp.Body.Close(); err != null {
+        if err := resp.Body.Close(); err != nil {
             openlog.Error("Http sse response close error: " + err.Error())
         }
     }()
@@ -364,7 +364,7 @@ func copyHeader(dst, src http.Header) {
 	for k, vs := range src {
 		for _, v := range vs {
 		    if SSEHeaderKey == k && strings.Contains(v, SSEHeaderValue) {
-		        dts.Add(SSEHeaderKey, SSEHeaderValue)
+		        dst.Add(SSEHeaderKey, SSEHeaderValue)
 		    } else {
 		        dst.Add(k, v)
 		    }
