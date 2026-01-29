@@ -18,6 +18,7 @@
 package http
 
 import (
+    "bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -54,6 +55,8 @@ var sr = resolver.GetSourceResolver()
 const (
 	XForwardedPort = "X-Forwarded-Port"
 	XForwardedHost = "X-Forwarded-Host"
+	SSEHeaderKey   = "Content-Type"
+	SSEHeaderValue = "text/event-stream"
 )
 
 var (
@@ -215,6 +218,33 @@ func RemoteRequestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func copySSEChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
+    defer func() {
+        if err := resp.Body.Close(); err != nil {
+            openlog.Error("Http sse response close error: " + err.Error())
+        }
+    }()
+
+    reader := bufio.NewReader(resp.Body)
+    for {
+        line, err := reader.ReadString('\n')
+        if err != nil {
+            if err == io.EOF {
+                break
+            }
+            openlog.Error("Error reading response line: " + err.Error())
+            return
+        }
+
+        if _, err = w.Write([]byte(line)); err != nil {
+            openlog.Error("Error reading response line: " + err.Error())
+            return
+        }
+
+        w.(http.Flusher).Flush()
+    }
+}
+
 func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	if resp == nil {
 		openlog.Warn("response is nil because of unknown reason")
@@ -223,6 +253,11 @@ func copyChassisResp2HttpResp(w http.ResponseWriter, resp *http.Response) {
 	postProcessResponse(resp)
 	copyHeader(w.Header(), resp.Header)
 	w.WriteHeader(resp.StatusCode)
+
+	if isSSEResponse(resp.Header) {
+	    copySSEChassisResp2HttpResp(w, resp)
+	    return
+	}
 
 	_, err := io.Copy(w, resp.Body)
 	if err != nil {
@@ -328,11 +363,22 @@ func prepareRequest(req *http.Request) {
 func copyHeader(dst, src http.Header) {
 	for k, vs := range src {
 		for _, v := range vs {
-			dst.Add(k, v)
+		    if SSEHeaderKey == k && strings.Contains(v, SSEHeaderValue) {
+		        dst.Add(SSEHeaderKey, SSEHeaderValue)
+		    } else {
+		        dst.Add(k, v)
+		    }
 		}
 	}
 }
 
 func postProcessResponse(rsp *http.Response) {
 	rsp.Header.Del("Connection")
+}
+
+func isSSEResponse(header http.Header) bool {
+    if header == nil {
+        return false
+    }
+    return SSEHeaderValue == header.Get(SSEHeaderKey)
 }
